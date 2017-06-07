@@ -1,0 +1,30 @@
+{
+  "name": "matcha",
+  "version": "1.0.0",
+  "description": "matcha",
+  "main": "app/index.js",
+  "scripts": {
+    "test": "nodemon app/index.js",
+    "start": "nodemon apifrugal.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vacrozet/Matcha.git"
+  },
+  "author": "vacrozet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vacrozet/Matcha/issues"
+  },
+  "homepage": "https://github.com/vacrozet/Matcha#readme",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.10.5",
+    "passport-facebook": "^2.1.1"
+  },
+  "devDependencies": {
+    "standard": "^10.0.2"
+  }
+}
