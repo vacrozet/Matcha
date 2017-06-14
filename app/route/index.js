@@ -1,5 +1,3 @@
-const MongoClient = require('mongodb').MongoClient
-const uuid = require('uuid')
 const express = require('express')
 const router = express.Router()
 
