@@ -1,6 +1,6 @@
 var express = require('express')
 var hostname = 'localhost'
-var port = 3000
+var port = 3001
 const bodyParser = require('body-parser')
 var app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -11,7 +11,7 @@ app.use('/', require('./route/index.js'))
 app.use((req, res) => {
   res.status(404)
   res.json({
-    message: 'URL not found'
+    message: 'URL not Found'
   })
 })
 

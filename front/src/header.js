@@ -15,7 +15,7 @@ class Acceuil extends Component {
       isSexe: 'Homme',
       toSexe: 'All',
       inst_axios: axios.create({
-        baseURL: 'http://localhost:3000/user/',
+        baseURL: 'http://localhost:3001',
         timeout: 1000,
         headers: {
           'X-Custom-Header': 'foobar'
@@ -35,14 +35,27 @@ class Acceuil extends Component {
       this.state.email === '' || this.state.passwd !== this.state.rePasswd) {
         return false
       } else {
-        this.state.inst_axios.post('signup.js', {
-          login: this.state.login,
-          passwd: this.state.passwd,
-          birthday: this.state.birthday,
-          bio: this.state.bio,
-          isSexe: this.state.isSexe,
-          toSexe: this.state.toSexe
-        })
+        // this.state.inst_axios.post('signup.js', {
+        //   login: this.state.login,
+        //   passwd: this.state.passwd,
+        //   birthday: this.state.birthday,
+        //   bio: this.state.bio,
+        //   isSexe: this.state.isSexe,
+        //   toSexe: this.state.toSexe
+        // })
+        this.state.inst_axios.post('/user/signup',
+          {
+            login: this.state.login,
+            passwd: this.state.passwd,
+            birthday: this.state.birthday,
+            bio: this.state.bio,
+            isSexe: this.state.isSexe,
+            toSexe: this.state.toSexe
+          }).then((res) => {
+            console.log(res)
+          }).catch((err) => {
+            console.log(err)
+          })
       }
     }
   }
@@ -65,9 +78,9 @@ class Acceuil extends Component {
         <div className='body' >
           <div className='Signup'>
             <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
-            <input type='text' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} />< br />
-            <input type='text' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} />< br />
-            <input type='email' name='email' onChange={this.handleChange} placeholder='email' onKeyPress={this.handleKeyPress} />< br />
+            <input type='text' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
+            <input type='text' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} /><br />
+            <input type='email' name='email' onChange={this.handleChange} placeholder='email' onKeyPress={this.handleKeyPress} /><br />
             <input type='text' name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-DD' onKeyPress={this.handleKeyPress} />
             <p>Sexe:</p>
             <select className='select_signup' name='isSexe' onChange={this.handleChange}>
