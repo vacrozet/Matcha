@@ -1,44 +1,61 @@
-const MongoClient = require('mongodb').MongoClient
 const bcrypt = require('bcryptjs')
+const db = require('../../db.js')
+
+function genToken () {
+  var str = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`
+  var token = ''
+
+  for (var count = 0; count < 128; count++) {
+    token += str[Math.floor((Math.random() * str.length))]
+  }
+  return (token)
+}
 
 module.exports = (req, res) => {
-  // //////////////----VERIFICATION----//////////////////////////////////////
-
-  if (!req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
+  if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
+    res.status(400)
     return res.json({
       message: 'login incorrect'
     })
   }
 
-  MongoClient.connect('mongodb://localhost/matcha', (error, db) => {
-    if (error) {
-      return res.json({
-        message: 'erreur'
-      })
-    }
-    console.log("Connecté à la base de données 'matcha'")
+  db.get().then((db) => {
     db.collection('Users').find({login: req.body.login}).toArray((error, results) => {
       if (error) {
-        db.close()
+        res.status(500)
         return res.json({
-          err: "erreur d'injection"
+          error: 'Internal server error'
         })
       }
       if (results.length === 1) {
-        results.forEach((obj) => {
-          if (req.body.login === obj.login && (bcrypt.compareSync(req.body.passwd, obj.passwd) === true)) { // true)
-            db.close()
-            return res.json({
-              message: 'login et passwd ok --- ENJOY !!'
-            })
-          }
-        })
+        if (bcrypt.compareSync(req.body.passwd, results[0].passwd)) {
+          let objToken = {}
+          objToken.token = genToken()
+          objToken.created_at = new Date().getTime()
+
+          results[0].tokens.push(objToken)
+          db.collection('Users').updateOne({login: req.body.login}, {$set: {tokens: results[0].tokens}})
+          return res.json({
+            success: true,
+            token: objToken.token
+          })
+        } else {
+          return res.json({
+            error: 'Wrong password'
+          })
+        }
       } else {
-        db.close()
+        res.status(404)
         return res.json({
-          message: 'User or Passwd incorrect'
+          error: 'User not found'
         })
       }
+    })
+  }).catch((err) => {
+    console.log(err)
+    res.status(500)
+    return res.json({
+      Message: 'Internal server error'
     })
   })
 }

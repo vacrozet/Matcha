@@ -18,16 +18,18 @@ class Acceuil extends Component {
         baseURL: 'http://localhost:3001',
         timeout: 1000,
         headers: {
-          'X-Custom-Header': 'foobar'
+          'Content-Type': 'application/json'
         }
       })
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
   }
+
   handleChange (event) {
     this.setState({[event.target.name]: event.target.value})
   }
+
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'inscription') {
       if (this.state.login === '' || this.state.passwd === '' ||
@@ -52,7 +54,7 @@ class Acceuil extends Component {
             isSexe: this.state.isSexe,
             toSexe: this.state.toSexe
           }).then((res) => {
-            console.log(res)
+            console.log(res.data)
           }).catch((err) => {
             console.log(err)
           })
