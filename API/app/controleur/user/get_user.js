@@ -8,7 +8,7 @@ module.exports = (req, res) => {
       })
     }
     console.log("Connecté à la base de données 'matcha'")
-    db.collection('Users').find().toArray((error, results) => {
+    db.collection('Users').find({login: req.user.login}).toArray((error, results) => {
       if (error) {
         db.close()
         return res.json({
