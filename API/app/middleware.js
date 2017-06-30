@@ -35,9 +35,16 @@ module.exports = (role) => {
             }
           }
         }
+      }).toArray((err, result) => {
+        if (err) {
+          res.status(500)
+          return res.json({
+            error: 'Internal server error'
+          })
+        }
+        console.log(result.length)
       })
-      console.log('array filter')
     })
-    return next
+    next()
   }
 }
