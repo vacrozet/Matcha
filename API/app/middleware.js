@@ -6,7 +6,7 @@ const db = require('./db.js')
 
 module.exports = (role) => {
   return (req, res, next) => {
-  console.log('je passe la')
+    console.log('je passe la')
     var auth = req.get('Authorization')
 
     if (auth === undefined) {
@@ -36,7 +36,8 @@ module.exports = (role) => {
           }
         }
       })
+      console.log('array filter')
     })
-    console.log('je passe la')
+    return next
   }
 }
