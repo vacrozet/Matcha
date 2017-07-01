@@ -2,15 +2,14 @@ const db = require('../../db.js')
 
 module.exports = (req, res) => {
   db.get().then((db) => {
-    db.collection('Users').find({login: req.user.login}).toArray((error, results) => {
+    db.collection('Users').find().toArray((error, results) => {
       if (error) {
         res.status(500)
         return res.json({
           err: "erreur d'injection"
         })
       }
-      console.log(results.length)
-      results.array.forEach((element, index) => {
+      results.forEach((element, index) => {
         delete results[index].passwd
         delete results[index].tokens
       }, this)

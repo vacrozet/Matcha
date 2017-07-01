@@ -10,16 +10,15 @@ module.exports = (role) => {
 
     if (auth === undefined) {
       res.status(400)
-      res.json({
+      return res.json({
         success: false,
         msg: 'Need Authorization in header'
       })
-      return
     }
     auth = auth.split(' ')
     if (auth[0] !== 'Bearer' || auth[1].length !== 128 || auth.length !== 2) {
       res.status(400)
-      res.json({
+      return res.json({
         success: false,
         msg: 'Wrong authorization header'
       })
@@ -39,6 +38,7 @@ module.exports = (role) => {
           })
         }
         if (result.length !== 1) {
+          res.status(404)
           return res.json({
             message: 'User not connected'
           })

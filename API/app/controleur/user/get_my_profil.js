@@ -19,19 +19,16 @@ module.exports = (req, res) => {
       }
       if (result.length === 0) {
         return res.json({
-          Message: 'utilisateur not found'
+          Message: 'user not found'
         })
       } else {
-        console.log(result.login)
-        const profil = {
-          login: result.login,
-          sexe: result.sexe,
-          to_match: result.to_match,
-          date: result.date
-        }
-        console.log(profil)
+        result.forEach((element, index) => {
+          delete result[index].passwd
+          delete result[index].tokens
+        }, this)
+
         return res.json({
-          login: profil.login
+          result
         })
       }
     })
