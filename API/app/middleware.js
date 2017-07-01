@@ -6,7 +6,6 @@ const db = require('./db.js')
 
 module.exports = (role) => {
   return (req, res, next) => {
-    console.log('je passe la')
     var auth = req.get('Authorization')
 
     if (auth === undefined) {
@@ -17,7 +16,6 @@ module.exports = (role) => {
       })
       return
     }
-    console.log('je passe ici')
     auth = auth.split(' ')
     if (auth[0] !== 'Bearer' || auth[1].length !== 128 || auth.length !== 2) {
       res.status(400)
@@ -30,9 +28,7 @@ module.exports = (role) => {
       db.collection('Users').find({
         tokens: { // tokens
           $elemMatch: { // each first array
-            $elemMatch: {
-              token: auth[1]
-            }
+            token: auth[1]
           }
         }
       }).toArray((err, result) => {
@@ -42,9 +38,14 @@ module.exports = (role) => {
             error: 'Internal server error'
           })
         }
-        console.log(result.length)
+        if (result.length !== 1) {
+          return res.json({
+            message: 'User not connected'
+          })
+        } else {
+          next()
+        }
       })
     })
-    next()
   }
 }

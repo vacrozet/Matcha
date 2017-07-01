@@ -7,7 +7,7 @@ module.exports = (req, res) => {
         message: 'erreur'
       })
     }
-    console.log("Connecté à la base de données 'matcha'")
+    console.log("Connecté à la base de données 'm'")
     db.collection('Users').find({login: req.user.login}).toArray((error, results) => {
       if (error) {
         db.close()

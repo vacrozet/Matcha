@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs')
 module.exports = (req, res) => {
   // //////////////----VERIFICATION----//////////////////////////////////////
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
-    console.log('je passe ici')
     return res.json({
       message: 'login incorrect'
     })
