@@ -63,21 +63,29 @@ class Acceuil extends Component {
   }
   myFunction (event) {
     document.querySelector('.container').classList.toggle('change')
+    document.querySelector('.volet').classList.toggle('voley')
+    // render () {
+    //   return (
+    //     <p>okokokokok</p>
+    //   )
+    // }
     // this.setState({
-    //   voley: this.state.voley ? 1 : 0
+      // voley: this.state.voley ? 1 : 0
     // })
   }
   render () {
     return (
       <div className='all'>
-        <div className='header' >
-          <div className='container' onClick={this.myFunction} >
-            <div className='bar1' />
-            <div className='bar2' />
-            <div className='bar3' />
-          </div>
-        </div>
         <div className='body' >
+          <div className='volet'>
+          <div className='essai' >
+            <div className='container' onClick={this.myFunction} >
+              <div className='bar1' />
+              <div className='bar2' />
+              <div className='bar3' />
+            </div>
+          </div>
+          </div>
           <div className='Signup'>
             <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
             <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
