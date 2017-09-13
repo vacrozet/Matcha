@@ -43,9 +43,12 @@ class Volet extends Component {
             passwd: this.state.passwd
           }).then((res) => {
             console.log(res.data)
-              if (res.data)
-            global.localStorage.setItem('token', res.data.token)
-            console.log(global.localStorage.getItem('token'))
+            if (res.data.success === true) {
+              global.localStorage.setItem('token', res.data.token)
+              this.setState({connexion: true})
+            } else {
+              console.log('user not found Front')
+            }
           }).catch((err) => {
             console.log(err)
           })
@@ -57,6 +60,10 @@ class Volet extends Component {
   }
   componentWillMount () {
     global.localStorage.getItem('token')
+    if (global.localStorage.getItem('token')) {
+      this.setState({connection: true})
+      console.log('je passe ici')
+    }
   }
 
   render () {
@@ -68,17 +75,24 @@ class Volet extends Component {
           <div className='bar3' />
         </div>
         <div className='all_word_volet'>
-          <div className='connexion'>
-            <div className='Signin_navbar'>
-              <div className='input_connect' >
-                <input className='input_connexion_volet' name='login' onChange={this.handleChange} type='login' placeholder='Login' onKeyPress={this.handleKeyPress} />
-                <input className='input_connexion_volet' name='passwd' onChange={this.handleChange} type='passwd' placeholder='Password' onKeyPress={this.handleKeyPress} />
-                <button className='button_connexion_volet' value='Connexion' onKeyPress={this.handleKeyPress} >Connexion</button>
+          { !this.state.connexion ? (
+            <div className='connexion'>
+              <div className='Signin_navbar'>
+                <div className='input_connect' >
+                  <input className='input_connexion_volet' name='login' onChange={this.handleChange} type='login' placeholder='Login' onKeyPress={this.handleKeyPress} />
+                  <input className='input_connexion_volet' name='passwd' onChange={this.handleChange} type='passwd' placeholder='Password' onKeyPress={this.handleKeyPress} />
+                  <button className='button_connexion_volet' value='Connexion' onKeyPress={this.handleKeyPress} >Connexion</button>
+                </div>
+                <div className='Signin_navbar' onClick={this.signIn}>SignIn</div>
               </div>
-              <div className='Signin_navbar' onClick={this.signIn}>SignIn</div>
+              <div className='Signup_navbar'>SignUp</div>
             </div>
-            <div className='Signup_navbar'>SignUp</div>
-          </div>
+          ) : (
+            <div className='connexion'>
+              <div>toto</div>
+            </div>
+          )
+          }
           <div className='word_volet'> Accueil </div>
           <div className='word_volet'> Profil </div>
           <div className='word_volet'> Notification </div>
