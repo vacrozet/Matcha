@@ -45,7 +45,7 @@ module.exports = (req, res) => {
           })
         }
       } else {
-        res.status(404)
+        res.status(200)
         return res.json({
           error: 'User not found'
         })
