@@ -37,7 +37,8 @@ module.exports = (req, res) => {
           db.collection('Users').updateOne({login: req.body.login}, {$set: {tokens: results[0].tokens}})
           return res.json({
             success: true,
-            token: objToken.token
+            token: objToken.token,
+            login: results[0].login
           })
         } else {
           return res.json({

@@ -46,6 +46,8 @@ class Volet extends Component {
             if (res.data.success === true) {
               global.localStorage.setItem('token', res.data.token)
               this.setState({connexion: true})
+              console.log('donnee users')
+              console.log(res.data.login)
             } else {
               console.log('user not found Front')
             }
@@ -61,8 +63,7 @@ class Volet extends Component {
   componentWillMount () {
     global.localStorage.getItem('token')
     if (global.localStorage.getItem('token')) {
-      this.setState({connection: true})
-      console.log('je passe ici')
+      this.setState({connexion: true})
     }
   }
 
