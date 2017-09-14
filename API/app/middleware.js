@@ -43,6 +43,12 @@ module.exports = (role) => {
             message: 'User not connected'
           })
         } else {
+          // console.log(result)
+          req.user = {
+            login: result[0].login,
+            path_img: result[0].login,
+            passwd: result[0].login
+          }
           next()
         }
       })

@@ -3,7 +3,7 @@ import './StyleSheet.css'
 import Navbar from './Navbar'
 import axiosInst from './utils/axios.js'
 
-class Acceuil extends Component {
+class Inscription extends Component {
   constructor () {
     super()
     this.state = {
@@ -31,14 +31,6 @@ class Acceuil extends Component {
       this.state.email === '' || this.state.passwd !== this.state.rePasswd) {
         return false
       } else {
-        // axiosInst().post('signup.js', {
-        //   login: this.state.login,
-        //   passwd: this.state.passwd,
-        //   birthday: this.state.birthday,
-        //   bio: this.state.bio,
-        //   isSexe: this.state.isSexe,
-        //   toSexe: this.state.toSexe
-        // })
         axiosInst().post('/user/signup',
           {
             login: this.state.login,
@@ -84,4 +76,4 @@ class Acceuil extends Component {
   }
 }
 
-export default Acceuil
+export default Inscription

@@ -3,7 +3,8 @@ import React from 'react'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 // import Acceuil from './header.js'
 import registerServiceWorker from './registerServiceWorker'
-import Acceuil from './header.js'
+import Inscription from './Inscription.js'
+import Accueil from './Accueil.js'
 
 import './index.css'
 
@@ -16,7 +17,10 @@ class Index extends React.Component {
 
   render () {
     return (
-      <Acceuil />
+      <Switch>
+        <Route exact path='/inscription' component={Inscription} />
+        <Route path='/' component={Accueil} />
+      </Switch>
     )
   }
 }

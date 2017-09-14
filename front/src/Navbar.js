@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
+import {Link} from 'react-router-dom'
 import './StyleSheet.css'
 import './Navbar.css'
 
@@ -16,6 +17,7 @@ class Volet extends Component {
     this.signIn = this.signIn.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.logoutUser = this.logoutUser.bind(this)
   }
   myFunction (event) {
     document.querySelector('.container').classList.toggle('change')
@@ -60,6 +62,10 @@ class Volet extends Component {
       }
     }
   }
+  logoutUser () {
+    global.localStorage.removeItem('token')
+    this.setState({connexion: false})
+  }
   componentWillMount () {
     global.localStorage.getItem('token')
     if (global.localStorage.getItem('token')) {
@@ -86,10 +92,10 @@ class Volet extends Component {
                 </div>
                 <div className='Signin_navbar' onClick={this.signIn}>SignIn</div>
               </div>
-              <div className='Signup_navbar'>SignUp</div>
+              <Link className='Signup_navbar' to='/inscription' >SignUp</Link>
             </div>
           ) : (
-            <div className='connexion'>
+            <div className='connexion volet_sign'>
               <div>toto</div>
             </div>
           )
@@ -97,7 +103,7 @@ class Volet extends Component {
           <div className='word_volet'> Accueil </div>
           <div className='word_volet'> Profil </div>
           <div className='word_volet'> Notification </div>
-          <div className='word_volet'> Deconnexion </div>
+          <div className='word_volet' onClick={this.logoutUser}> Deconnexion </div>
         </div>
       </div>
     )

@@ -33,6 +33,7 @@ module.exports = (req, res) => {
           objToken.token = genToken()
           objToken.created_at = new Date().getTime()
 
+          // console.log(results[0])
           results[0].tokens.push(objToken)
           db.collection('Users').updateOne({login: req.body.login}, {$set: {tokens: results[0].tokens}})
           return res.json({

@@ -1,6 +1,7 @@
 const db = require('../../db.js')
 
 module.exports = (req, res) => {
+  console.log(req.user)
   db.get().then((db) => {
     db.collection('Users').find().toArray((error, results) => {
       if (error) {

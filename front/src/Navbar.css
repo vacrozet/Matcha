@@ -94,7 +94,8 @@
 }
 .Signup_navbar {
     /* border: solid red 1px; */
-    
+    text-decoration: none;
+    color: white;
     display: flex;
     width: 80%;
     height: 7vh;
@@ -178,4 +179,8 @@
 }
 ::-ms-input-placeholder { /* Microsoft Edge */
    color:   white;
+}
+
+.test{
+    height: 5vh;
 }
