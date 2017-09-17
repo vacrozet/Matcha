@@ -11,22 +11,23 @@ module.exports = (req, res) => {
       message: 'login incorrect'
     })
   }
-  if (req.body.sexe === undefined || !req.body.sexe.match(/^(Homme|Femme)$/)) {
+  if (req.body.isSexe === undefined || !req.body.isSexe.match(/^(Homme|Femme)$/)) {
     return res.json({
       message: 'sexe incorrect'
     })
   }
-  if (req.body.to_match === undefined || !req.body.to_match.match(/^(Homme|Femme|Between)$/)) {
+  if (req.body.toSexe === undefined || !req.body.toSexe.match(/^(Homme|Femme|All)$/)) {
     return res.json({
       message: 'to_match incorrect'
     })
   }
   // /////////----FORMAT DATE: YYYY-DD-MM -----////
-  if (req.body.date === undefined || !req.body.date.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
+  if (req.body.birthday === undefined || !req.body.birthday.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
     return res.json({
       message: 'date incorrect'
     })
   }
+  console.log('je passe icic')
   // //////////---- HASH PASSWORD BCRYPT -----/////
   var hash = bcrypt.hashSync(req.body.passwd, 10)
   // console.log(hash.bgGreen.white.bold.underline)
@@ -41,13 +42,14 @@ module.exports = (req, res) => {
       }
   // ///////-----CREATION D'UN NOUVEL USER-----////////////
       let id = uuid()
+      console.log('j arrive ici')
       if (results.length !== 1) {
         let tab = {
           _id: id,
           login: req.body.login,
-          sexe: req.body.sexe,
-          to_match: req.body.to_match,
-          date: req.body.date,
+          sexe: req.body.isSexe,
+          to_match: req.body.toSexe,
+          date: req.body.birthday,
           passwd: hash,
           path_img: '',
           tokens: []

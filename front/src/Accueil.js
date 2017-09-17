@@ -21,7 +21,7 @@ class Acceuil extends Component {
             Il est moche, Je sais <br />
             =D <br />
             <div>
-              <Link to='/inscription'>Clique ici pour ton t'inscrire</Link>
+              <Link to='/inscription'>Clique ici pour t'inscrire</Link>
             </div>
           </div>
 

@@ -14,7 +14,8 @@ class Inscription extends Component {
       birthday: '',
       bio: '',
       isSexe: 'Homme',
-      toSexe: 'All'
+      toSexe: 'All',
+      signUpOk: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -41,6 +42,8 @@ class Inscription extends Component {
             toSexe: this.state.toSexe
           }).then((res) => {
             console.log(res.data)
+            this.setState({signUpOk: true})
+            console.log('info vrai, je passe ici')
           }).catch((err) => {
             console.log(err)
           })
@@ -51,6 +54,7 @@ class Inscription extends Component {
     return (
       <div className='body'>
         <Navbar />
+        { !this.state.signUpOk ? (
         <div className='Signup'>
           <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
           <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
@@ -71,6 +75,12 @@ class Inscription extends Component {
           <textarea type='text' name='bio' onChange={this.handleChange} placeholder='bio ici' /><br />
           <button id='button_signup' value='inscription' onClick={this.handleKeyPress}>Inscription</button>
         </div>
+        ) : (
+          <div className='Signup'>
+            <div>Inscription Effectuer</div>
+          </div>
+        )
+      }
       </div>
     )
   }

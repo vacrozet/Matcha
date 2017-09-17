@@ -100,7 +100,7 @@ class Volet extends Component {
             </div>
           )
           }
-          <div className='word_volet'> Accueil </div>
+          <Link className='word_volet' to='/Accueil'>  Accueil </Link>
           <div className='word_volet'> Profil </div>
           <div className='word_volet'> Notification </div>
           <div className='word_volet' onClick={this.logoutUser}> Deconnexion </div>
