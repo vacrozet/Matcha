@@ -5,7 +5,8 @@ export default () => {
     baseURL: 'http://localhost:3001',
     timeout: 1000,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${global.localStorage.getItem('token')}`
     }
   })
 }

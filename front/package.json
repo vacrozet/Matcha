@@ -9,7 +9,8 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-navbar": "^1.0.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
+    "semantic-ui-react": "^0.73.1"
   },
   "devDependencies": {
     "react-scripts": "1.0.7"

@@ -21,18 +21,9 @@ class Acceuil extends Component {
     return (
       <div className='all'>
         <div className='body' >
-          { !this.state.connexion ? (
-            <div className='Signup'>
-              Bienvenue sur mon site <br />
-              Il est moche, Je sais <br />
-              =D <br />
-            </div>
-            ) : (
-              <div className='Signup'>
-                <div>vous etes connecter</div>
-              </div>
-            )
-          }
+          <div className='Signup'>
+            <div>vous etes connecter</div>
+          </div>
         </div>
       </div>
     )

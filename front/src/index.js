@@ -7,6 +7,7 @@ import Inscription from './Inscription.js'
 import Accueil from './Accueil.js'
 import AccueilKo from './AccueilKo.js'
 import Navbar from './Navbar.js'
+import Profile from './Profile.js'
 
 import './index.css'
 
@@ -14,7 +15,8 @@ class Index extends React.Component {
   componentWillMount () {
     if (!global.localStorage.getItem('token') && this.props.location.pathname !== '/') {
       this.props.history.push('/')
-    } else {
+    }
+    if (global.localStorage.getItem('token') && this.props.location.pathname === '/') {
       this.props.history.push('/accueil')
     }
   }
@@ -26,6 +28,7 @@ class Index extends React.Component {
         <Switch>
           <Route exact path='/inscription' component={Inscription} />
           <Route exact path='/accueil' component={Accueil} />
+          <Route exact path='/profile' component={Profile} />
           <Route path='/' component={AccueilKo} />
         </Switch>
       </div>

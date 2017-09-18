@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import axiosInst from './utils/axios.js'
+import axios from 'axios'
 import {Link} from 'react-router-dom'
 import './StyleSheet.css'
 import './Navbar.css'
@@ -39,7 +39,7 @@ class Volet extends Component {
       if (this.state.login === '' || this.state.passwd === '') {
         return false
       } else {
-        axiosInst().post('/user/signin',
+        axios.post('http://localhost:3001/user/signin',
           {
             login: this.state.login,
             passwd: this.state.passwd
@@ -103,12 +103,13 @@ class Volet extends Component {
           )
           }
           { !this.state.connexion ? (
-            <Link className='word_volet' to='/'>  Accueil </Link>
+            <Link className='word_volet' to='/'>  Accueil </Link>,
+            <Link className='word_volet' to='/'> Profile </Link>
           ) : (
-            <Link className='word_volet' to='/accueil'>  Accueil </Link>
+            <Link className='word_volet' to='/accueil'>  Accueil </Link>,
+            <Link className='word_volet' to='/profile'> Profile </Link>
           )
           }
-          <div className='word_volet'> Profil </div>
           <div className='word_volet'> Notification </div>
           <div className='word_volet' onClick={this.logoutUser}> Deconnexion </div>
         </div>
