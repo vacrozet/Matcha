@@ -8,6 +8,7 @@ module.exports = (req, res) => {
   console.log(req.body)
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     return res.json({
+      success: false,
       message: 'login incorrect'
     })
   }
@@ -97,10 +98,11 @@ module.exports = (req, res) => {
         })
         res.status(200)
         return res.json({
+          success: true,
           Message: 'INSCRIPTION OK -- ENJOY'
         })
       } else {
-        res.status(400)
+        res.status(200)
         return res.json({
           message: 'utilisateur deja present'
         })

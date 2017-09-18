@@ -15,7 +15,10 @@ class Inscription extends Component {
       bio: '',
       isSexe: 'Homme',
       toSexe: 'All',
-      signUpOk: false
+      signUpOk: false,
+      iMessage: false,
+      message: '',
+      connexion: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -41,21 +44,34 @@ class Inscription extends Component {
             isSexe: this.state.isSexe,
             toSexe: this.state.toSexe
           }).then((res) => {
-            console.log(res.data)
-            this.setState({signUpOk: true})
-            console.log('info vrai, je passe ici')
+            if (res.data === true) {
+              this.setState({signUpOk: true})
+            } else {
+              this.setState({message: res.data.message, iMessage: true})
+            }
           }).catch((err) => {
             console.log(err)
           })
       }
     }
   }
+  componentWillMount () {
+    if (global.localStorage.getItem('token')) {
+      this.setState({connexion: true})
+    }
+  }
   render () {
     return (
       <div className='body'>
         <Navbar />
-        { !this.state.signUpOk ? (
+        { !this.state.connexion ? (
         <div className='Signup'>
+          { this.state.iMessage ? (
+            this.state.message
+          ) : (
+            null
+          )
+          }
           <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
           <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
           <input type='password' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} /><br />
@@ -76,11 +92,9 @@ class Inscription extends Component {
           <button id='button_signup' value='inscription' onClick={this.handleKeyPress}>Inscription</button>
         </div>
         ) : (
-          <div className='Signup'>
-            <div>Inscription Effectuer</div>
-          </div>
+        <div className='Signup'> vous êtes déjà inscrit vue que vous êtes connecter </div>
         )
-      }
+        }
       </div>
     )
   }

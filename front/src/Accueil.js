@@ -7,7 +7,14 @@ class Acceuil extends Component {
   constructor () {
     super()
     this.state = {
-      email: ''
+      email: '',
+      connexion: false
+    }
+  }
+
+  componentWillMount () {
+    if (global.localStorage.getItem('token')) {
+      this.setState({connexion: true})
     }
   }
 
@@ -16,15 +23,19 @@ class Acceuil extends Component {
       <div className='all'>
         <Navbar />
         <div className='body' >
-          <div className='Signup'>
-            Bienvenue sur mon site <br />
-            Il est moche, Je sais <br />
-            =D <br />
-            <div>
+          { !this.state.connexion ? (
+            <div className='Signup'>
+              Bienvenue sur mon site <br />
+              Il est moche, Je sais <br />
+              =D <br />
               <Link to='/inscription'>Clique ici pour t'inscrire</Link>
             </div>
-          </div>
-
+            ) : (
+              <div className='Signup'>
+                <div>vous etes connecter</div>
+              </div>
+            )
+          }
         </div>
       </div>
     )
