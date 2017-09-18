@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './StyleSheet.css'
-import Navbar from './Navbar'
 import axiosInst from './utils/axios.js'
 
 class Inscription extends Component {
@@ -63,36 +62,35 @@ class Inscription extends Component {
   render () {
     return (
       <div className='body'>
-        <Navbar />
         { !this.state.connexion ? (
-        <div className='Signup'>
-          { this.state.iMessage ? (
-            this.state.message
-          ) : (
-            null
-          )
-          }
-          <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
-          <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
-          <input type='password' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} /><br />
-          <input type='email' name='email' onChange={this.handleChange} placeholder='email' onKeyPress={this.handleKeyPress} /><br />
-          <input type='text' name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-DD' onKeyPress={this.handleKeyPress} />
-          <p>Sexe:</p>
-          <select className='select_signup' name='isSexe' onChange={this.handleChange}>
-            <option value='Homme' defaultValue>Homme</option>
-            <option value='Femme'>Femme</option>
-          </select><br /><br />
-          <p> Interessé par:</p>
-          <select className='select_signup' name='toSexe' onChange={this.handleChange}>
-            <option value='All' defaultValue>All</option>
-            <option value='Homme'>Homme</option>
-            <option value='Femme'>Femme</option>
-          </select><br /><br />
-          <textarea type='text' name='bio' onChange={this.handleChange} placeholder='bio ici' /><br />
-          <button id='button_signup' value='inscription' onClick={this.handleKeyPress}>Inscription</button>
-        </div>
+          <div className='Signup'>
+            { this.state.iMessage ? (
+              this.state.message
+            ) : (
+              null
+            )
+            }
+            <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
+            <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
+            <input type='password' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} /><br />
+            <input type='email' name='email' onChange={this.handleChange} placeholder='email' onKeyPress={this.handleKeyPress} /><br />
+            <input type='text' name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-DD' onKeyPress={this.handleKeyPress} />
+            <p>Sexe:</p>
+            <select className='select_signup' name='isSexe' onChange={this.handleChange}>
+              <option value='Homme' defaultValue>Homme</option>
+              <option value='Femme'>Femme</option>
+            </select><br /><br />
+            <p> Interessé par:</p>
+            <select className='select_signup' name='toSexe' onChange={this.handleChange}>
+              <option value='All' defaultValue>All</option>
+              <option value='Homme'>Homme</option>
+              <option value='Femme'>Femme</option>
+            </select><br /><br />
+            <textarea type='text' name='bio' onChange={this.handleChange} placeholder='bio ici' /><br />
+            <button id='button_signup' value='inscription' onClick={this.handleKeyPress}>Inscription</button>
+          </div>
         ) : (
-        <div className='Signup'> vous êtes déjà inscrit vue que vous êtes connecter </div>
+          <div className='Signup'> vous êtes déjà inscrit vue que vous êtes connecter </div>
         )
         }
       </div>

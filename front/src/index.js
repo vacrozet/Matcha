@@ -5,6 +5,8 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 import Inscription from './Inscription.js'
 import Accueil from './Accueil.js'
+import AccueilKo from './AccueilKo.js'
+import Navbar from './Navbar.js'
 
 import './index.css'
 
@@ -12,15 +14,21 @@ class Index extends React.Component {
   componentWillMount () {
     if (!global.localStorage.getItem('token') && this.props.location.pathname !== '/') {
       this.props.history.push('/')
+    } else {
+      this.props.history.push('/accueil')
     }
   }
 
   render () {
     return (
-      <Switch>
-        <Route exact path='/inscription' component={Inscription} />
-        <Route path='/' component={Accueil} />
-      </Switch>
+      <div>
+        <Navbar history={this.props.history} />
+        <Switch>
+          <Route exact path='/inscription' component={Inscription} />
+          <Route exact path='/accueil' component={Accueil} />
+          <Route path='/' component={AccueilKo} />
+        </Switch>
+      </div>
     )
   }
 }

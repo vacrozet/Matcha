@@ -50,6 +50,7 @@ class Volet extends Component {
               this.setState({connexion: true})
               console.log('donnee users')
               console.log(res.data.login)
+              this.props.history.push('/accueil')
             } else {
               console.log('user not found Front')
             }
@@ -64,6 +65,7 @@ class Volet extends Component {
   }
   logoutUser () {
     global.localStorage.removeItem('token')
+    this.props.history.push('/')
     this.setState({connexion: false})
   }
   componentWillMount () {
@@ -100,7 +102,12 @@ class Volet extends Component {
             </div>
           )
           }
-          <Link className='word_volet' to='/Accueil'>  Accueil </Link>
+          { !this.state.connexion ? (
+            <Link className='word_volet' to='/'>  Accueil </Link>
+          ) : (
+            <Link className='word_volet' to='/accueil'>  Accueil </Link>
+          )
+          }
           <div className='word_volet'> Profil </div>
           <div className='word_volet'> Notification </div>
           <div className='word_volet' onClick={this.logoutUser}> Deconnexion </div>

@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    background-image: url("./image/rencontre.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: row;
+}
+.block_text{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+.text {
+    margin: auto;
+    font-family: monospace;
+    font-size: 40px;
+    color: Black;
+}
+.button {
+    text-decoration: none;
+    color: black;
+}
