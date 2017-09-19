@@ -27,7 +27,6 @@ module.exports = (req, res) => {
           delete result[index].passwd
           delete result[index].tokens
         }, this)
-
         return res.json({
           result
         })
