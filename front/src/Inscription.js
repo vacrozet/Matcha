@@ -3,8 +3,8 @@ import './StyleSheet.css'
 import axiosInst from './utils/axios.js'
 
 class Inscription extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
       email: '',
       login: '',
@@ -15,7 +15,6 @@ class Inscription extends Component {
       isSexe: 'Homme',
       toSexe: 'All',
       signUpOk: false,
-      iMessage: false,
       message: '',
       connexion: false
     }
@@ -46,7 +45,11 @@ class Inscription extends Component {
             if (res.data === true) {
               this.setState({signUpOk: true})
             } else {
-              this.setState({message: res.data.message, iMessage: true})
+              this.props.notification.addNotification({
+                message: res.data.message,
+                level: 'error',
+                position: 'top right'
+              })
             }
           }).catch((err) => {
             console.log(err)
@@ -64,12 +67,6 @@ class Inscription extends Component {
       <div className='body'>
         { !this.state.connexion ? (
           <div className='Signup'>
-            { this.state.iMessage ? (
-              this.state.message
-            ) : (
-              null
-            )
-            }
             <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
             <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
             <input type='password' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} /><br />

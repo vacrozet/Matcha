@@ -52,14 +52,17 @@ class Volet extends Component {
               console.log(res.data.login)
               this.props.history.push('/accueil')
             } else {
-              console.log('user not found Front')
+              this.props.notification.addNotification({
+                message: res.data.error,
+                level: 'error'
+              })
             }
           }).catch((err) => {
-            console.log(err)
+            this.props.notification.addNotification({
+              message: err,
+              level: 'error'
+            })
           })
-        // console.log('je passe ici')
-        // console.log(this.state.login)
-        // console.log(this.state.passwd)
       }
     }
   }
@@ -103,11 +106,15 @@ class Volet extends Component {
           )
           }
           { !this.state.connexion ? (
-            <Link className='word_volet' to='/'>  Accueil </Link>,
-            <Link className='word_volet' to='/'> Profile </Link>
+            <div>
+              <Link className='word_volet' to='/'>Accueil</Link>
+              <Link className='word_volet' to='/'>Profile</Link>
+            </div>
           ) : (
-            <Link className='word_volet' to='/accueil'>  Accueil </Link>,
-            <Link className='word_volet' to='/profile'> Profile </Link>
+            <div>
+              <Link className='word_volet' to='/accueil'>Accueil</Link>
+              <Link className='word_volet' to='/profile'>Profile</Link>
+            </div>
           )
           }
           <div className='word_volet'> Notification </div>

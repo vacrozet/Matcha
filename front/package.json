@@ -9,6 +9,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-navbar": "^1.0.0",
+    "react-notification-system": "^0.2.15",
     "react-router-dom": "^4.2.2",
     "semantic-ui-react": "^0.73.1"
   },

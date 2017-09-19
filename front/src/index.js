@@ -11,7 +11,18 @@ import Profile from './Profile.js'
 
 import './index.css'
 
+var NotificationSystem = require('react-notification-system')
+
 class Index extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this._notificationSystem = null
+    this.state = {
+      _notificationSystem: false
+    }
+  }
+
   componentWillMount () {
     if (!global.localStorage.getItem('token') && this.props.location.pathname !== '/') {
       this.props.history.push('/')
@@ -21,12 +32,24 @@ class Index extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this._notificationSystem = this.refs.notificationSystem
+    this.setState({upNotifSys: true})
+  }
+
   render () {
     return (
       <div>
-        <Navbar history={this.props.history} />
+        <NotificationSystem ref='notificationSystem' />
+        {(this.state.upNotifSys !== false) ? (
+          <Navbar history={this.props.history} notification={this._notificationSystem} />
+        ) : (
+          null
+        )}
         <Switch>
-          <Route exact path='/inscription' component={Inscription} />
+          <Route exact path='/inscription' render={({history, match, location}) => {
+            <Inscription history={history} match={match} notification={this._notificationSystem} />
+          }} />
           <Route exact path='/accueil' component={Accueil} />
           <Route exact path='/profile' component={Profile} />
           <Route path='/' component={AccueilKo} />
