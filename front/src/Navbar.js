@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
+import axiosInst from './utils/axios.js'
 import './StyleSheet.css'
 import './Navbar.css'
 
@@ -11,7 +12,9 @@ class Volet extends Component {
       volet: false,
       connexion: false,
       login: '',
-      passwd: ''
+      passwd: '',
+      age: '',
+      sexe: ''
     }
     this.myFunction = this.myFunction.bind(this)
     this.signIn = this.signIn.bind(this)
@@ -44,12 +47,17 @@ class Volet extends Component {
             login: this.state.login,
             passwd: this.state.passwd
           }).then((res) => {
-            console.log(res.data)
             if (res.data.success === true) {
               global.localStorage.setItem('token', res.data.token)
-              this.setState({connexion: true})
-              console.log('donnee users')
-              console.log(res.data.login)
+              this.setState({
+                connexion: true,
+                login: res.data.login
+              })
+              this.props.notification.addNotification({
+                message: 'Connected',
+                level: 'success'
+              })
+              // console.log(res.data)
               this.props.history.push('/accueil')
             } else {
               this.props.notification.addNotification({
@@ -74,6 +82,18 @@ class Volet extends Component {
   componentWillMount () {
     global.localStorage.getItem('token')
     if (global.localStorage.getItem('token')) {
+      axiosInst().get('/user/profile').then((res) => {
+        this.setState({
+          login: res.data.result[0].login,
+          age: res.data.result[0].age,
+          sexe: res.data.result[0].sexe
+        })
+        console.log(this.state.login)
+        console.log(this.state.age)
+        console.log(this.state.sexe)
+      }).catch((err) => {
+        console.log(err)
+      })
       this.setState({connexion: true})
     }
   }
@@ -101,7 +121,9 @@ class Volet extends Component {
             </div>
           ) : (
             <div className='connexion volet_sign'>
-              <div>toto</div>
+              <div>{this.state.login}</div>
+              <div>{this.state.age} ans</div>
+              <div>{this.state.sexe}</div>
             </div>
           )
           }

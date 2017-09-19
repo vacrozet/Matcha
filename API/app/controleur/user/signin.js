@@ -11,6 +11,17 @@ function genToken () {
   return (token)
 }
 
+function getAge (datestring) {
+  var today = new Date()
+  var birthDate = new Date(datestring)
+  var age = today.getFullYear() - birthDate.getFullYear()
+  var m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+  return age
+}
+
 module.exports = (req, res) => {
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     res.status(400)
@@ -32,10 +43,9 @@ module.exports = (req, res) => {
           let objToken = {}
           objToken.token = genToken()
           objToken.created_at = new Date().getTime()
-
-          console.log(results[0])
+          let hbirthday = getAge(results[0].date)
           results[0].tokens.push(objToken)
-          db.collection('Users').updateOne({login: req.body.login}, {$set: {tokens: results[0].tokens}})
+          db.collection('Users').updateOne({login: req.body.login}, {$set: {tokens: results[0].tokens, age: hbirthday}})
           return res.json({
             success: true,
             token: objToken.token,

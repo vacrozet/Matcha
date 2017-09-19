@@ -1,0 +1,40 @@
+.page_profile {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.body_profile {
+    height: auto;
+    width: 500px;
+}
+.all_pictures {
+    border: solid 1px red;
+    display: flex;
+
+    flex-direction: row;
+}
+.cadre_profile {
+    height: 200px;
+    display: flex;
+    margin-top: 10px;
+    flex-direction: column;
+    padding-left: 10px;
+    justify-content: center;
+    border: solid 1px red;
+    background-color: white;
+    border-radius: 10px;
+}
+.photo {
+    border: solid 1px red;
+    width: 20%;
+    height: 70px;
+}
+.card {
+    margin: auto;
+}
+.text_profile{
+    font-size: 20px;
+}

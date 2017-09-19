@@ -43,6 +43,7 @@
     background-color: #071D40;
     color: white;
     position: absolute;
+    z-index: 10;
 }
 .all_word_volet {
     display: flex;

@@ -10,7 +10,7 @@ class Inscription extends Component {
       login: '',
       passwd: '',
       rePasswd: '',
-      birthday: '',
+      date: '',
       bio: '',
       isSexe: 'Homme',
       toSexe: 'All',
@@ -29,7 +29,7 @@ class Inscription extends Component {
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'inscription') {
       if (this.state.login === '' || this.state.passwd === '' ||
-      this.state.rePasswd === '' || this.state.birthday === '' ||
+      this.state.rePasswd === '' || this.state.date === '' ||
       this.state.email === '' || this.state.passwd !== this.state.rePasswd) {
         return false
       } else {
@@ -37,7 +37,7 @@ class Inscription extends Component {
           {
             login: this.state.login,
             passwd: this.state.passwd,
-            birthday: this.state.birthday,
+            date: this.state.date,
             bio: this.state.bio,
             isSexe: this.state.isSexe,
             toSexe: this.state.toSexe
@@ -77,7 +77,7 @@ class Inscription extends Component {
             <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
             <input type='password' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} /><br />
             <input type='email' name='email' onChange={this.handleChange} placeholder='email' onKeyPress={this.handleKeyPress} /><br />
-            <input type='text' name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-DD' onKeyPress={this.handleKeyPress} />
+            <input type='text' name='date' onChange={this.handleChange} placeholder='YYYY-MM-DD' onKeyPress={this.handleKeyPress} />
             <p>Sexe:</p>
             <select className='select_signup' name='isSexe' onChange={this.handleChange}>
               <option value='Homme' defaultValue>Homme</option>

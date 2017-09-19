@@ -39,7 +39,7 @@ class Index extends React.Component {
 
   render () {
     return (
-      <div>
+      <div id='data'>
         <NotificationSystem ref='notificationSystem' />
         {(this.state.upNotifSys !== false) ? (
           <Navbar history={this.props.history} notification={this._notificationSystem} />
