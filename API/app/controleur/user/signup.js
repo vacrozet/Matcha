@@ -99,7 +99,7 @@ module.exports = (req, res) => {
         res.status(200)
         return res.json({
           success: true,
-          Message: 'INSCRIPTION OK -- ENJOY'
+          message: 'INSCRIPTION OK -- ENJOY'
         })
       } else {
         res.status(200)

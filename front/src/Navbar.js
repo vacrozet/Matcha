@@ -97,7 +97,7 @@ class Volet extends Component {
                 </div>
                 <div className='Signin_navbar' onClick={this.signIn}>SignIn</div>
               </div>
-              <Link className='Signup_navbar' to='/inscription' >SignUp</Link>
+              <Link className='Signup_navbar' to='/inscription'>SignUp</Link>
             </div>
           ) : (
             <div className='connexion volet_sign'>

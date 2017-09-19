@@ -42,13 +42,19 @@ class Inscription extends Component {
             isSexe: this.state.isSexe,
             toSexe: this.state.toSexe
           }).then((res) => {
-            if (res.data === true) {
-              this.setState({signUpOk: true})
+            if (res.data.success === true) {
+              this.props.notification.addNotification({
+                message: res.data.message,
+                level: 'success',
+                position: 'tr'
+              })
+              this.props.history.push('/')
             } else {
+              console.log(res.data)
               this.props.notification.addNotification({
                 message: res.data.message,
                 level: 'error',
-                position: 'top right'
+                position: 'tr'
               })
             }
           }).catch((err) => {

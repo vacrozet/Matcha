@@ -47,9 +47,9 @@ class Index extends React.Component {
           null
         )}
         <Switch>
-          <Route exact path='/inscription' render={({history, match, location}) => {
+          <Route exact path='/inscription' render={({history, match, location}) =>
             <Inscription history={history} match={match} notification={this._notificationSystem} />
-          }} />
+          } />
           <Route exact path='/accueil' component={Accueil} />
           <Route exact path='/profile' component={Profile} />
           <Route path='/' component={AccueilKo} />
