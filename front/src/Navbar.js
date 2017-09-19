@@ -51,7 +51,9 @@ class Volet extends Component {
               global.localStorage.setItem('token', res.data.token)
               this.setState({
                 connexion: true,
-                login: res.data.login
+                login: res.data.login,
+                age: res.data.age,
+                sexe: res.data.sexe
               })
               this.props.notification.addNotification({
                 message: 'Connected',
@@ -77,6 +79,10 @@ class Volet extends Component {
   logoutUser () {
     global.localStorage.removeItem('token')
     this.props.history.push('/')
+    this.props.notification.addNotification({
+      message: 'Disconnected',
+      level: 'success'
+    })
     this.setState({connexion: false})
   }
   componentWillMount () {
@@ -88,9 +94,6 @@ class Volet extends Component {
           age: res.data.result[0].age,
           sexe: res.data.result[0].sexe
         })
-        console.log(this.state.login)
-        console.log(this.state.age)
-        console.log(this.state.sexe)
       }).catch((err) => {
         console.log(err)
       })
@@ -121,9 +124,11 @@ class Volet extends Component {
             </div>
           ) : (
             <div className='connexion volet_sign'>
-              <div>{this.state.login}</div>
-              <div>{this.state.age} ans</div>
-              <div>{this.state.sexe}</div>
+              <div>
+                <div>{this.state.login}</div>
+                <div>{this.state.age} ans</div>
+                <div>{this.state.sexe}</div>
+              </div>
             </div>
           )
           }
@@ -131,16 +136,18 @@ class Volet extends Component {
             <div>
               <Link className='word_volet' to='/'>Accueil</Link>
               <Link className='word_volet' to='/'>Profile</Link>
+              <Link className='word_volet' to='/'>Notification</Link>
+              <Link className='word_volet' to='/' onClick={this.logoutUser}>Deconnexion</Link>
             </div>
           ) : (
             <div>
               <Link className='word_volet' to='/accueil'>Accueil</Link>
               <Link className='word_volet' to='/profile'>Profile</Link>
+              <Link className='word_volet' to='/notification'>Notification</Link>
+              <Link className='word_volet' to='/' onClick={this.logoutUser}>Deconnexion</Link>
             </div>
           )
           }
-          <div className='word_volet'> Notification </div>
-          <div className='word_volet' onClick={this.logoutUser}> Deconnexion </div>
         </div>
       </div>
     )

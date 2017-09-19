@@ -49,7 +49,9 @@ module.exports = (req, res) => {
           return res.json({
             success: true,
             token: objToken.token,
-            login: results[0].login
+            login: results[0].login,
+            sexe: results[0].sexe,
+            age: hbirthday
           })
         } else {
           return res.json({
