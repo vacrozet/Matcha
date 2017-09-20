@@ -9,7 +9,7 @@ module.exports = (req, res) => {
           err: "erreur d'injection"
         })
       }
-      console.log(results.length)
+      // console.log(results.length)
       results.array.forEach((element, index) => {
         delete results[index].passwd
         delete results[index].tokens

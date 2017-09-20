@@ -22,7 +22,7 @@ module.exports = (req, res) => {
           Message: 'user not found'
         })
       } else {
-        console.log(result[0])
+        // console.log(result[0])
         result.forEach((element, index) => {
           delete result[index].passwd
           delete result[index].tokens

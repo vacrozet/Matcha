@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs')
 
 module.exports = (req, res) => {
   // //////////////----VERIFICATION----//////////////////////////////////////
-  console.log(req.body)
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     return res.json({
       success: false,
@@ -41,7 +40,6 @@ module.exports = (req, res) => {
       }
   // ///////-----CREATION D'UN NOUVEL USER-----////////////
       let id = uuid()
-      console.log('j arrive ici')
       if (results.length !== 1) {
         let tab = {
           _id: id,
@@ -52,7 +50,8 @@ module.exports = (req, res) => {
           age: '',
           passwd: hash,
           img: [],
-          tokens: []
+          tokens: [],
+          tag: []
         }
         db.collection('Users').insert(tab, null, (error, result) => {
           if (error) {

@@ -8,6 +8,8 @@ import Accueil from './Accueil.js'
 import AccueilKo from './AccueilKo.js'
 import Navbar from './Navbar.js'
 import Profile from './Profile.js'
+import './styles.min.css'
+import '../node_modules/elemental/less/elemental.less'
 
 import './index.css'
 

@@ -7,7 +7,6 @@ const db = require('./db.js')
 module.exports = (role) => {
   return (req, res, next) => {
     var auth = req.get('Authorization')
-
     if (auth === undefined) {
       res.status(400)
       return res.json({
@@ -49,6 +48,7 @@ module.exports = (role) => {
             path_img: result[0].login,
             passwd: result[0].login
           }
+          console.log('je passe la')
           next()
         }
       })

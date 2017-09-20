@@ -7,34 +7,78 @@
     justify-content: center;
 }
 .body_profile {
-    height: auto;
-    width: 500px;
+    height: 60%;
+    /* width: 500px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 .all_pictures {
-    border: solid 1px red;
     display: flex;
-
-    flex-direction: row;
+    flex-wrap: wrap;
+    width: 60vw;
+    min-width: 235px;
+    display: flex;
+    justify-content: center;
 }
 .cadre_profile {
     height: 200px;
     display: flex;
+    width: 40vw;
+    min-width: 215px;
     margin-top: 10px;
     flex-direction: column;
-    padding-left: 10px;
     justify-content: center;
-    border: solid 1px red;
     background-color: white;
     border-radius: 10px;
+    align-items: center;
+
 }
 .photo {
-    border: solid 1px red;
-    width: 20%;
-    height: 70px;
+    width: 40px;
+    height: 150px;
+    min-width: 115px;
+    background-color: white;
+
 }
 .card {
     margin: auto;
 }
 .text_profile{
     font-size: 20px;
+}
+.primary {
+    width: 50%;
+}
+.bmp {
+    color: white;
+    text-decoration: none;
+}
+.bmp:hover {
+    color:white;
+    text-decoration: none;
+}
+.all_htag{
+    height: 200px;
+    width: 380px;
+    border-radius: 10px;
+    border: solid 1px red;    
+    background-color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.affichage_tag {
+    height: 70%;
+    border: solid 1px grey;
+    border-radius: 10px;
+    width: 95%;  
+    text-align: center;    
+}
+.binput {
+    height: 20%;
+    width: 95%;
+    text-align: center;
 }
