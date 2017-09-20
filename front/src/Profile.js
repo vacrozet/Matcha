@@ -19,19 +19,27 @@ class Profile extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.affichTag = this.affichTag.bind(this)
+    this.searchTag = this.searchTag.bind(this)
   }
   handleChange (event) {
     this.setState({[event.target.name]: event.target.value})
   }
+
+  affichTag (result) {
+    console.log(result)
+  }
+  searchTag () {
+    /// Chercher tous les tags  et utiliser la fonction affichTag ///
+  }
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'ajouter') {
       if (this.state.tag !== '') {
-        console.log('je passe ici')
-        console.log(this.state.tag)
         axiosInst().post('./user/addTag', {
           tag: this.state.tag
         }).then((res) => {
           this.setState({tag: ''})
+          this.searchTag()
           console.log(res.data)
         }).catch((err) => {
           console.log(err)
@@ -51,6 +59,12 @@ class Profile extends Component {
         /// IL FAUT RECEVOIR UN TABLEAU ///
         /// REPRISE ICI ///
       })
+      if (this.state.tagProfile.length === 0) {
+        console.log('aucun element dans le tableau')
+      } else {
+        this.affichTag(this.state.tagProfile)
+        /// RENVOI a affichTag dans l'argument result ///
+      }
     }).catch((err) => {
       console.log(err)
     })
