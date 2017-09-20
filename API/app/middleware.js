@@ -48,7 +48,6 @@ module.exports = (role) => {
             path_img: result[0].login,
             passwd: result[0].login
           }
-          console.log('je passe la')
           next()
         }
       })

@@ -14,7 +14,8 @@ class Profile extends Component {
       birthday: '',
       age: '',
       tag: '',
-      token: ''
+      token: '',
+      tagProfile: []
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -25,9 +26,15 @@ class Profile extends Component {
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'ajouter') {
       if (this.state.tag !== '') {
-        axiosInst().post('/user/addTag', {
-          tag: this.state.tag,
-          token: global.localStorage.getItem('token')
+        console.log('je passe ici')
+        console.log(this.state.tag)
+        axiosInst().post('./user/addTag', {
+          tag: this.state.tag
+        }).then((res) => {
+          this.setState({tag: ''})
+          console.log(res.data)
+        }).catch((err) => {
+          console.log(err)
         })
       }
     }
@@ -40,7 +47,9 @@ class Profile extends Component {
         toSexe: res.data.result[0].to_match,
         birthday: res.data.result[0].date,
         age: res.data.result[0].age,
-        tag: res.data.result[0].tag
+        tagProfile: res.data.result[0].tag
+        /// IL FAUT RECEVOIR UN TABLEAU ///
+        /// REPRISE ICI ///
       })
     }).catch((err) => {
       console.log(err)
@@ -75,7 +84,7 @@ class Profile extends Component {
               <Pill label='TEST' type='primary' onClear={this.handleClear} />
             </div>
             <div className='binput'>
-              <input type='name' name='tag' onChange={this.handleChange} placeholder='#TAG' onKeyPress={this.handleKeyPress} />
+              <input type='name' name='tag' value={this.state.tag} onChange={this.handleChange} placeholder='#TAG' onKeyPress={this.handleKeyPress} />
               <Button className='primary' type='primary' value='ajouter' onClick={this.handleKeyPress}>Ajouter</Button>
             </div>
           </div>

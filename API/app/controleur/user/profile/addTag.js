@@ -10,9 +10,29 @@ module.exports = (req, res) => {
             error: 'Internal server error'
           })
         }
-        console.log('lancer')
-        if (result.length === 1) {
-          console.log(result[0].tag.length)
+        // console.log(result[0].tag.length)
+        if (result[0].tag.length === 0) {
+          db.collection('Users').updateOne({login: req.user.login}, {$push: {tag: req.body.tag}})
+          return res.json({
+            message: 'tag ajouter'
+          })
+        } else {
+          var capteur = false
+          result[0].tag.forEach((element) => {
+            if (element === req.body.tag) {
+              capteur = true
+            }
+          }, this)
+          if (capteur === true) {
+            res.json({
+              message: 'tag deja present'
+            })
+          } else {
+            db.collection('Users').updateOne({login: req.user.login}, {$push: {tag: req.body.tag}})
+            return res.json({
+              message: 'tag ajouter'
+            })
+          }
         }
       })
     })

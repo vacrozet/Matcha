@@ -26,7 +26,6 @@ module.exports = (req, res) => {
       message: 'date incorrect'
     })
   }
-  console.log('je passe icic')
   // //////////---- HASH PASSWORD BCRYPT -----/////
   var hash = bcrypt.hashSync(req.body.passwd, 10)
 
