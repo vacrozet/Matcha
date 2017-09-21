@@ -1,13 +1,13 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
-// import Acceuil from './header.js'
 import registerServiceWorker from './registerServiceWorker'
 import Inscription from './Inscription.js'
 import Accueil from './Accueil.js'
 import AccueilKo from './AccueilKo.js'
 import Navbar from './Navbar.js'
 import Profile from './Profile.js'
+import Modify from './ModifyProfile.js'
 import './styles.min.css'
 import '../node_modules/elemental/less/elemental.less'
 
@@ -52,7 +52,12 @@ class Index extends React.Component {
           <Route exact path='/inscription' render={({history, match, location}) =>
             <Inscription history={history} match={match} notification={this._notificationSystem} />
           } />
-          <Route exact path='/accueil' component={Accueil} />
+          <Route exact path='/accueil' render={({history, match, location}) =>
+            <Accueil history={history} match={match} location={location} />
+          } />
+          <Route exact path='/profile/modify' render={({history, match, location}) =>
+            <Modify history={history} match={match} notification={this._notificationSystem} />
+          } />
           <Route exact path='/profile' render={({history, match, location}) =>
             <Profile history={history} match={match} notification={this._notificationSystem} />
           } />

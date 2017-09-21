@@ -7,11 +7,14 @@ class Inscription extends Component {
     super(props)
     this.state = {
       email: '',
+      nom: '',
+      prenom: '',
       login: '',
       passwd: '',
       rePasswd: '',
       date: '',
       bio: '',
+      tag: '',
       isSexe: 'Homme',
       toSexe: 'All',
       signUpOk: false,
@@ -28,39 +31,38 @@ class Inscription extends Component {
 
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'inscription') {
-      if (this.state.login === '' || this.state.passwd === '' ||
-      this.state.rePasswd === '' || this.state.date === '' ||
-      this.state.email === '' || this.state.passwd !== this.state.rePasswd) {
-        return false
-      } else {
-        axiosInst().post('/user/signup',
-          {
-            login: this.state.login,
-            passwd: this.state.passwd,
-            date: this.state.date,
-            bio: this.state.bio,
-            isSexe: this.state.isSexe,
-            toSexe: this.state.toSexe
-          }).then((res) => {
-            if (res.data.success === true) {
-              this.props.notification.addNotification({
-                message: res.data.message,
-                level: 'success',
-                position: 'tr'
-              })
-              this.props.history.push('/')
-            } else {
-              console.log(res.data)
-              this.props.notification.addNotification({
-                message: res.data.message,
-                level: 'error',
-                position: 'tr'
-              })
-            }
-          }).catch((err) => {
-            console.log(err)
-          })
-      }
+      axiosInst().post('/user/signup',
+        {
+          login: this.state.login,
+          nom: this.state.nom,
+          prenom: this.state.prenom,
+          passwd: this.state.passwd,
+          rePasswd: this.state.rePasswd,
+          date: this.state.date,
+          bio: this.state.bio,
+          isSexe: this.state.isSexe,
+          toSexe: this.state.toSexe,
+          tag: this.state.tag,
+          email: this.state.email
+        }).then((res) => {
+          if (res.data.success === true) {
+            this.props.notification.addNotification({
+              message: res.data.message,
+              level: 'success',
+              position: 'tr'
+            })
+            this.props.history.push('/')
+          } else {
+            console.log(res.data)
+            this.props.notification.addNotification({
+              message: res.data.message,
+              level: 'error',
+              position: 'tr'
+            })
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
     }
   }
   componentWillMount () {
@@ -74,6 +76,8 @@ class Inscription extends Component {
         { !this.state.connexion ? (
           <div className='Signup'>
             <input type='login' name='login' onChange={this.handleChange} placeholder='Login' onKeyPress={this.handleKeyPress} /><br />
+            <input type='name' name='nom' onChange={this.handleChange} placeholder='Nom' onKeyPress={this.handleKeyPress} /><br />
+            <input type='prenom' name='prenom' onChange={this.handleChange} placeholder='Prenom' onKeyPress={this.handleKeyPress} /><br />
             <input type='password' name='passwd' onChange={this.handleChange} placeholder='Password' onKeyPress={this.handleKeyPress} /><br />
             <input type='password' name='rePasswd' onChange={this.handleChange} placeholder='Re-Password' onKeyPress={this.handleKeyPress} /><br />
             <input type='email' name='email' onChange={this.handleChange} placeholder='email' onKeyPress={this.handleKeyPress} /><br />
@@ -90,6 +94,7 @@ class Inscription extends Component {
               <option value='Femme'>Femme</option>
             </select><br /><br />
             <textarea type='text' name='bio' onChange={this.handleChange} placeholder='bio ici' /><br />
+            <input type='text' name='tag' onChange={this.handleChange} placeholder='#' onKeyPress={this.handleKeyPress} /><br />
             <button id='button_signup' value='inscription' onClick={this.handleKeyPress}>Inscription</button>
           </div>
         ) : (

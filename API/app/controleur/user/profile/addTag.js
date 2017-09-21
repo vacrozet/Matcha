@@ -31,6 +31,7 @@ module.exports = (req, res) => {
             } else {
               db.collection('Users').updateOne({login: req.user.login}, {$push: {tag: req.body.tag}})
               return res.json({
+                success: 'OK',
                 message: 'tag ajouter'
               })
             }

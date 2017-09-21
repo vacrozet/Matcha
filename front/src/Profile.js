@@ -56,11 +56,12 @@ class Profile extends Component {
           tag: this.state.tag
         }).then((res) => {
           this.setState({tag: ''})
-          console.log('Tag Ajouter')
-          this.props.notification.addNotification({
-            message: 'Tag add',
-            level: 'success'
-          })
+          if (res.data.success === 'OK') {
+            this.props.notification.addNotification({
+              message: 'Tag add',
+              level: 'success'
+            })
+          }
           this.searchTag()
         }).catch((err) => {
           console.log(err)
@@ -104,7 +105,7 @@ class Profile extends Component {
             <div>Interessé par: {this.state.toSexe}</div>
             <div>date de naissance: {this.state.birthday}</div>
             <div>Age: {this.state.age}</div>
-            <Button className='primary' type='primary'><Link className='bmp' to='/'>Modifier</Link></Button>
+            <Button className='primary' type='primary'><Link className='bmp' to='/profile/modify'>Modifier</Link></Button>
           </div>
           <div className='all_htag'>
             <div className='affichage_tag'>

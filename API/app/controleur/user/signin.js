@@ -54,6 +54,7 @@ module.exports = (req, res) => {
             age: hbirthday
           })
         } else {
+          res.status(200)
           return res.json({
             error: 'Wrong password'
           })
