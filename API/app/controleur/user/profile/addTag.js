@@ -10,7 +10,6 @@ module.exports = (req, res) => {
             error: 'Internal server error'
           })
         }
-        // console.log(result[0].tag.length)
         if (result[0].tag.length === 0) {
           db.collection('Users').updateOne({login: req.user.login}, {$push: {tag: req.body.tag}})
           return res.json({

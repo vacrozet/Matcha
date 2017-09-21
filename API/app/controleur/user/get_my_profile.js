@@ -14,23 +14,19 @@ module.exports = (req, res) => {
       if (err) {
         res.status(500)
         return res.json({
-          error: 'Internal server error'
+          Message: 'Internal server error'
         })
       }
       if (result.length === 0) {
         return res.json({
           Message: 'user not found'
         })
-      } else {
-        // console.log(result[0])
-        result.forEach((element, index) => {
-          delete result[index].passwd
-          delete result[index].tokens
-        }, this)
-        return res.json({
-          result
-        })
       }
+      delete result[0].passwd
+      delete result[0].tokens
+      return res.json({
+        result
+      })
     })
   })
 }

@@ -19,18 +19,31 @@ class Profile extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
-    this.affichTag = this.affichTag.bind(this)
     this.searchTag = this.searchTag.bind(this)
+    this.handleClear = this.handleClear.bind(this)
   }
   handleChange (event) {
     this.setState({[event.target.name]: event.target.value})
   }
 
-  affichTag (result) {
-    console.log(result)
+  handleClear (tag) {
+    console.log(tag)
+    console.log('je lance l instance et la requete')
+    axiosInst().delete(`./user/delete/tag${tag}`).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
   }
   searchTag () {
-    /// Chercher tous les tags  et utiliser la fonction affichTag ///
+    axiosInst().get('/user/profile').then((res) => {
+      this.setState({
+        tagProfile: res.data.result[0].tag
+      })
+    }).catch((err) => {
+      console.log(err)
+    })
+    /// Chercher tous les tags  et utiliser la fonction afsfichTag ///
   }
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'ajouter') {
@@ -39,8 +52,11 @@ class Profile extends Component {
           tag: this.state.tag
         }).then((res) => {
           this.setState({tag: ''})
+          // this.props.notification.addNotification({
+          //   message: 'TAG ADD',
+          //   level: 'success'
+          // })
           this.searchTag()
-          console.log(res.data)
         }).catch((err) => {
           console.log(err)
         })
@@ -56,15 +72,7 @@ class Profile extends Component {
         birthday: res.data.result[0].date,
         age: res.data.result[0].age,
         tagProfile: res.data.result[0].tag
-        /// IL FAUT RECEVOIR UN TABLEAU ///
-        /// REPRISE ICI ///
       })
-      if (this.state.tagProfile.length === 0) {
-        console.log('aucun element dans le tableau')
-      } else {
-        this.affichTag(this.state.tagProfile)
-        /// RENVOI a affichTag dans l'argument result ///
-      }
     }).catch((err) => {
       console.log(err)
     })
@@ -95,7 +103,15 @@ class Profile extends Component {
           </div>
           <div className='all_htag'>
             <div className='affichage_tag'>
-              <Pill label='TEST' type='primary' onClear={this.handleClear} />
+              { this.state.tagProfile ? this.state.tagProfile.map((tag) => {
+                return (
+                  <Pill label={tag} key={Math.random()} type='primary' value={tag} onClear={() => {
+                    this.handleClear(tag)
+                  }} />)
+              }
+              ) : (
+                  null)
+              }
             </div>
             <div className='binput'>
               <input type='name' name='tag' value={this.state.tag} onChange={this.handleChange} placeholder='#TAG' onKeyPress={this.handleKeyPress} />

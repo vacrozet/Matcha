@@ -75,7 +75,8 @@
     border: solid 1px grey;
     border-radius: 10px;
     width: 95%;  
-    text-align: center;    
+    text-align: center;
+    overflow: auto;  
 }
 .binput {
     height: 20%;
