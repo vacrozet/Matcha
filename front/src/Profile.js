@@ -29,8 +29,13 @@ class Profile extends Component {
   handleClear (tag) {
     console.log(tag)
     console.log('je lance l instance et la requete')
-    axiosInst().delete(`./user/delete/tag${tag}`).then((res) => {
-      console.log(res)
+    axiosInst().delete(`./user/deletetag/${tag}`).then((res) => {
+      this.searchTag()
+      console.log(`message handleClear : ${res.data.message}`)
+      this.props.notification.addNotification({
+        message: 'Tag deleted',
+        level: 'success'
+      })
     }).catch((err) => {
       console.log(err)
     })
@@ -43,7 +48,6 @@ class Profile extends Component {
     }).catch((err) => {
       console.log(err)
     })
-    /// Chercher tous les tags  et utiliser la fonction afsfichTag ///
   }
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'ajouter') {
@@ -52,10 +56,11 @@ class Profile extends Component {
           tag: this.state.tag
         }).then((res) => {
           this.setState({tag: ''})
-          // this.props.notification.addNotification({
-          //   message: 'TAG ADD',
-          //   level: 'success'
-          // })
+          console.log('Tag Ajouter')
+          this.props.notification.addNotification({
+            message: 'Tag add',
+            level: 'success'
+          })
           this.searchTag()
         }).catch((err) => {
           console.log(err)
@@ -105,7 +110,7 @@ class Profile extends Component {
             <div className='affichage_tag'>
               { this.state.tagProfile ? this.state.tagProfile.map((tag) => {
                 return (
-                  <Pill label={tag} key={Math.random()} type='primary' value={tag} onClear={() => {
+                  <Pill label={`#${tag}`} key={Math.random()} type='primary' value={`#${tag}`} onClear={() => {
                     this.handleClear(tag)
                   }} />)
               }

@@ -76,6 +76,7 @@
     border-radius: 10px;
     width: 95%;  
     text-align: center;
+    padding: 5px;
     overflow: auto;  
 }
 .binput {

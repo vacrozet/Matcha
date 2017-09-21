@@ -53,7 +53,9 @@ class Index extends React.Component {
             <Inscription history={history} match={match} notification={this._notificationSystem} />
           } />
           <Route exact path='/accueil' component={Accueil} />
-          <Route exact path='/profile' component={Profile} notification={this._notificationSystem} />
+          <Route exact path='/profile' render={({history, match, location}) =>
+            <Profile history={history} match={match} notification={this._notificationSystem} />
+          } />
           <Route path='/' component={AccueilKo} />
         </Switch>
       </div>
