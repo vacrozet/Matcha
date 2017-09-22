@@ -9,13 +9,16 @@ class Profile extends Component {
     super(props)
     this.state = {
       login: '',
+      prenom: '',
+      nom: '',
       sexe: '',
       toSexe: '',
       birthday: '',
       age: '',
       tag: '',
       token: '',
-      tagProfile: []
+      tagProfile: [],
+      bio: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -31,7 +34,6 @@ class Profile extends Component {
     console.log('je lance l instance et la requete')
     axiosInst().delete(`./user/deletetag/${tag}`).then((res) => {
       this.searchTag()
-      console.log(`message handleClear : ${res.data.message}`)
       this.props.notification.addNotification({
         message: 'Tag deleted',
         level: 'success'
@@ -70,21 +72,25 @@ class Profile extends Component {
     }
   }
   componentWillMount () {
-    axiosInst().get('/user/profile').then((res) => {
-      this.setState({
-        login: res.data.result[0].login,
-        sexe: res.data.result[0].sexe,
-        toSexe: res.data.result[0].to_match,
-        birthday: res.data.result[0].date,
-        age: res.data.result[0].age,
-        tagProfile: res.data.result[0].tag
+    if (global.localStorage.getItem('token')) {
+      axiosInst().get('/user/profile').then((res) => {
+        this.setState({
+          login: res.data.result[0].login,
+          prenom: res.data.result[0].prenom,
+          nom: res.data.result[0].nom,
+          sexe: res.data.result[0].sexe,
+          toSexe: res.data.result[0].to_match,
+          age: res.data.result[0].age,
+          tagProfile: res.data.result[0].tag,
+          bio: res.data.result[0].bio
+        })
+      }).catch((err) => {
+        console.log(err)
       })
-    }).catch((err) => {
-      console.log(err)
-    })
-    this.setState({
-      token: global.localStorage.getItem('token')
-    })
+      this.setState({
+        token: global.localStorage.getItem('token')
+      })
+    }
   }
 
   render () {
@@ -101,11 +107,13 @@ class Profile extends Component {
           <div className='cadre_profile'>
             <div className='text_profile'>Profile</div>
             <div>Login: {this.state.login}</div>
+            <div>Prenom: {this.state.prenom}</div>
+            <div>Nom: {this.state.nom}</div>
             <div>Sexe: {this.state.sexe}</div>
             <div>Interessé par: {this.state.toSexe}</div>
-            <div>date de naissance: {this.state.birthday}</div>
             <div>Age: {this.state.age}</div>
-            <Button className='primary' type='primary'><Link className='bmp' to='/profile/modify'>Modifier</Link></Button>
+            <div>Bio: {this.state.bio}</div>
+            <div><Link className='bmp primary' to='/profile/modify'><Button type='primary'>Modifier</Button></Link></div>
           </div>
           <div className='all_htag'>
             <div className='affichage_tag'>

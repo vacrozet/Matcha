@@ -3,27 +3,19 @@ const uuid = require('uuid')
 const bcrypt = require('bcryptjs')
 
 module.exports = (req, res) => {
-  // //////////////----VERIFICATION----//////////////////////////////////////
-  console.log(req.body.login)
-  console.log(req.body.nom)
-  console.log(req.body.prenom)
-  console.log(req.body.tag)
-  console.log(req.body.date)
-  console.log(req.body.isSexe)
-  console.log(req.body.toSexe)
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     return res.json({
       success: false,
       message: 'login incorrect'
     })
   }
-  if (req.body.nom.length < 4 || req.body.nom === '') {
+  if (req.body.nom.length < 3 || req.body.nom === '') {
     return res.json({
       success: false,
       message: 'nom incorrect'
     })
   }
-  if (req.body.prenom === undefined || req.body.prenom.length < 4 || req.body.prenom === '') {
+  if (req.body.prenom === undefined || req.body.prenom.length < 3 || req.body.prenom === '') {
     return res.json({
       success: false,
       message: 'prenom incorrect'
@@ -65,14 +57,13 @@ module.exports = (req, res) => {
       message: 'Pass And RePass Not Same'
     })
   }
-  // ///////------ VERIFICATION MAIL ------- Regex a ajouter ----///////////
-  if (req.body.email === undefined || req.body.email === '') {
+  if (req.body.email === undefined || req.body.email === '' ||
+  !req.body.mail.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
     return res.json({
       success: false,
       message: 'Email Incorrect'
     })
   }
-  // /////////----FORMAT DATE: YYYY-DD-MM -----////
   if (req.body.date === undefined || !req.body.date.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
     return res.json({
       success: false,

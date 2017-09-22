@@ -15,7 +15,7 @@ class modifyProfile extends Component {
       rePasswd: '',
       birthday: '',
       bio: '',
-      mdpConfirmation: ''
+      toSexe: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -24,40 +24,34 @@ class modifyProfile extends Component {
     this.setState({[event.target.name]: event.target.value})
   }
   handleKeyPress (event) {
-    if (event.key === 'Enter' || event.target.value === 'inscription') {
-      if (this.state.login === '' || this.state.passwd === '' ||
-      this.state.rePasswd === '' || this.state.date === '' ||
-      this.state.email === '' || this.state.passwd !== this.state.rePasswd) {
-        return false
-      } else {
-        axiosInst().post('/user/signup',
-          {
-            login: this.state.login,
-            passwd: this.state.passwd,
-            date: this.state.date,
-            bio: this.state.bio,
-            isSexe: this.state.isSexe,
-            toSexe: this.state.toSexe
-          }).then((res) => {
-            if (res.data.success === true) {
-              this.props.notification.addNotification({
-                message: res.data.message,
-                level: 'success',
-                position: 'tr'
-              })
-              this.props.history.push('/')
-            } else {
-              console.log(res.data)
-              this.props.notification.addNotification({
-                message: res.data.message,
-                level: 'error',
-                position: 'tr'
-              })
-            }
-          }).catch((err) => {
-            console.log(err)
-          })
-      }
+    if (event.key === 'Enter' || event.target.value === 'confirmer') {
+      axiosInst().patch('/user/modifyprofile',
+        {
+          login: this.state.login,
+          prenom: this.state.prenom,
+          nom: this.state.nom,
+          mail: this.state.mail,
+          passwd: this.state.passwd,
+          rePasswd: this.state.rePasswd,
+          birthday: this.state.birthday,
+          bio: this.state.bio,
+          toSexe: this.state.toSexe
+        }).then((res) => {
+          if (res.data.success === 'OK') {
+            this.props.notification.addNotification({
+              level: 'success',
+              message: res.data.message
+            })
+            this.props.history.push('/profile')
+          } else {
+            this.props.notification.addNotification({
+              message: 'Profile Not Update',
+              level: 'error'
+            })
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
     }
   }
   componentWillMount () {
@@ -76,31 +70,40 @@ class modifyProfile extends Component {
           <div className='cmp'>login: {this.state.login}</div>
           <div className='cmp'>
             <p>Prenom</p>
-            <input value={this.state.prenom} onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+            <input value={this.state.prenom} name='prenom' onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
           </div>
           <div className='cmp'>
             <p>Nom</p>
-            <input value={this.state.nom} onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+            <input value={this.state.nom} name='nom' onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
           </div>
           <div className='cmp'>
             <p>Email</p>
-            <input value={this.state.mail} onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+            <input value={this.state.mail} name='mail' onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
           </div>
           <div className='cmp'>
             <p>Passwd</p>
-            <input value={this.state.passwd} onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+            <input value={this.state.passwd} name='passwd' onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
           </div>
           <div className='cmp'>
             <p>RePasswd</p>
-            <input value={this.state.rePasswd} onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+            <input value={this.state.rePasswd} name='rePasswd' onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
           </div>
           <div className='cmp'>
             <p>Birthday</p>
-            <input value={this.state.birthday} onChange={this.handleChange} placeholder='YYYY-MM-JJ' onKeyPress={this.handleKeyPress} />
+            <input value={this.state.birthday} name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-JJ' onKeyPress={this.handleKeyPress} />
           </div>
           <div className='cmp'>
             <p>Bio</p>
-            <input value={this.state.bio} onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+            <input value={this.state.bio} name='bio' onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+          </div>
+          <div className='cmp'>
+            <p>Recherche:</p>
+            <select className='select_signup' name='toSexe' onChange={this.handleChange}>
+              <option value='' defaultValue>---</option>
+              <option value='All'>All</option>
+              <option value='Homme'>Homme</option>
+              <option value='Femme'>Femme</option>
+            </select><br />
           </div>
           <Button className='primary' type='primary' value='confirmer' onClick={this.handleKeyPress}>Confirmer</Button>
         </div>

@@ -18,7 +18,6 @@ module.exports = (req, res) => {
         })
         if (capteur === true) {
           db.collection('Users').updateOne({login: req.user.login}, {$pull: {tag: req.params.tag}})
-          console.log('tag supprime')
           return res.json({
             success: 'OK',
             message: 'Tag Deleted'

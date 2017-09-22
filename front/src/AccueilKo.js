@@ -12,7 +12,7 @@ class AccueilKo extends Component {
       <div className='body'>
         <div className='block_text'>
           <div className='text'>Bienvenue sur Matcha</div>
-          <div className='text'><Link className='button' to='/inscription' >Inscrit Toi</Link></div>
+          <div className='text'><Link className='button' to='/inscription' >Inscris Toi</Link></div>
         </div>
       </div>
     )
