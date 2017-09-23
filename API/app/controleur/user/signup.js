@@ -58,7 +58,7 @@ module.exports = (req, res) => {
     })
   }
   if (req.body.email === undefined || req.body.email === '' ||
-  !req.body.mail.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+  !req.body.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
     return res.json({
       success: false,
       message: 'Email Incorrect'
@@ -109,25 +109,25 @@ module.exports = (req, res) => {
             })
           }
         })
-        tab = {
-          _id: id
-        }
-        db.collection('Tag_users').insert(tab, null, (error, results) => {
-          if (error) {
-            console.log(new Error(error))
-            res.status(500)
-            return res.json({
-              success: false,
-              message: 'Internal server error',
-              error: error
-            })
-          }
-        })
-        res.status(200)
-        return res.json({
-          success: true,
-          message: 'INSCRIPTION REUSSIE'
-        })
+        // tab = {
+        //   _id: id
+        // }
+        // db.collection('Tag_users').insert(tab, null, (error, results) => {
+        //   if (error) {
+        //     console.log(new Error(error))
+        //     res.status(500)
+        //     return res.json({
+        //       success: false,
+        //       message: 'Internal server error',
+        //       error: error
+        //     })
+        //   }
+        // })
+        // res.status(200)
+        // return res.json({
+        //   success: true,
+        //   message: 'INSCRIPTION REUSSIE'
+        // })
       } else {
         res.status(200)
         return res.json({

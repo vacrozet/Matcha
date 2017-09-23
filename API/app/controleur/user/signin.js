@@ -45,7 +45,19 @@ module.exports = (req, res) => {
           objToken.created_at = new Date().getTime()
           let hbirthday = getAge(results[0].date)
           results[0].tokens.push(objToken)
-          db.collection('Users').updateOne({login: req.body.login}, {$set: {tokens: results[0].tokens, age: hbirthday}})
+          db.collection('Users').updateOne({login: req.body.login}, {$set:
+          {
+            tokens: results[0].tokens,
+            age: hbirthday,
+            img: [
+              `http://localhost:3001/picture/${objToken.token}/0`,
+              `http://localhost:3001/picture/${objToken.token}/1`,
+              `http://localhost:3001/picture/${objToken.token}/2`,
+              `http://localhost:3001/picture/${objToken.token}/3`,
+              `http://localhost:3001/picture/${objToken.token}/4`
+            ]
+          }
+          })
           return res.json({
             success: true,
             token: objToken.token,

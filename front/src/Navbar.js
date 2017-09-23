@@ -14,7 +14,8 @@ class Volet extends Component {
       login: '',
       passwd: '',
       age: '',
-      sexe: ''
+      sexe: '',
+      token: ''
     }
     this.myFunction = this.myFunction.bind(this)
     this.signIn = this.signIn.bind(this)
