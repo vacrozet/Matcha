@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
+import axios from 'axios'
 import './card.css'
 import { Button, Pill } from 'elemental'
 import {Link} from 'react-router-dom'
+import Dropzone from 'react-dropzone'
 
 class Profile extends Component {
   constructor (props) {
@@ -18,17 +20,150 @@ class Profile extends Component {
       tag: '',
       token: '',
       tagProfile: [],
-      bio: ''
+      bio: '',
+      img: []
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.searchTag = this.searchTag.bind(this)
     this.handleClear = this.handleClear.bind(this)
+    this.searchPicture = this.searchPicture.bind(this)
+    this.onDropReject = this.onDropReject.bind(this)
   }
   handleChange (event) {
     this.setState({[event.target.name]: event.target.value})
   }
 
+  sendPicture (pic, index) {
+    console.log(pic)
+    console.log(index)
+    console.log('je passe ici')
+    axiosInst().put('/picture/' + index, {
+      pic: pic
+    }).then((res) => {
+      if (res.data.success === true) {
+        this.props.notification.addNotification({
+          level: 'success',
+          title: 'Picture upload :',
+          message: 'Done'
+        })
+      } else {
+        this.props.notification.addNotification({
+          level: 'error',
+          title: 'Picture upload :',
+          message: res.data.error
+        })
+      }
+    }).catch((err) => {
+      if (err) {
+        console.log(err.response)
+      }
+    })
+  }
+
+  onDropReject () {
+    this.props.notification.addNotification({
+      level: 'error',
+      title: 'Picture upload :',
+      message: 'Failed'
+    })
+  }
+
+  onDrop1 (acceptedFiles) {
+    let self = this
+    acceptedFiles.forEach(file => {
+      var reader = new global.FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        let img = self.state.img
+        img[0] = reader.result
+        self.sendPicture(img[0], 0)
+        self.setState({
+          img: img
+        })
+      }
+      reader.onerror = function (error) {
+        console.log('Error: ', error)
+      }
+    })
+    setTimeout(() => {
+      // let url = `http://localhost:3001/picture/${global.localStorage.getItem('token')}/0?${new Date().getTime()}`
+      // document.getElementById('pictureProfile').style.backgroundImage = `url('${url}')`
+    }, 50)
+  }
+
+  onDrop2 (acceptedFiles) {
+    let self = this
+    acceptedFiles.forEach(file => {
+      var reader = new global.FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        let img = self.state.img
+        img[1] = reader.result
+        self.sendPicture(img[1], 1)
+        self.setState({
+          img: img
+        })
+      }
+      reader.onerror = function (error) {
+        console.log('Error: ', error)
+      }
+    })
+  }
+  onDrop3 (acceptedFiles) {
+    let self = this
+    acceptedFiles.forEach(file => {
+      var reader = new global.FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        let img = self.state.img
+        img[2] = reader.result
+        self.sendPicture(img[2], 2)
+        self.setState({
+          img: img
+        })
+      }
+      reader.onerror = function (error) {
+        console.log('Error: ', error)
+      }
+    })
+  }
+  onDrop4 (acceptedFiles) {
+    let self = this
+    acceptedFiles.forEach(file => {
+      var reader = new global.FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        let img = self.state.img
+        img[3] = reader.result
+        self.sendPicture(img[3], 3)
+        self.setState({
+          img: img
+        })
+      }
+      reader.onerror = function (error) {
+        console.log('Error: ', error)
+      }
+    })
+  }
+  onDrop5 (acceptedFiles) {
+    let self = this
+    acceptedFiles.forEach(file => {
+      var reader = new global.FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        let img = self.state.img
+        img[4] = reader.result
+        self.sendPicture(img[4], 4)
+        self.setState({
+          img: img
+        })
+      }
+      reader.onerror = function (error) {
+        console.log('Error: ', error)
+      }
+    })
+  }
   handleClear (tag) {
     console.log(tag)
     console.log('je lance l instance et la requete')
@@ -71,9 +206,20 @@ class Profile extends Component {
       }
     }
   }
+  searchPicture (link) {
+    if (link !== '') {
+      axios.get(link).then((res) => {
+        console.log('ici')
+        console.log(res.data)
+        console.log('ici')
+        return res.data
+      })
+    }
+  }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
       axiosInst().get('/user/profile').then((res) => {
+        console.log(res.data.result[0])
         this.setState({
           login: res.data.result[0].login,
           prenom: res.data.result[0].prenom,
@@ -82,7 +228,8 @@ class Profile extends Component {
           toSexe: res.data.result[0].to_match,
           age: res.data.result[0].age,
           tagProfile: res.data.result[0].tag,
-          bio: res.data.result[0].bio
+          bio: res.data.result[0].bio,
+          img: res.data.result[0].img
         })
       }).catch((err) => {
         console.log(err)
@@ -98,11 +245,21 @@ class Profile extends Component {
       <div className='page_profile'>
         <div className='body_profile'>
           <div className='all_pictures'>
-            <div className='photo'>Photo</div>
-            <div className='photo'>Photo</div>
-            <div className='photo'>Photo</div>
-            <div className='photo'>Photo</div>
-            <div className='photo'>Photo</div>
+            <Dropzone className='photo' disablePreview accept='image/png' maxSize={2000000} onDrop={this.onDrop1.bind(this)} onDropRejected={this.onDropReject}>
+              <img className='photo' src={this.state.img[0]} alt='Profile 1' />
+            </Dropzone>
+            <Dropzone className='photo' disablePreview accept='image/png' maxSize={2000000} onDrop={this.onDrop2.bind(this)} onDropRejected={this.onDropReject}>
+              <img className='photo' src={this.state.img[1]} alt='Profile 2' />
+            </Dropzone>
+            <Dropzone className='photo' disablePreview accept='image/png' maxSize={2000000} onDrop={this.onDrop3.bind(this)} onDropRejected={this.onDropReject}>
+              <img className='photo' src={this.state.img[2]} alt='Profile 3' />
+            </Dropzone>
+            <Dropzone className='photo' disablePreview accept='image/png' maxSize={2000000} onDrop={this.onDrop4.bind(this)} onDropRejected={this.onDropReject}>
+              <img className='photo' src={this.state.img[3]} alt='Profile 4' />
+            </Dropzone>
+            <Dropzone className='photo' disablePreview accept='image/png' maxSize={2000000} onDrop={this.onDrop5.bind(this)} onDropRejected={this.onDropReject}>
+              <img className='photo' src={this.state.img[4]} alt='Profile 5' />
+            </Dropzone>
           </div>
           <div className='cadre_profile'>
             <div className='text_profile'>Profile</div>

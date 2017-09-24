@@ -6,11 +6,9 @@ module.exports = {
       db.get().then((db) => {
         db.collection('Users').find({tokens: {$elemMatch: {token: token}}}).toArray((error, result) => {
           if (error) {
-            return error
+            return reject(error)
           }
-          if (result) {
-            return result[0].login
-          }
+          return resolve(result[0].login)
         })
       })
     })
