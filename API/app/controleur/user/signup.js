@@ -109,25 +109,25 @@ module.exports = (req, res) => {
             })
           }
         })
-        // tab = {
-        //   _id: id
-        // }
-        // db.collection('Tag_users').insert(tab, null, (error, results) => {
-        //   if (error) {
-        //     console.log(new Error(error))
-        //     res.status(500)
-        //     return res.json({
-        //       success: false,
-        //       message: 'Internal server error',
-        //       error: error
-        //     })
-        //   }
-        // })
-        // res.status(200)
-        // return res.json({
-        //   success: true,
-        //   message: 'INSCRIPTION REUSSIE'
-        // })
+        tab = {
+          _id: id
+        }
+        db.collection('Like_User').insert(tab, null, (error, results) => {
+          if (error) {
+            console.log(new Error(error))
+            res.status(500)
+            return res.json({
+              success: false,
+              message: 'Internal server error',
+              error: error
+            })
+          }
+        })
+        res.status(200)
+        return res.json({
+          success: true,
+          message: 'INSCRIPTION REUSSIE'
+        })
       } else {
         res.status(200)
         return res.json({
