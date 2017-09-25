@@ -8,9 +8,9 @@ const port = 3001
 
 db.connect()
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
 app.use(cors())
+app.use(bodyParser.urlencoded({extended: true, limit: '512kb'}))
+app.use(bodyParser.json({limit: '5mb'}))
 
 app.use('/', require('./route/index.js'))
 

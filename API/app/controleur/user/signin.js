@@ -63,7 +63,14 @@ module.exports = (req, res) => {
             token: objToken.token,
             login: results[0].login,
             sexe: results[0].sexe,
-            age: hbirthday
+            age: hbirthday,
+            img: [
+              `http://localhost:3001/picture/${objToken.token}/0`,
+              `http://localhost:3001/picture/${objToken.token}/1`,
+              `http://localhost:3001/picture/${objToken.token}/2`,
+              `http://localhost:3001/picture/${objToken.token}/3`,
+              `http://localhost:3001/picture/${objToken.token}/4`
+            ]
           })
         } else {
           res.status(200)

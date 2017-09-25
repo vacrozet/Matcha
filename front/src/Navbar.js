@@ -15,7 +15,8 @@ class Volet extends Component {
       passwd: '',
       age: '',
       sexe: '',
-      token: ''
+      token: '',
+      img: []
     }
     this.myFunction = this.myFunction.bind(this)
     this.signIn = this.signIn.bind(this)
@@ -54,7 +55,8 @@ class Volet extends Component {
                 connexion: true,
                 login: res.data.login,
                 age: res.data.age,
-                sexe: res.data.sexe
+                sexe: res.data.sexe,
+                img: res.data.img
               })
               this.props.notification.addNotification({
                 message: 'Connected',
@@ -93,7 +95,8 @@ class Volet extends Component {
         this.setState({
           login: res.data.result[0].login,
           age: res.data.result[0].age,
-          sexe: res.data.result[0].sexe
+          sexe: res.data.result[0].sexe,
+          img: res.data.result[0].img
         })
       }).catch((err) => {
         console.log(err)
@@ -126,6 +129,7 @@ class Volet extends Component {
           ) : (
             <div className='connexion volet_sign'>
               <div>
+                <div><img id='pictureProfile' className='photo' src={this.state.img[0]} alt='Picture_profile' /></div>
                 <div>{this.state.login}</div>
                 <div>{this.state.age} ans</div>
                 <div>{this.state.sexe}</div>

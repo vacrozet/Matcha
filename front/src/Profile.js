@@ -21,7 +21,13 @@ class Profile extends Component {
       token: '',
       tagProfile: [],
       bio: '',
-      img: []
+      img: [
+        `http://localhost:3001/picture/${global.localStorage.getItem('token')}/0?tot=${Math.random()}`,
+        `http://localhost:3001/picture/${global.localStorage.getItem('token')}/1?tot=${Math.random()}`,
+        `http://localhost:3001/picture/${global.localStorage.getItem('token')}/2?tot=${Math.random()}`,
+        `http://localhost:3001/picture/${global.localStorage.getItem('token')}/3?tot=${Math.random()}`,
+        `http://localhost:3001/picture/${global.localStorage.getItem('token')}/4?tot=${Math.random()}`
+      ]
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -35,9 +41,6 @@ class Profile extends Component {
   }
 
   sendPicture (pic, index) {
-    console.log(pic)
-    console.log(index)
-    console.log('je passe ici')
     axiosInst().put('/picture/' + index, {
       pic: pic
     }).then((res) => {
@@ -87,8 +90,8 @@ class Profile extends Component {
       }
     })
     setTimeout(() => {
-      // let url = `http://localhost:3001/picture/${global.localStorage.getItem('token')}/0?${new Date().getTime()}`
-      // document.getElementById('pictureProfile').style.backgroundImage = `url('${url}')`
+      let url = `http://localhost:3001/picture/${global.localStorage.getItem('token')}/0?${new Date().getTime()}`
+      document.getElementById('pictureProfile').style.backgroundImage = `url('${url}')`
     }, 50)
   }
 
@@ -216,10 +219,15 @@ class Profile extends Component {
       })
     }
   }
+  componentWillUnmount () {
+    console.log('je suis un teuber')
+  }
+  
   componentWillMount () {
+    console.log('je passe ici')
     if (global.localStorage.getItem('token')) {
       axiosInst().get('/user/profile').then((res) => {
-        console.log(res.data.result[0])
+        console.log(res.data)
         this.setState({
           login: res.data.result[0].login,
           prenom: res.data.result[0].prenom,
@@ -228,9 +236,9 @@ class Profile extends Component {
           toSexe: res.data.result[0].to_match,
           age: res.data.result[0].age,
           tagProfile: res.data.result[0].tag,
-          bio: res.data.result[0].bio,
-          img: res.data.result[0].img
+          bio: res.data.result[0].bio
         })
+        console.log(this.state)
       }).catch((err) => {
         console.log(err)
       })
