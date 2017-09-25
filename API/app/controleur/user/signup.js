@@ -123,7 +123,8 @@ module.exports = (req, res) => {
           }
         })
         tab = {
-          _id: id
+          _id: id,
+          login: [req.body.login]
         }
         db.collection('Like_User').insert(tab, null, (error, results) => {
           if (error) {

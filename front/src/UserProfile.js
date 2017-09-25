@@ -16,10 +16,28 @@ class UserProfile extends Component {
       age: '',
       sexe: '',
       img: [],
-      tag: []
+      tag: [],
+      like: false
     }
+    this.likeProfile = this.likeProfile.bind(this)
   }
-
+  likeProfile (event) {
+    axiosInst().post('/like/addlike', {
+      login: this.state.login
+    }).then((res) => {
+      // if (res.data.success === true) {
+      //   this.setState({
+      //     like: false
+      //   })
+      // }
+      console.log(res.data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+  unlikeProfile (event) {
+    console.log(event.target.value)
+  }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
@@ -35,7 +53,11 @@ class UserProfile extends Component {
           tag: res.data.result[0].tag
         })
         axiosInst().get(`/like/getlike/${this.state.login}`).then((res) => {
-          console.log(res)
+          if (res.data.success === false) {
+            this.setState({
+              like: false
+            })
+          }
         }).catch((err) => {
           console.log(err)
         })
@@ -85,7 +107,12 @@ class UserProfile extends Component {
               )}
             </div>
             <div className='buttonForLikeAndBlock'>
-              <Button className='primary' id='sizeButton' type='primary' value='Like' onClick={this.handleKeyPress}>Like</Button>
+              { !this.state.like ? (
+                <Button className='primary' id='sizeButton' type='primary' value='like' onClick={this.likeProfile}>Like</Button>
+              ) : (
+                <Button className='primary' id='sizeButton' type='danger' value='Unlike' onClick={this.unlikeProfile}>UnkLike</Button>
+              )
+              }
               <Button className='primary' id='sizeButton' type='primary' value='Block' onClick={this.handleKeyPress}>block</Button>
               <Button className='primary' id='sizeButton' type='primary' value='report User' onClick={this.handleKeyPress}>Report User</Button>
             </div>

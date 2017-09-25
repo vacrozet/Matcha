@@ -80,7 +80,7 @@ textarea {
 .profileUserCard{
     min-width: 300px;
     display: flex;
-    height: 50%;
+    height: auto;
     width: 60%;
     flex-direction: column;
     align-items: center;

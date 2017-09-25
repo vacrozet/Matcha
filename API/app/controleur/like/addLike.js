@@ -1,12 +1,12 @@
 const db = require('../../db.js')
-const functionUser = require('../FonctionUser.js')
 
 module.exports = (req, res) => {
-  console.log(req.body.like)
-  let _id = functionUser.getIdByToken(req.body.token)
-  if (_id.length !== 0) {
+  console.log(req.body.login)
+  console.log(req.user.id)
+  let capteur
+  if (req.user.id.length !== 0) {
     db.get().then((db) => {
-      db.collection('Like_User').find({_id: _id}).toArray((error, result) => {
+      db.collection('Like_User').find({_id: req.user.id}).toArray((error, result) => {
         if (error) {
           res.status(500)
           return res.json({
@@ -14,28 +14,33 @@ module.exports = (req, res) => {
           })
         }
         if (result.length === 1) {
-          result[0].forEach((element) => {
-            if (element === req.body.user) {
-              return res.json({
-                success: false,
-                message: 'like deja présent'
-              })
+          result[0].login.forEach((element) => {
+            console.log(element)
+            if (element === req.body.login) {
+              capteur = true
             }
           }, this)
-          db.collection('Like_User').insert(_id, {login: req.body.login}).then((res) => {
-            res.status(200)
-            return res.json({
-              success: true,
-              message: 'Like insert'
-            })
-          }).catch((err) => {
-            res.status(404)
+          console.log(capteur)
+          if (capteur === true) {
             return res.json({
               success: false,
-              error: err,
-              message: 'like not insert'
+              message: 'like deja présent'
             })
-          })
+          } else {
+            console.log('jarrive ici')
+            db.collection('Like_User').updateOne({_id: req.user.id}, {$push:
+            {
+              login: req.body.login
+            }
+            }).then((res) => {
+              return res.json({
+                success: true,
+                message: 'like inseré'
+              })
+            }).catch((err) => {
+              console.log(err)
+            })
+          }
         } else {
           res.status(404)
           return res.json({
