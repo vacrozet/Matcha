@@ -1,10 +1,11 @@
 const db = require('../../db.js')
-const functionUser = require('../FonctionUser.js')
 
 module.exports = (req, res) => {
-  console.log(req.body.like)
-  let _id = functionUser.getIdByToken(req.body.token)
-  if (_id.length !== 0) {
+  console.log('je passe ici')
+  console.log(req.params.login)
+  console.log(req.user.id)
+  let _id = req.user.id
+  if (_id !== undefined) {
     db.get().then((db) => {
       db.collection('Like_User').find({_id: _id}).toArray((error, result) => {
         if (error) {
@@ -13,15 +14,17 @@ module.exports = (req, res) => {
             error: 'Internal server error'
           })
         }
+        console.log('je passe ici')
         if (result.length === 1) {
           result[0].forEach((element) => {
-            if (element === req.body.user) {
+            if (element === req.params.login) {
               return res.json({
                 success: true,
                 message: 'like présent'
               })
             }
           }, this)
+          console.log('je rentre la')
           return res.json({
             success: false,
             message: 'Like not found'

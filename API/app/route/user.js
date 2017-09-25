@@ -9,4 +9,5 @@ router.patch('/modifyprofile', middle('USER'), require('../controleur/user/profi
 router.post('/addTag', middle('USER'), require('../controleur/user/profile/addTag.js'))
 router.delete('/deletetag/:tag', middle('USER'), require('../controleur/user/profile/deleteTag.js'))
 router.get('/alluser', middle('USER'), require('../controleur/user/allUser.js'))
+router.get('/userprofile/:login', middle('USER'), require('../controleur/user/getProfileUser.js'))
 module.exports = router

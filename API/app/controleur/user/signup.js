@@ -2,6 +2,17 @@ const db = require('../../db.js')
 const uuid = require('uuid')
 const bcrypt = require('bcryptjs')
 
+function getAge (datestring) {
+  var today = new Date()
+  var birthDate = new Date(datestring)
+  var age = today.getFullYear() - birthDate.getFullYear()
+  var m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+  return age
+}
+
 module.exports = (req, res) => {
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     return res.json({
@@ -70,6 +81,8 @@ module.exports = (req, res) => {
       message: 'date incorrect'
     })
   }
+  let hbirthday = getAge(req.body.date)
+
   // //////////---- HASH PASSWORD BCRYPT -----/////
   var hash = bcrypt.hashSync(req.body.passwd, 10)
 
@@ -93,7 +106,7 @@ module.exports = (req, res) => {
           sexe: req.body.isSexe,
           to_match: req.body.toSexe,
           date: req.body.date,
-          age: '',
+          age: hbirthday,
           passwd: hash,
           img: [],
           tokens: [],
