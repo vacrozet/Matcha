@@ -8,6 +8,7 @@ import AccueilKo from './AccueilKo.js'
 import Navbar from './Navbar.js'
 import Profile from './Profile.js'
 import Modify from './ModifyProfile.js'
+import UserProfile from './UserProfile.js'
 import './styles.min.css'
 import '../node_modules/elemental/less/elemental.less'
 
@@ -60,6 +61,9 @@ class Index extends React.Component {
           } />
           <Route exact path='/profile' render={({history, match, location}) =>
             <Profile history={history} match={match} notification={this._notificationSystem} />
+          } />
+          <Route path='/userprofile/:login' render={({history, match, location}) =>
+            <UserProfile history={history} match={match} notification={this._notificationSystem} />
           } />
           <Route path='/' component={AccueilKo} />
         </Switch>

@@ -44,7 +44,8 @@ module.exports = (role) => {
         } else {
           req.user = {
             login: result[0].login,
-            passwd: result[0].login,
+            toMatch: result[0].to_match,
+            sexe: result[0].sexe,
             id: result[0]._id
           }
           next()

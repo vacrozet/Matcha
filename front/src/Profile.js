@@ -222,12 +222,10 @@ class Profile extends Component {
   componentWillUnmount () {
     console.log('je suis un teuber')
   }
-  
+
   componentWillMount () {
-    console.log('je passe ici')
     if (global.localStorage.getItem('token')) {
       axiosInst().get('/user/profile').then((res) => {
-        console.log(res.data)
         this.setState({
           login: res.data.result[0].login,
           prenom: res.data.result[0].prenom,
@@ -238,7 +236,6 @@ class Profile extends Component {
           tagProfile: res.data.result[0].tag,
           bio: res.data.result[0].bio
         })
-        console.log(this.state)
       }).catch((err) => {
         console.log(err)
       })

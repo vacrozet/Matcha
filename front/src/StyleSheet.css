@@ -35,3 +35,38 @@ textarea {
     max-width: 350px;
     max-height: 100px;
 }
+.body_accueil_search{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    padding: 50px;
+    overflow: hidden;
+}
+.multiProfile{
+    height: 400px;
+    width: 250px;
+    background-color: white;
+    border-radius: 10px;
+}
+.photoProfileMulti{
+    display: flex;
+    height: 40%;
+    width: 100%;
+    border: solid 1px black;
+    justify-content: center;
+    align-items: center;
+}
+.descriProfilMulti{
+    display: flex;
+    height: 60%;
+    width: 100%;
+    border: solid 1px black;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+}
+.textDescri{
+    font-family: Arial Black;
+}

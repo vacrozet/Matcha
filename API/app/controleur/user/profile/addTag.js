@@ -3,7 +3,7 @@ const db = require('../../../db.js')
 module.exports = (req, res) => {
   if (req.body.tag === undefined || req.body.tag !== '') {
     var str = req.body.tag.split(' ')
-    if (str.length === 1 && req.body.tag.length > 1 && req.body.tag[0] !== '#') {
+    if (str.length === 1 && req.body.tag.length > 0 && req.body.tag[0] !== '#' && req.body.tag[0].match(/^([a-zA-Z]+)$/)) {
       db.get().then((db) => {
         db.collection('Users').find({ login: req.user.login }).toArray((err, result) => {
           if (err) {
