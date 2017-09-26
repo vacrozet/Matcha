@@ -17,10 +17,12 @@ class UserProfile extends Component {
       sexe: '',
       img: [],
       tag: [],
-      like: ''
+      like: '',
+      block: false
     }
     this.likeProfile = this.likeProfile.bind(this)
     this.unlikeProfile = this.unlikeProfile.bind(this)
+    this.blockUser = this.blockUser.bind(this)
   }
   likeProfile (event) {
     axiosInst().post('./like/addlike', {
@@ -49,6 +51,16 @@ class UserProfile extends Component {
       console.log(err)
     })
   }
+  blockUser (event) {
+    axiosInst().post('./block/addblock', {
+      login: this.state.login
+    }).then((res) => {
+      if (res.data.block === true) {
+        this.props.history.push('/accueil')
+      }
+      console.log(res)
+    })
+  }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
@@ -61,7 +73,8 @@ class UserProfile extends Component {
           age: res.data.result[0].age,
           sexe: res.data.result[0].sexe,
           img: res.data.result[0].img,
-          tag: res.data.result[0].tag
+          tag: res.data.result[0].tag,
+          block: false
         })
         axiosInst().get(`./like/getlike/${this.state.login}`).then((res) => {
           if (res.data.like === false) {
@@ -129,7 +142,7 @@ class UserProfile extends Component {
                 <Button className='primary' id='sizeButton' type='danger' value='Unlike' onClick={this.unlikeProfile}>UnkLike</Button>
               )
               }
-              <Button className='primary' id='sizeButton' type='primary' value='Block' onClick={this.handleKeyPress}>block</Button>
+              <Button className='primary' id='sizeButton' type='success' value='Block' onClick={this.blockUser}>block</Button>
               <Button className='primary' id='sizeButton' type='primary' value='report User' onClick={this.handleKeyPress}>Report User</Button>
             </div>
           </div>

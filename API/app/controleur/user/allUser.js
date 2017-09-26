@@ -1,7 +1,6 @@
 const db = require('../../db.js')
 
 module.exports = (req, res) => {
-  // console.log(req.user.toMatch)
   if (req.user.toMatch === 'Homme' || req.user.toMatch === 'Femme') {
     db.get().then((db) => {
       db.collection('Users').find({to_match: {$in: [req.user.sexe, 'All']}, sexe: req.user.toMatch
@@ -13,6 +12,8 @@ module.exports = (req, res) => {
             message: 'Collection not found'
           })
         }
+        // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
+        console.log(result)
         if (result) {
           var tab = result.filter(result => {
             return result.login !== req.user.login
@@ -42,6 +43,7 @@ module.exports = (req, res) => {
             message: 'Collection not found'
           })
         }
+        // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
         if (result) {
           var tab = result.filter(result => {
             return result.login !== req.user.login
