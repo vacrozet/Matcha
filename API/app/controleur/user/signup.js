@@ -81,6 +81,12 @@ module.exports = (req, res) => {
       message: 'date incorrect'
     })
   }
+  if (req.body.bio === undefined) {
+    return res.json({
+      success: false,
+      message: 'bio not defined'
+    })
+  }
   let hbirthday = getAge(req.body.date)
 
   // //////////---- HASH PASSWORD BCRYPT -----/////
@@ -107,6 +113,7 @@ module.exports = (req, res) => {
           to_match: req.body.toSexe,
           date: req.body.date,
           age: hbirthday,
+          bio: req.body.bio,
           passwd: hash,
           img: [],
           tokens: [],

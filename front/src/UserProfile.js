@@ -17,7 +17,7 @@ class UserProfile extends Component {
       sexe: '',
       img: [],
       tag: [],
-      like: false
+      like: ''
     }
     this.likeProfile = this.likeProfile.bind(this)
   }
@@ -57,7 +57,12 @@ class UserProfile extends Component {
             this.setState({
               like: false
             })
+          } else {
+            this.setState({
+              like: true
+            })
           }
+          console.log(res.data)
         }).catch((err) => {
           console.log(err)
         })
