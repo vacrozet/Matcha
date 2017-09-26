@@ -30,7 +30,7 @@ class UserProfile extends Component {
       //     like: false
       //   })
       // }
-      console.log(res.data)
+      console.log(res.data.like)
     }).catch((err) => {
       console.log(err)
     })
@@ -53,7 +53,7 @@ class UserProfile extends Component {
           tag: res.data.result[0].tag
         })
         axiosInst().get(`/like/getlike/${this.state.login}`).then((res) => {
-          if (res.data.success === false) {
+          if (res.data.like === false) {
             this.setState({
               like: false
             })

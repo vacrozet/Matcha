@@ -1,9 +1,11 @@
 const db = require('../../db.js')
 
 module.exports = (req, res) => {
+  // console.log(req.user.toMatch)
   if (req.user.toMatch === 'Homme' || req.user.toMatch === 'Femme') {
     db.get().then((db) => {
-      db.collection('Users').find({sexe: req.user.toMatch, to_match: req.user.sexe}).toArray((err, result) => {
+      db.collection('Users').find({to_match: {$in: [req.user.sexe, 'All']}, sexe: req.user.toMatch
+      }).toArray((err, result) => {
         if (err) {
           res.status(404)
           return res.json({

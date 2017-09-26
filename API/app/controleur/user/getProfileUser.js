@@ -2,7 +2,7 @@ const db = require('../../db.js')
 
 module.exports = (req, res) => {
   if (req.params.login !== '' && req.params.login !== undefined) {
-    console.log(req.params.login)
+    // console.log(req.params.login)
     db.get().then((db) => {
       db.collection('Users').find({login: req.params.login}).toArray((err, result) => {
         if (err) {
@@ -17,7 +17,7 @@ module.exports = (req, res) => {
             delete result[0].mail
             delete result[0].tokens
             delete result[0]._id
-            console.log(result)
+            // console.log(result)
             return res.json({
               result
             })

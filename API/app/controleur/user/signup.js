@@ -110,7 +110,11 @@ module.exports = (req, res) => {
           passwd: hash,
           img: [],
           tokens: [],
-          tag: [req.body.tag]
+          tag: [req.body.tag],
+          like: [],
+          match: [],
+          block: [],
+          notification: []
         }
         db.collection('Users').insert(tab, null, (error, result) => {
           if (error) {
