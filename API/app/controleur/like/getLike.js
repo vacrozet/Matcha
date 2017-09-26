@@ -2,7 +2,7 @@ const db = require('../../db.js')
 
 module.exports = (req, res) => {
   // console.log('je passe ici')
-  console.log(`req.params.login: ${req.params.login}`)
+  // console.log(`req.params.login: ${req.params.login}`)
   // console.log(`req.user.id: ${req.user.id}`)
   let capteur
   if (req.user.id !== undefined) {
@@ -22,7 +22,7 @@ module.exports = (req, res) => {
               capteur = true
             }
           }, this)
-          console.log(capteur)
+          // console.log(capteur)
           if (capteur === true) {
             return res.json({
               like: true,

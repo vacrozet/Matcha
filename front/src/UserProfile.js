@@ -27,7 +27,7 @@ class UserProfile extends Component {
       login: this.state.login
     }).then((res) => {
       console.log(res.data)
-      if (res.data.like === true) {
+      if (res.data.addlike === true) {
         this.setState({
           like: true
         })
@@ -38,11 +38,16 @@ class UserProfile extends Component {
   }
   unlikeProfile (event) {
     axiosInst().delete(`./like/deletelike/${this.state.login}`).then((res) => {
+      if (res.data.unlike === true) {
+        this.setState({
+          like: false
+        })
+      }
+      console.log(res.data.unlike)
       console.log(res)
     }).catch((err) => {
       console.log(err)
     })
-    console.log(event.target.value)
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
@@ -119,7 +124,7 @@ class UserProfile extends Component {
             </div>
             <div className='buttonForLikeAndBlock'>
               { !this.state.like ? (
-                <Button className='primary' id='sizeButton' type='primary' value='like' onClick={this.likeProfile}>Like</Button>
+                <Button className='primary' id='sizeButton' type='success' value='like' onClick={this.likeProfile}>Like</Button>
               ) : (
                 <Button className='primary' id='sizeButton' type='danger' value='Unlike' onClick={this.unlikeProfile}>UnkLike</Button>
               )

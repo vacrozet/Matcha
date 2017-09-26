@@ -1,9 +1,6 @@
 const db = require('../../db.js')
 
 module.exports = (req, res) => {
-  console.log(req.params.login)
-  console.log(req.user.id)
-  console.log(req.user.login)
   if (req.params.login !== '') {
     db.get().then((db) => {
       db.collection('Users').find({_id: req.user.id}).toArray((err, result) => {
@@ -14,8 +11,6 @@ module.exports = (req, res) => {
             message: 'connexion impossible'
           })
         }
-        console.log(result[0].like.length)
-        console.log(result[0].like)
         if (result[0].like.length > 0) {
           let capteur
           let capteur1
@@ -29,44 +24,49 @@ module.exports = (req, res) => {
               capteur1 = true
             }
           }, this)
-          console.log(capteur)
           if (capteur === true) {
-            db.collection('Users').update({_id: req.user.id}, {$pull: { like: {$in: [req.params.login]} }}).then((res1) => {
-              console.log('res1')
+            db.collection('Users').update({_id: req.user.id}, {$pull: {like: {$in: [req.params.login]}}}).then((res1) => {
               if (res1.result.n === 1) {
                 if (capteur1 === true) {
-                  db.collection('Users').update({_id: req.user.id}, {$pull: { match: {$in: [req.params.login]} }}).then((res2) => {
+                  db.collection('Users').update({_id: req.user.id}, {$pull: {match: {$in: [req.params.login]}}}).then((res2) => {
                     if (res2.result.n === 1) {
-                      db.collection('Users').update({login: req.params.login}, {$pull: { match: {$in: [req.user.login]} }}).then((res3) => {
+                      db.collection('Users').update({login: req.params.login}, {$pull: {match: {$in: [req.user.login]}}}).then((res3) => {
                         if (res3.result.n === 1) {
                           return res.json({
-                            success: true,
+                            unlike: true,
                             message: 'like and match supprimer'
+                          })
+                        } else {
+                          return res.json({
+                            success: 'KO',
+                            message: 'derniere requete abord'
                           })
                         }
                       }).catch((err3) => {
-                        res.json({
+                        return res.json({
                           success: false,
                           message: 'erreur connexion'
                         })
                       })
+                    } else {
+                      res.status(500)
+                      return res.json({
+                        success: false,
+                        message: 'match non supprimer'
+                      })
                     }
-                    res.status(500)
-                    return res.json({
-                      success: false,
-                      message: 'match non supprimer'
-                    })
                   }).catch((err2) => {
                     return res.json({
                       success: false,
                       message: 'erreur connexion'
                     })
                   })
+                } else {
+                  return res.json({
+                    unlike: true,
+                    message: 'like supprimer'
+                  })
                 }
-                return res.json({
-                  success: true,
-                  message: 'like supprimer'
-                })
               } else {
                 return res.json({
                   success: false,
@@ -74,7 +74,6 @@ module.exports = (req, res) => {
                 })
               }
             }).catch((err1) => {
-              console.log(err1)
               return res.json({
                 success: false,
                 message: 'crach'
