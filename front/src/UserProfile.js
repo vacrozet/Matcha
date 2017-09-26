@@ -20,22 +20,28 @@ class UserProfile extends Component {
       like: ''
     }
     this.likeProfile = this.likeProfile.bind(this)
+    this.unlikeProfile = this.unlikeProfile.bind(this)
   }
   likeProfile (event) {
-    axiosInst().post('/like/addlike', {
+    axiosInst().post('./like/addlike', {
       login: this.state.login
     }).then((res) => {
-      // if (res.data.success === true) {
-      //   this.setState({
-      //     like: false
-      //   })
-      // }
-      console.log(res.data.like)
+      console.log(res.data)
+      if (res.data.like === true) {
+        this.setState({
+          like: true
+        })
+      }
     }).catch((err) => {
       console.log(err)
     })
   }
   unlikeProfile (event) {
+    axiosInst().delete(`./like/deletelike/${this.state.login}`).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
     console.log(event.target.value)
   }
   componentWillMount () {
@@ -52,7 +58,7 @@ class UserProfile extends Component {
           img: res.data.result[0].img,
           tag: res.data.result[0].tag
         })
-        axiosInst().get(`/like/getlike/${this.state.login}`).then((res) => {
+        axiosInst().get(`./like/getlike/${this.state.login}`).then((res) => {
           if (res.data.like === false) {
             this.setState({
               like: false
