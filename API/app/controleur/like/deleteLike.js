@@ -4,7 +4,7 @@ module.exports = (req, res) => {
   console.log(req.params.login)
   console.log(req.user.id)
   console.log(req.user.login)
-  if (req.params.login !== ''){
+  if (req.params.login !== '') {
     db.get().then((db) => {
       db.collection('Users').find({_id: req.user.id}).toArray((err, result) => {
         if (err) {
