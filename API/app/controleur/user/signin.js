@@ -1,25 +1,6 @@
 const bcrypt = require('bcryptjs')
 const db = require('../../db.js')
-// const geolocation = require('google-geolocation')({
-//   key: 'AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8'
-// })
-// const params = {
-//   wifiAccessPoints: [
-//     {
-//       macAddress: 'f4:0f:24:1b:49:a2',
-//       signalStrength: -65,
-//       signalToNoiseRatio: 40
-//     }
-//   ]
-// }
-
-// geolocation (params, (err, data) => {
-//   if (err) {
-//     console.log(err)
-//     return
-//   }
-//   console.log(data)
-// })
+const axios = require('axios')
 
 function genToken () {
   var str = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`
@@ -30,7 +11,6 @@ function genToken () {
   }
   return (token)
 }
-
 function getAge (datestring) {
   var today = new Date()
   var birthDate = new Date(datestring)
@@ -41,77 +21,82 @@ function getAge (datestring) {
   }
   return age
 }
-
 module.exports = (req, res) => {
-  console.log(req.body.longitude)
-  console.log(req.body.latitude)
-  if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
-    res.status(400)
-    return res.json({
-      message: 'login incorrect'
-    })
-  }
-
-  db.get().then((db) => {
-    db.collection('Users').find({login: req.body.login}).toArray((error, results) => {
-      if (error) {
-        res.status(500)
-        return res.json({
-          error: 'Internal server error'
-        })
-      }
-      if (results.length === 1) {
-        if (bcrypt.compareSync(req.body.passwd, results[0].passwd)) {
-          let objToken = {}
-          objToken.token = genToken()
-          objToken.created_at = new Date().getTime()
-          let hbirthday = getAge(results[0].date)
-          results[0].tokens.push(objToken)
-          db.collection('Users').updateOne({login: req.body.login}, {$set:
-          {
-            tokens: results[0].tokens,
-            age: hbirthday,
-            img: [
-              `http://localhost:3001/picture/${objToken.token}/0`,
-              `http://localhost:3001/picture/${objToken.token}/1`,
-              `http://localhost:3001/picture/${objToken.token}/2`,
-              `http://localhost:3001/picture/${objToken.token}/3`,
-              `http://localhost:3001/picture/${objToken.token}/4`
-            ]
-          }
-          })
-          return res.json({
-            success: true,
-            token: objToken.token,
-            login: results[0].login,
-            sexe: results[0].sexe,
-            age: hbirthday,
-            img: [
-              `http://localhost:3001/picture/${objToken.token}/0`,
-              `http://localhost:3001/picture/${objToken.token}/1`,
-              `http://localhost:3001/picture/${objToken.token}/2`,
-              `http://localhost:3001/picture/${objToken.token}/3`,
-              `http://localhost:3001/picture/${objToken.token}/4`
-            ]
-          })
-        } else {
-          res.status(200)
-          return res.json({
-            error: 'Wrong password'
-          })
-        }
-      } else {
-        res.status(200)
-        return res.json({
-          error: 'User not found'
-        })
-      }
-    })
+  let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
+  console.log(url)
+  axios.get(url).then((res) => {
+    console.log(res.data.results[0])
   }).catch((err) => {
     console.log(err)
-    res.status(500)
-    return res.json({
-      Message: 'Internal server error'
-    })
   })
+  // if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
+  //   res.status(400)
+  //   return res.json({
+  //     message: 'login incorrect'
+  //   })
+  // }
+
+  // db.get().then((db) => {
+  //   db.collection('Users').find({login: req.body.login}).toArray((error, results) => {
+  //     if (error) {
+  //       res.status(500)
+  //       return res.json({
+  //         error: 'Internal server error'
+  //       })
+  //     }
+  //     if (results.length === 1) {
+  //       if (bcrypt.compareSync(req.body.passwd, results[0].passwd)) {
+  //         let objToken = {}
+  //         objToken.token = genToken()
+  //         objToken.created_at = new Date().getTime()
+  //         let hbirthday = getAge(results[0].date)
+  //         results[0].tokens.push(objToken)
+  //         db.collection('Users').updateOne({login: req.body.login}, {$set:
+  //         {
+  //           tokens: results[0].tokens,
+  //           age: hbirthday,
+  //           img: [
+  //             `http://localhost:3001/picture/${objToken.token}/0`,
+  //             `http://localhost:3001/picture/${objToken.token}/1`,
+  //             `http://localhost:3001/picture/${objToken.token}/2`,
+  //             `http://localhost:3001/picture/${objToken.token}/3`,
+  //             `http://localhost:3001/picture/${objToken.token}/4`
+  //           ]
+  //         }
+  //         }).then((res1) => {
+  //           return res.json({
+  //             success: true,
+  //             token: objToken.token,
+  //             login: results[0].login,
+  //             sexe: results[0].sexe,
+  //             age: hbirthday,
+  //             img: [
+  //               `http://localhost:3001/picture/${objToken.token}/0`,
+  //               `http://localhost:3001/picture/${objToken.token}/1`,
+  //               `http://localhost:3001/picture/${objToken.token}/2`,
+  //               `http://localhost:3001/picture/${objToken.token}/3`,
+  //               `http://localhost:3001/picture/${objToken.token}/4`
+  //             ]
+  //           })
+  //         })
+  //       } else {
+  //         res.status(200)
+  //         return res.json({
+  //           error: 'Wrong password'
+  //         })
+  //       }
+  //     } else {
+  //       res.status(200)
+  //       return res.json({
+  //         error: 'User not found'
+  //       })
+  //     }
+  //   })
+  // }).catch((err) => {
+  //   console.log(err)
+  //   res.status(500)
+  //   return res.json({
+  //     Message: 'Internal server error'
+  //   })
+  // })
 }

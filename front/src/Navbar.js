@@ -46,22 +46,48 @@ class Volet extends Component {
       if (this.state.login === '' || this.state.passwd === '') {
         return false
       } else {
-        var afficherGeoLocPosition = (geolocPosition) => {
-          this.setState({
-            longitude: geolocPosition.coords.longitude,
-            latitude: geolocPosition.coords.latitude
-          })
-        }
         if (navigator.geolocation) {
-          // geolocalisation supportée
-          navigator.geolocation.getCurrentPosition(afficherGeoLocPosition)
-        }
-        axios.post('http://localhost:3001/user/signin',
-          {
+          navigator.geolocation.getCurrentPosition((geolocPosition) => {
+            axios.post('http://localhost:3001/user/signin', {
+              login: this.state.login,
+              passwd: this.state.passwd,
+              longitude: geolocPosition.coords.longitude,
+              latitude: geolocPosition.coords.latitude
+            }).then((res) => {
+              if (res.data.success === true) {
+                global.localStorage.setItem('token', res.data.token)
+                this.setState({
+                  connexion: true,
+                  login: res.data.login,
+                  age: res.data.age,
+                  sexe: res.data.sexe,
+                  img: res.data.img
+                })
+                this.props.notification.addNotification({
+                  message: 'Connected',
+                  level: 'success'
+                })
+                // console.log(res.data)
+                this.props.history.push('/accueil')
+              } else {
+                this.props.notification.addNotification({
+                  message: res.data.error,
+                  level: 'error'
+                })
+              }
+            }).catch((err) => {
+              this.props.notification.addNotification({
+                message: err,
+                level: 'error'
+              })
+            })
+          })
+        } else {
+          axios.post('http://localhost:3001/user/signin', {
             login: this.state.login,
             passwd: this.state.passwd,
-            longitude: this.state.longitude,
-            latitude: this.state.latitude
+            longitude: 0,
+            latitude: 0
           }).then((res) => {
             if (res.data.success === true) {
               global.localStorage.setItem('token', res.data.token)
@@ -90,6 +116,7 @@ class Volet extends Component {
               level: 'error'
             })
           })
+        }
       }
     }
   }
@@ -138,7 +165,7 @@ class Volet extends Component {
                 <div className='input_connect' >
                   <input className='input_connexion_volet' name='login' onChange={this.handleChange} type='login' placeholder='Login' onKeyPress={this.handleKeyPress} />
                   <input className='input_connexion_volet' name='passwd' onChange={this.handleChange} type='passwd' placeholder='Password' onKeyPress={this.handleKeyPress} />
-                  <button className='button_connexion_volet' value='Connexion' onKeyPress={this.handleKeyPress} >Connexion</button>
+                  <button className='button_connexion_volet' value='connexion' onKeyPress={this.handleKeyPress} >Connexion</button>
                 </div>
                 <div className='Signin_navbar' onClick={this.signIn}>SignIn</div>
               </div>
