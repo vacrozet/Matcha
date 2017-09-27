@@ -17,7 +17,6 @@ module.exports = (req, res) => {
             delete result[0].mail
             delete result[0].tokens
             delete result[0]._id
-            // console.log(result)
             return res.json({
               result,
               user: req.user.login

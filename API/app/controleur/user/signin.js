@@ -39,6 +39,7 @@ module.exports = (req, res) => {
   let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
   // console.log(url)
   axios.get(url).then((res2) => {
+    console.log('ok')
     let adresse
     if (req.body.latitude !== 0 && req.body.longitude !== 0) {
       adresse = res2.data.results[0].formatted_address
@@ -65,6 +66,8 @@ module.exports = (req, res) => {
           tokens: results[0].tokens,
           age: hbirthday,
           location: adresse,
+          long: req.body.longitude,
+          lat: req.body.latitude,
           img: [
             `http://localhost:3001/picture/${objToken.token}/0`,
             `http://localhost:3001/picture/${objToken.token}/1`,

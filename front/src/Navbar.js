@@ -67,7 +67,6 @@ class Volet extends Component {
                   message: 'Connected',
                   level: 'success'
                 })
-                // console.log(res.data)
                 this.props.history.push('/accueil')
               } else {
                 this.props.notification.addNotification({
@@ -102,7 +101,6 @@ class Volet extends Component {
                 message: 'Connected',
                 level: 'success'
               })
-              // console.log(res.data)
               this.props.history.push('/accueil')
             } else {
               this.props.notification.addNotification({
