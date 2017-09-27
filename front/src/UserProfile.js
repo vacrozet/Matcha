@@ -18,6 +18,8 @@ class UserProfile extends Component {
       img: [],
       tag: [],
       like: '',
+      location: '',
+      popularite: '',
       block: ''
     }
     this.likeProfile = this.likeProfile.bind(this)
@@ -33,6 +35,10 @@ class UserProfile extends Component {
         this.setState({
           like: true
         })
+        this.props.notification.addNotification({
+          message: 'User Like',
+          level: 'success'
+        })
       }
     }).catch((err) => {
       console.log(err)
@@ -43,6 +49,10 @@ class UserProfile extends Component {
       if (res.data.unlike === true) {
         this.setState({
           like: false
+        })
+        this.props.notification.addNotification({
+          message: 'User DisLike',
+          level: 'success'
         })
       }
     }).catch((err) => {
@@ -57,6 +67,11 @@ class UserProfile extends Component {
         this.setState({
           block: true
         })
+        this.props.notification.addNotification({
+          message: 'User Block',
+          level: 'success'
+        })
+
       }
     })
   }
@@ -66,6 +81,11 @@ class UserProfile extends Component {
         this.setState({
           block: false
         })
+        this.props.notification.addNotification({
+          message: 'User UnBlock',
+          level: 'success'
+        })
+
       }
     }).catch((err) => {
       console.log(err)
@@ -92,6 +112,8 @@ class UserProfile extends Component {
             sexe: res.data.result[0].sexe,
             img: res.data.result[0].img,
             tag: res.data.result[0].tag,
+            location: res.data.result[0].location,
+            popularite: res.data.result[0].popularite,
             block: true
           })
         } else {
@@ -104,6 +126,8 @@ class UserProfile extends Component {
             sexe: res.data.result[0].sexe,
             img: res.data.result[0].img,
             tag: res.data.result[0].tag,
+            location: res.data.result[0].location,
+            popularite: res.data.result[0].popularite,
             block: false
 
           })
@@ -144,6 +168,8 @@ class UserProfile extends Component {
             <div className='detailProfileUser'>
               <div className='textUserProfile'>Login: </div>
               <div>{this.state.login}</div>
+              <div className='textUserProfile'>Popularité: </div>
+              <div>{this.state.popularite}</div>
               <div className='textUserProfile'>Prenom: </div>
               <div>{this.state.prenom}</div>
               <div className='textUserProfile'>Nom: </div>
@@ -152,6 +178,8 @@ class UserProfile extends Component {
               <div>{this.state.age}</div>
               <div className='textUserProfile'>Anniversaire: </div>
               <div>{this.state.date}</div>
+              <div className='textUserProfile'>Adresse: </div>
+              <div>{this.state.location}</div>
               <div className='textUserProfile'>Bio: </div>
               <div>{this.state.bio}</div>
               <div className='textUserProfile'>Tous les #Tag:</div>

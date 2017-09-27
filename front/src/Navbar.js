@@ -165,7 +165,7 @@ class Volet extends Component {
                 <div className='input_connect' >
                   <input className='input_connexion_volet' name='login' onChange={this.handleChange} type='login' placeholder='Login' onKeyPress={this.handleKeyPress} />
                   <input className='input_connexion_volet' name='passwd' onChange={this.handleChange} type='passwd' placeholder='Password' onKeyPress={this.handleKeyPress} />
-                  <button className='button_connexion_volet' value='connexion' onKeyPress={this.handleKeyPress} >Connexion</button>
+                  <button className='button_connexion_volet' value='connexion' onKeyPress={this.handleKeyPress} onClick={this.handleKeyPress}>Connexion</button>
                 </div>
                 <div className='Signin_navbar' onClick={this.signIn}>SignIn</div>
               </div>
@@ -184,10 +184,7 @@ class Volet extends Component {
           }
           { !this.state.connexion ? (
             <div>
-              <Link className='word_volet' to='/'>Accueil</Link>
-              <Link className='word_volet' to='/'>Profile</Link>
-              <Link className='word_volet' to='/'>Notification</Link>
-              <Link className='word_volet' to='/' onClick={this.logoutUser}>Deconnexion</Link>
+              <Link className='word_volet' to='/'>Oubli ?</Link>
             </div>
           ) : (
             <div>

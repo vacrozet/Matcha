@@ -15,7 +15,8 @@ class modifyProfile extends Component {
       rePasswd: '',
       birthday: '',
       bio: '',
-      toSexe: ''
+      toSexe: '',
+      location: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -35,7 +36,8 @@ class modifyProfile extends Component {
           rePasswd: this.state.rePasswd,
           birthday: this.state.birthday,
           bio: this.state.bio,
-          toSexe: this.state.toSexe
+          toSexe: this.state.toSexe,
+          location: this.state.location 
         }).then((res) => {
           if (res.data.success === 'OK') {
             this.props.notification.addNotification({
@@ -57,7 +59,8 @@ class modifyProfile extends Component {
   componentWillMount () {
     axiosInst().get('/user/profile').then((res) => {
       this.setState({
-        login: res.data.result[0].login
+        login: res.data.result[0].login,
+        location: res.data.result[0].location
       })
     }).catch((err) => {
       console.log(err)
@@ -91,6 +94,10 @@ class modifyProfile extends Component {
           <div className='cmp'>
             <p>Birthday</p>
             <input value={this.state.birthday} name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-JJ' onKeyPress={this.handleKeyPress} />
+          </div>
+          <div className='cmp'>
+            <p>Adresse</p>
+            <input value={this.state.location} name='location' onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
           </div>
           <div className='cmp'>
             <p>Bio</p>
