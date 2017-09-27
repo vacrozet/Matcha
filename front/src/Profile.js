@@ -234,7 +234,8 @@ class Profile extends Component {
           toSexe: res.data.result[0].to_match,
           age: res.data.result[0].age,
           tagProfile: res.data.result[0].tag,
-          bio: res.data.result[0].bio
+          bio: res.data.result[0].bio,
+          location: res.data.result[0].location
         })
       }).catch((err) => {
         console.log(err)
@@ -274,6 +275,7 @@ class Profile extends Component {
             <div>Sexe: {this.state.sexe}</div>
             <div>Interessé par: {this.state.toSexe}</div>
             <div>Age: {this.state.age}</div>
+            <div>Adresse: {this.state.location}</div>          
             <div>Bio: {this.state.bio}</div>
             <div><Link className='bmp primary' to='/profile/modify'><Button type='primary'>Modifier</Button></Link></div>
           </div>

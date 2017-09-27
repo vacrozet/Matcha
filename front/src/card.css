@@ -21,7 +21,6 @@
     justify-content: center;
 }
 .cadre_profile {
-    height: 200px;
     display: flex;
     width: 40vw;
     min-width: 215px;
