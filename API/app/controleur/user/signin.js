@@ -1,5 +1,25 @@
 const bcrypt = require('bcryptjs')
 const db = require('../../db.js')
+// const geolocation = require('google-geolocation')({
+//   key: 'AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8'
+// })
+// const params = {
+//   wifiAccessPoints: [
+//     {
+//       macAddress: 'f4:0f:24:1b:49:a2',
+//       signalStrength: -65,
+//       signalToNoiseRatio: 40
+//     }
+//   ]
+// }
+
+// geolocation (params, (err, data) => {
+//   if (err) {
+//     console.log(err)
+//     return
+//   }
+//   console.log(data)
+// })
 
 function genToken () {
   var str = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`
@@ -23,6 +43,8 @@ function getAge (datestring) {
 }
 
 module.exports = (req, res) => {
+  console.log(req.body.longitude)
+  console.log(req.body.latitude)
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     res.status(400)
     return res.json({

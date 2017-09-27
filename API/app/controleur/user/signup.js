@@ -105,6 +105,7 @@ module.exports = (req, res) => {
       if (results.length !== 1) {
         let tab = {
           _id: id,
+          actif: true,
           login: req.body.login,
           nom: req.body.nom,
           prenom: req.body.prenom,
@@ -115,6 +116,8 @@ module.exports = (req, res) => {
           age: hbirthday,
           bio: req.body.bio,
           passwd: hash,
+          popularite: 50,
+          geoloc: '',
           img: [],
           tokens: [],
           tag: [req.body.tag],

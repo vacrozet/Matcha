@@ -19,7 +19,8 @@ module.exports = (req, res) => {
             delete result[0]._id
             // console.log(result)
             return res.json({
-              result
+              result,
+              user: req.user.login
             })
           } else {
             return res.json({

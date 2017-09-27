@@ -16,7 +16,9 @@ class Volet extends Component {
       age: '',
       sexe: '',
       token: '',
-      img: []
+      img: [],
+      longitude: '',
+      latitude: ''
     }
     this.myFunction = this.myFunction.bind(this)
     this.signIn = this.signIn.bind(this)
@@ -44,10 +46,22 @@ class Volet extends Component {
       if (this.state.login === '' || this.state.passwd === '') {
         return false
       } else {
+        var afficherGeoLocPosition = (geolocPosition) => {
+          this.setState({
+            longitude: geolocPosition.coords.longitude,
+            latitude: geolocPosition.coords.latitude
+          })
+        }
+        if (navigator.geolocation) {
+          // geolocalisation supportée
+          navigator.geolocation.getCurrentPosition(afficherGeoLocPosition)
+        }
         axios.post('http://localhost:3001/user/signin',
           {
             login: this.state.login,
-            passwd: this.state.passwd
+            passwd: this.state.passwd,
+            longitude: this.state.longitude,
+            latitude: this.state.latitude
           }).then((res) => {
             if (res.data.success === true) {
               global.localStorage.setItem('token', res.data.token)
@@ -86,7 +100,11 @@ class Volet extends Component {
       message: 'Disconnected',
       level: 'success'
     })
-    this.setState({connexion: false})
+    this.setState({
+      connexion: false,
+      login: '',
+      passwd: false
+    })
   }
   componentWillMount () {
     global.localStorage.getItem('token')

@@ -1,7 +1,6 @@
 const db = require('../../db.js')
 
 function erreur (res) {
-  console.log('je passe ici')
   return res.json({
     success: 'KO',
     message: 'test'
@@ -9,9 +8,6 @@ function erreur (res) {
 }
 
 module.exports = (req, res) => {
-  console.log(req.user.login)
-  console.log(req.user.id)
-  console.log(req.body.login)
   if (req.user.login !== '') {
     db.get().then((db) => {
       db.collection('Users').find({login: req.body.login}).toArray((err, result) => {
@@ -32,7 +28,6 @@ module.exports = (req, res) => {
             db.collection('Users').update({login: req.body.login},
               {$push: {block: req.user.login}}).then((res1) => {
                 if (!res1.result.n === 1) return erreur(res1)
-                console.log('pof_POF')
                 return res.json({
                   block: true,
                   message: 'User blocker'

@@ -26,14 +26,3 @@ module.exports = {
     })
   }
 }
-  // checkLikeOtherUser: (loginOtherUser) => {
-  //   return new Promise((resolve, reject) => {
-  //     db.get().then((db) =>{
-  //       db.collection('Users').find({login: loginOtherUser}).toArray((error, result) => {
-  //         if (error) {
-  //           return reject(error)
-  //         }
-  //       })
-  //     })
-  //   })
-  // }

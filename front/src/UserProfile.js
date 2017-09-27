@@ -18,17 +18,17 @@ class UserProfile extends Component {
       img: [],
       tag: [],
       like: '',
-      block: false
+      block: ''
     }
     this.likeProfile = this.likeProfile.bind(this)
     this.unlikeProfile = this.unlikeProfile.bind(this)
     this.blockUser = this.blockUser.bind(this)
+    this.unBlockUser = this.unBlockUser.bind(this)
   }
   likeProfile (event) {
     axiosInst().post('./like/addlike', {
       login: this.state.login
     }).then((res) => {
-      console.log(res.data)
       if (res.data.addlike === true) {
         this.setState({
           like: true
@@ -45,8 +45,6 @@ class UserProfile extends Component {
           like: false
         })
       }
-      console.log(res.data.unlike)
-      console.log(res)
     }).catch((err) => {
       console.log(err)
     })
@@ -56,26 +54,60 @@ class UserProfile extends Component {
       login: this.state.login
     }).then((res) => {
       if (res.data.block === true) {
-        this.props.history.push('/accueil')
+        this.setState({
+          block: true
+        })
       }
-      console.log(res)
+    })
+  }
+  unBlockUser () {
+    axiosInst().delete(`./block/deleteblock/${this.state.login}`).then((res) => {
+      if (res.data.Unblock === true) {
+        this.setState({
+          block: false
+        })
+      }
+    }).catch((err) => {
+      console.log(err)
     })
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
-        console.log(res.data.result[0])
-        this.setState({
-          login: res.data.result[0].login,
-          nom: res.data.result[0].nom,
-          prenom: res.data.result[0].prenom,
-          date: res.data.result[0].date,
-          age: res.data.result[0].age,
-          sexe: res.data.result[0].sexe,
-          img: res.data.result[0].img,
-          tag: res.data.result[0].tag,
-          block: false
-        })
+        let capteur = false
+        if (res.data.result[0].block.length > 0) {
+          res.data.result[0].block.forEach((element) => {
+            if (element === res.data.user) {
+              capteur = true
+            }
+          }, this)
+        }
+        if (capteur === true) {
+          this.setState({
+            login: res.data.result[0].login,
+            nom: res.data.result[0].nom,
+            prenom: res.data.result[0].prenom,
+            date: res.data.result[0].date,
+            age: res.data.result[0].age,
+            sexe: res.data.result[0].sexe,
+            img: res.data.result[0].img,
+            tag: res.data.result[0].tag,
+            block: true
+          })
+        } else {
+          this.setState({
+            login: res.data.result[0].login,
+            nom: res.data.result[0].nom,
+            prenom: res.data.result[0].prenom,
+            date: res.data.result[0].date,
+            age: res.data.result[0].age,
+            sexe: res.data.result[0].sexe,
+            img: res.data.result[0].img,
+            tag: res.data.result[0].tag,
+            block: false
+
+          })
+        }
         axiosInst().get(`./like/getlike/${this.state.login}`).then((res) => {
           if (res.data.like === false) {
             this.setState({
@@ -86,7 +118,6 @@ class UserProfile extends Component {
               like: true
             })
           }
-          console.log(res.data)
         }).catch((err) => {
           console.log(err)
         })
@@ -94,7 +125,7 @@ class UserProfile extends Component {
         console.log(err)
       })
     } else {
-
+      this.props.history.push('/')
     }
   }
 
@@ -142,8 +173,13 @@ class UserProfile extends Component {
                 <Button className='primary' id='sizeButton' type='danger' value='Unlike' onClick={this.unlikeProfile}>UnkLike</Button>
               )
               }
-              <Button className='primary' id='sizeButton' type='success' value='Block' onClick={this.blockUser}>block</Button>
-              <Button className='primary' id='sizeButton' type='primary' value='report User' onClick={this.handleKeyPress}>Report User</Button>
+              { !this.state.block ? (
+                <Button className='primary' id='sizeButton' type='danger' value='Block' onClick={this.blockUser}>Block</Button>
+              ) : (
+                <Button className='primary' id='sizeButton' type='danger' value='Block' onClick={this.unBlockUser}>Unblock</Button>
+              )
+              }
+              <Button className='primary' id='sizeButton' type='primary' value='report User' onClick={this.unBlockUser}>Report User</Button>
             </div>
           </div>
         </div>

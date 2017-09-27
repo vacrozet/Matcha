@@ -13,7 +13,7 @@ module.exports = (req, res) => {
           })
         }
         // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
-        console.log(result)
+        // console.log(result)
         if (result) {
           var tab = result.filter(result => {
             return result.login !== req.user.login
