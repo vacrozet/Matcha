@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const db = require('../../db.js')
 const axios = require('axios')
+// const axios = require('axios')
 
 function genToken () {
   var str = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`
@@ -52,8 +53,8 @@ module.exports = (req, res) => {
       {
         tokens: results[0].tokens,
         age: hbirthday,
-        // long: req.body.longitude,
-        // lat: req.body.latitude,
+        long: req.body.longitude,
+        lat: req.body.latitude,
         img: [
           `http://localhost:3001/picture/${objToken.token}/0`,
           `http://localhost:3001/picture/${objToken.token}/1`,
@@ -76,7 +77,7 @@ module.exports = (req, res) => {
             `http://localhost:3001/picture/${objToken.token}/3`,
             `http://localhost:3001/picture/${objToken.token}/4`
           ]
-        })   
+        })
       }).catch((err1) => {
         return res.json({
           message: 'erreur'
@@ -90,26 +91,25 @@ module.exports = (req, res) => {
       Message: 'Internal server error'
     })
   })
-  let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
-    // console.log(url)
-  axios.get(url).then((res2) => {
-    console.log('ok')
-    let adresse
-    if (req.body.latitude !== 0 && req.body.longitude !== 0) {
-      adresse = res2.data.results[0].formatted_address
-    } else {
-      adresse = 'Paris, France'
-    }
-    db.get().then((db) => {
-      db.collection('Users').updateOne({login: req.body.login}, {$set:
-      {
-        long: req.body.longitude,
-        lat: req.body.latitude,
-        location: adresse
-      }
-      })
-    })
-  }).catch((err2) => {
-    console.log(err2)
-  })
+  // let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
+  // axios.get(url).then((res2) => {
+  //   console.log('ok')
+  //   let adresse
+  //   if (req.body.latitude !== 0 && req.body.longitude !== 0) {
+  //     adresse = res2.data.results[0].formatted_address
+  //   } else {
+  //     adresse = 'Paris, France'
+  //   }
+  //   db.get().then((db) => {
+  //     db.collection('Users').updateOne({login: req.body.login}, {$set:
+  //     {
+  //       long: req.body.longitude,
+  //       lat: req.body.latitude,
+  //       location: adresse
+  //     }
+  //     })
+  //   })
+  // }).catch((err2) => {
+  //   console.log(err2)
+  // })
 }

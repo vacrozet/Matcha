@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import './StyleSheet.css'
 import axiosInst from './utils/axios.js'
-import {Button} from 'elemental'
-// import {Link} from 'react-router-dom'
+import FlatButton from 'material-ui/FlatButton'
 
 class Acceuil extends Component {
   constructor (props) {
@@ -13,31 +12,46 @@ class Acceuil extends Component {
       tab: []
     }
   }
-  handleButtonPress (event) {
-    this.props.history.push(`/userprofile/${event.target.value}`)
+  handleButtonPress (login) {
+    this.props.history.push(`/userprofile/${login}`)
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
       axiosInst().get('/user/alluser').then((res) => {
-        if (res.data.tab.length >= 1) {
-          console.log(res.data.tab.length)
+        const tabl = res.data.tab
+        if (tabl.length > 0) {
+          console.log('je passe')
           this.setState({
             tab: res.data.tab
           })
+          res.data.tab.forEach((element) => {
+            console.log(element)
+          }, this)      
+        // var R = 6378137 // Earth’s mean radius in meter
+        // var dLat = rad(p2.lat - p1.lat)
+        // var dLong = rad(p2.lng - p1.lng)
+        // var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        //   Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) *
+        //   Math.sin(dLong / 2) * Math.sin(dLong / 2)
+        // var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        // var d = R * c
+        // return d
         }
+      }).catch((erreur) => {
+        console.log(erreur)
       })
       this.setState({
         connexion: true
       })
     }
   }
-
   render () {
     return (
       <div className='all'>
         <div className='body_accueil_search'>
           <div className='multiProfile'>
             { this.state.tab ? this.state.tab.map((nam) => {
+              
               return (
                 <div className='multiProfile' key={nam._id}>
                   <div className='photoProfileMulti'>
@@ -54,13 +68,13 @@ class Acceuil extends Component {
                     <div>{nam.tag[0]}</div>
                     <div className='textDescri'>Connecté:</div>
                     <div>in progress</div>
-                    <Button className='primary' type='primary' value={nam.login} onClick={this.handleButtonPress.bind(this)}>Voir</Button>
+                    <FlatButton label="Voir" primary={true} onClick={() => {this.handleButtonPress(nam.login)}} />
                   </div>
                 </div>
               )
             }
             ) : (
-              <div>Personne sur ce reseaux de merde</div>
+              <div>coucou</div>
             )
             }
           </div>

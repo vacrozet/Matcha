@@ -11,6 +11,7 @@ db.connect()
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true, limit: '512kb'}))
 app.use(bodyParser.json({limit: '5mb'}))
+// app.use(bodyParser.json({ type: 'application/json-patch+json' }))
 
 app.use('/', require('./route/index.js'))
 

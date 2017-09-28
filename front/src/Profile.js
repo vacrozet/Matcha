@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
-import axios from 'axios'
 import './card.css'
-import { Button, Pill } from 'elemental'
 import {Link} from 'react-router-dom'
 import Dropzone from 'react-dropzone'
+import RaisedButton from 'material-ui/RaisedButton'
+import Chip from 'material-ui/Chip'
 
 class Profile extends Component {
   constructor (props) {
@@ -33,8 +33,8 @@ class Profile extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.searchTag = this.searchTag.bind(this)
     this.handleClear = this.handleClear.bind(this)
-    this.searchPicture = this.searchPicture.bind(this)
     this.onDropReject = this.onDropReject.bind(this)
+    this.enterKeyPress = this.enterKeyPress.bind(this)
   }
   handleChange (event) {
     this.setState({[event.target.name]: event.target.value})
@@ -168,8 +168,6 @@ class Profile extends Component {
     })
   }
   handleClear (tag) {
-    console.log(tag)
-    console.log('je lance l instance et la requete')
     axiosInst().delete(`./user/deletetag/${tag}`).then((res) => {
       this.searchTag()
       this.props.notification.addNotification({
@@ -189,38 +187,28 @@ class Profile extends Component {
       console.log(err)
     })
   }
-  handleKeyPress (event) {
-    if (event.key === 'Enter' || event.target.value === 'ajouter') {
-      if (this.state.tag !== '') {
-        axiosInst().post('./user/addTag', {
-          tag: this.state.tag
-        }).then((res) => {
-          this.setState({tag: ''})
-          if (res.data.success === 'OK') {
-            this.props.notification.addNotification({
-              message: 'Tag add',
-              level: 'success'
-            })
-          }
-          this.searchTag()
-        }).catch((err) => {
-          console.log(err)
-        })
-      }
+  enterKeyPress (event){
+    if (event.key === 'Enter'){
+    this.handleKeyPress()
     }
   }
-  searchPicture (link) {
-    if (link !== '') {
-      axios.get(link).then((res) => {
-        console.log('ici')
-        console.log(res.data)
-        console.log('ici')
-        return res.data
+  handleKeyPress () {
+    if (this.state.tag !== '') {
+      axiosInst().post('./user/addTag', {
+        tag: this.state.tag
+      }).then((res) => {
+        this.setState({tag: ''})
+        if (res.data.success === 'OK') {
+          this.props.notification.addNotification({
+            message: 'Tag add',
+            level: 'success'
+          })
+        }
+        this.searchTag()
+      }).catch((err) => {
+        console.log(err)
       })
     }
-  }
-  componentWillUnmount () {
-    console.log('je suis un teuber')
   }
 
   componentWillMount () {
@@ -277,23 +265,22 @@ class Profile extends Component {
             <div>Age: {this.state.age}</div>
             <div>Adresse: {this.state.location}</div>          
             <div>Bio: {this.state.bio}</div>
-            <div><Link className='bmp primary' to='/profile/modify'><Button type='primary'>Modifier</Button></Link></div>
+            <div><Link className='bmp primary' to='/profile/modify'><RaisedButton label='Modifier' primary={true} /></Link></div>
           </div>
           <div className='all_htag'>
             <div className='affichage_tag'>
               { this.state.tagProfile ? this.state.tagProfile.map((tag) => {
                 return (
-                  <Pill label={`#${tag}`} key={Math.random()} type='primary' value={`#${tag}`} onClear={() => {
-                    this.handleClear(tag)
-                  }} />)
+                  <Chip key={Math.random()} type='primary' value={`#${tag}`} onRequestDelete={() => {this.handleClear(tag)}}>{`#${tag}`}</Chip> 
+                )
               }
               ) : (
                   null)
               }
             </div>
             <div className='binput'>
-              <input type='name' name='tag' value={this.state.tag} onChange={this.handleChange} placeholder='#TAG' onKeyPress={this.handleKeyPress} />
-              <Button className='primary' type='primary' value='ajouter' onClick={this.handleKeyPress}>Ajouter</Button>
+              <input type='name' name='tag' value={this.state.tag} onChange={this.handleChange} placeholder='#TAG' onKeyPress={this.enterKeyPress} />
+              <RaisedButton label='ajouter' value='ajouter' primary={true} onClick={() => {this.handleKeyPress()}} />
             </div>
           </div>
         </div>

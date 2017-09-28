@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
-import {Pill, Button} from 'elemental'
-
+// import {Pill, Button} from 'elemental'
+import RaisedButton from 'material-ui/RaisedButton'
+import Chip from 'material-ui/Chip'
 import './StyleSheet.css'
 
 class UserProfile extends Component {
@@ -91,7 +92,9 @@ class UserProfile extends Component {
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
+      console.log(this.props.match.params.login)
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
+        console.log('requete')
         let capteur = false
         if (res.data.result[0].block.length > 0) {
           res.data.result[0].block.forEach((element) => {
@@ -100,54 +103,28 @@ class UserProfile extends Component {
             }
           }, this)
         }
-        if (capteur === true) {
-          this.setState({
-            login: res.data.result[0].login,
-            nom: res.data.result[0].nom,
-            prenom: res.data.result[0].prenom,
-            date: res.data.result[0].date,
-            age: res.data.result[0].age,
-            sexe: res.data.result[0].sexe,
-            img: res.data.result[0].img,
-            tag: res.data.result[0].tag,
-            location: res.data.result[0].location,
-            popularite: res.data.result[0].popularite,
-            block: true
-          })
-        } else {
-          this.setState({
-            login: res.data.result[0].login,
-            nom: res.data.result[0].nom,
-            prenom: res.data.result[0].prenom,
-            date: res.data.result[0].date,
-            age: res.data.result[0].age,
-            sexe: res.data.result[0].sexe,
-            img: res.data.result[0].img,
-            tag: res.data.result[0].tag,
-            location: res.data.result[0].location,
-            popularite: res.data.result[0].popularite,
-            block: false
-
-          })
-        }
-        axiosInst().get(`./like/getlike/${this.state.login}`).then((res) => {
-          if (res.data.like === false) {
+        axiosInst().get(`./like/getlike/${this.props.match.params.login}`).then((res1) => {
             this.setState({
-              like: false
+              login: res.data.result[0].login,
+              nom: res.data.result[0].nom,
+              prenom: res.data.result[0].prenom,
+              date: res.data.result[0].date,
+              age: res.data.result[0].age,
+              sexe: res.data.result[0].sexe,
+              img: res.data.result[0].img,
+              tag: res.data.result[0].tag,
+              location: res.data.result[0].location,
+              popularite: res.data.result[0].popularite,
+              block: capteur,
+              like: res1.data.like
             })
-          } else {
-            this.setState({
-              like: true
-            })
-          }
-        }).catch((err) => {
-          console.log(err)
+            // this.props.history.push('/')
+        }).catch((err1) => {
+          console.log(err1)
         })
       }).catch((err) => {
         console.log(err)
       })
-    } else {
-      this.props.history.push('/')
     }
   }
 
@@ -185,7 +162,7 @@ class UserProfile extends Component {
             <div className='allTagUserProfile'>
               { this.state.tag ? this.state.tag.map((tag) => {
                 return (
-                  <Pill label={`#${tag}`} key={tag} type='primary' value={`#${tag}`} />
+                  <Chip key={Math.random()} type='primary' value={`#${tag}`}>{`#${tag}`}</Chip>
                 )
               }
               ) : (
@@ -194,18 +171,18 @@ class UserProfile extends Component {
             </div>
             <div className='buttonForLikeAndBlock'>
               { !this.state.like ? (
-                <Button className='primary' id='sizeButton' type='success' value='like' onClick={this.likeProfile}>Like</Button>
+                <RaisedButton label='Like' primary={true} onClick={() => {this.likeProfile(this.state.login)}} />
               ) : (
-                <Button className='primary' id='sizeButton' type='danger' value='Unlike' onClick={this.unlikeProfile}>UnkLike</Button>
+                <RaisedButton label='DisLike' secondary={true} onClick={() => {this.unlikeProfile(this.state.login)}} />
               )
               }
               { !this.state.block ? (
-                <Button className='primary' id='sizeButton' type='danger' value='Block' onClick={this.blockUser}>Block</Button>
+                <RaisedButton label='Block' secondary={true} onClick={() => {this.blockUser(this.state.login)}} />
               ) : (
-                <Button className='primary' id='sizeButton' type='danger' value='Block' onClick={this.unBlockUser}>Unblock</Button>
+                <RaisedButton label='UnBlock' secondary={true} onClick={() => {this.unBlockUser(this.state.login)}} />
               )
               }
-              <Button className='primary' id='sizeButton' type='primary' value='report User' onClick={this.unBlockUser}>Report User</Button>
+              <RaisedButton label='ReportUser' secondary={true} onClick={() => {this.blockUser(this.state.login)}} />
             </div>
           </div>
         </div>

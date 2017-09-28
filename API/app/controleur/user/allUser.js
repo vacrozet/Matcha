@@ -15,9 +15,37 @@ module.exports = (req, res) => {
         // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
         // console.log(result)
         if (result) {
+          let blocklist
+          result.map((e) => {
+              console.log(e.login)
+            if (e.login === req.user.login) {
+              blocklist = e.block
+            }
+          })
+          
           var tab = result.filter(result => {
             return result.login !== req.user.login
           })
+
+          // var moi = result.filter(result => {
+          //   return result.login === req.user.login
+          // })
+          // console.log(moi)
+          // moi = moi[0].block
+          // // var tabfilter = tab.filter(tab => {
+          //   if (moi[0].block.indexOf(req.user.login) !== -1) {
+          //     return tab
+          //   }
+          // })
+          // console.log(tabfilter)
+          
+          
+          
+          
+          
+          
+          
+          
           result.forEach((tab) => {
             delete tab.passwd
             delete tab.tokens

@@ -18,7 +18,8 @@ class Volet extends Component {
       token: '',
       img: [],
       longitude: '',
-      latitude: ''
+      latitude: '',
+      adresse: ''
     }
     this.myFunction = this.myFunction.bind(this)
     this.signIn = this.signIn.bind(this)
@@ -46,13 +47,10 @@ class Volet extends Component {
       if (this.state.login === '' || this.state.passwd === '') {
         return false
       } else {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((geolocPosition) => {
             axios.post('http://localhost:3001/user/signin', {
               login: this.state.login,
               passwd: this.state.passwd,
-              longitude: geolocPosition.coords.longitude,
-              latitude: geolocPosition.coords.latitude
+              location: this.state.adresse
             }).then((res) => {
               if (res.data.success === true) {
                 global.localStorage.setItem('token', res.data.token)
@@ -61,13 +59,52 @@ class Volet extends Component {
                   login: res.data.login,
                   age: res.data.age,
                   sexe: res.data.sexe,
-                  img: res.data.img
+                  img: res.data.img,
                 })
                 this.props.notification.addNotification({
                   message: 'Connected',
                   level: 'success'
                 })
                 this.props.history.push('/accueil')
+                  if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((geolocPosition) => {
+                      setTimeout(() => {
+                        axiosInst().post('/location/patchlocation', {
+                          longitude: geolocPosition.coords.longitude,
+                          latitude: geolocPosition.coords.latitude,
+                          login: this.state.login
+                        }).then((res) => {
+                          this.props.notification.addNotification({
+                            message: 'User Geoloc',
+                            level: 'success'
+                          })
+                        }).catch((err) => {
+                          this.props.notification.addNotification({
+                            message: 'User Not Geoloc',
+                            level: 'error'
+                          })
+                        })              
+                      }, 8000)
+                    })
+                  } else {
+                    setTimeout(() => {
+                      axiosInst().post('/location/patchlocation', {
+                        longitude: 0,
+                        latitude: 0,
+                        login: this.state.login
+                      }).then((res) => {
+                        this.props.notification.addNotification({
+                          message: 'User Geoloc',
+                          level: 'success'
+                        })
+                      }).catch((err) => {
+                        this.props.notification.addNotification({
+                          message: 'User Not Geoloc',
+                          level: 'error'
+                        })
+                      })
+                    }, 4000)                     
+                  }
               } else {
                 this.props.notification.addNotification({
                   message: res.data.error,
@@ -80,41 +117,6 @@ class Volet extends Component {
                 level: 'error'
               })
             })
-          })
-        } else {
-          axios.post('http://localhost:3001/user/signin', {
-            login: this.state.login,
-            passwd: this.state.passwd,
-            longitude: 0,
-            latitude: 0
-          }).then((res) => {
-            if (res.data.success === true) {
-              global.localStorage.setItem('token', res.data.token)
-              this.setState({
-                connexion: true,
-                login: res.data.login,
-                age: res.data.age,
-                sexe: res.data.sexe,
-                img: res.data.img
-              })
-              this.props.notification.addNotification({
-                message: 'Connected',
-                level: 'success'
-              })
-              this.props.history.push('/accueil')
-            } else {
-              this.props.notification.addNotification({
-                message: res.data.error,
-                level: 'error'
-              })
-            }
-          }).catch((err) => {
-            this.props.notification.addNotification({
-              message: err,
-              level: 'error'
-            })
-          })
-        }
       }
     }
   }
@@ -145,9 +147,8 @@ class Volet extends Component {
         console.log(err)
       })
       this.setState({connexion: true})
-    }
+    }  
   }
-
   render () {
     return (
       <div className='volet'>

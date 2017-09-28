@@ -10,8 +10,7 @@ import Profile from './Profile.js'
 import Modify from './ModifyProfile.js'
 import UserProfile from './UserProfile.js'
 import './styles.min.css'
-import '../node_modules/elemental/less/elemental.less'
-
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './index.css'
 
 var NotificationSystem = require('react-notification-system')
@@ -74,9 +73,11 @@ class Index extends React.Component {
 
 ReactDOM.render(
   <BrowserRouter>
-    <Switch>
-      <Route path='/' component={Index} />
-    </Switch>
+    <MuiThemeProvider>
+      <Switch>
+        <Route path='/' component={Index} />
+      </Switch>
+    </MuiThemeProvider>
   </BrowserRouter>,
   document.getElementById('root')
 )
