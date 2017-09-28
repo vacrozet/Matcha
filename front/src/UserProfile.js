@@ -71,7 +71,6 @@ class UserProfile extends Component {
           message: 'User Block',
           level: 'success'
         })
-
       }
     })
   }
@@ -85,7 +84,6 @@ class UserProfile extends Component {
           message: 'User UnBlock',
           level: 'success'
         })
-
       }
     }).catch((err) => {
       console.log(err)
