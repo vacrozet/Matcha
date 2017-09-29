@@ -47,76 +47,39 @@ class Volet extends Component {
       if (this.state.login === '' || this.state.passwd === '') {
         return false
       } else {
-            axios.post('http://localhost:3001/user/signin', {
-              login: this.state.login,
-              passwd: this.state.passwd,
-              location: this.state.adresse
-            }).then((res) => {
-              if (res.data.success === true) {
-                global.localStorage.setItem('token', res.data.token)
-                this.setState({
-                  connexion: true,
-                  login: res.data.login,
-                  age: res.data.age,
-                  sexe: res.data.sexe,
-                  img: res.data.img,
-                })
-                this.props.notification.addNotification({
-                  message: 'Connected',
-                  level: 'success'
-                })
-                this.props.history.push('/accueil')
-                  if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition((geolocPosition) => {
-                      setTimeout(() => {
-                        axiosInst().post('/location/patchlocation', {
-                          longitude: geolocPosition.coords.longitude,
-                          latitude: geolocPosition.coords.latitude,
-                          login: this.state.login
-                        }).then((res) => {
-                          this.props.notification.addNotification({
-                            message: 'User Geoloc',
-                            level: 'success'
-                          })
-                        }).catch((err) => {
-                          this.props.notification.addNotification({
-                            message: 'User Not Geoloc',
-                            level: 'error'
-                          })
-                        })              
-                      }, 8000)
-                    })
-                  } else {
-                    setTimeout(() => {
-                      axiosInst().post('/location/patchlocation', {
-                        longitude: 0,
-                        latitude: 0,
-                        login: this.state.login
-                      }).then((res) => {
-                        this.props.notification.addNotification({
-                          message: 'User Geoloc',
-                          level: 'success'
-                        })
-                      }).catch((err) => {
-                        this.props.notification.addNotification({
-                          message: 'User Not Geoloc',
-                          level: 'error'
-                        })
-                      })
-                    }, 4000)                     
-                  }
-              } else {
-                this.props.notification.addNotification({
-                  message: res.data.error,
-                  level: 'error'
-                })
-              }
-            }).catch((err) => {
+        axios.post('http://localhost:3001/user/signin', {
+          login: this.state.login,
+          passwd: this.state.passwd,
+          longitude: this.state.longitude,
+          latitude: this.state.latitude
+        }).then((res) => {
+          if (res.data.success === true) {
+            global.localStorage.setItem('token', res.data.token)
+            this.setState({
+              connexion: true,
+              login: res.data.login,
+              age: res.data.age,
+              sexe: res.data.sexe,
+              img: res.data.img,
+            }, () => {
               this.props.notification.addNotification({
-                message: err,
-                level: 'error'
+                message: 'Connected',
+                level: 'success'
               })
+              this.props.history.push('/accueil')
             })
+          } else {
+            this.props.notification.addNotification({
+              message: res.data.error,
+              level: 'error'
+            })
+          }
+        }).catch((err) => {
+          this.props.notification.addNotification({
+            message: err,
+            level: 'error'
+          })
+        })
       }
     }
   }
@@ -134,7 +97,6 @@ class Volet extends Component {
     })
   }
   componentWillMount () {
-    global.localStorage.getItem('token')
     if (global.localStorage.getItem('token')) {
       axiosInst().get('/user/profile').then((res) => {
         this.setState({
@@ -146,8 +108,26 @@ class Volet extends Component {
       }).catch((err) => {
         console.log(err)
       })
-      this.setState({connexion: true})
-    }  
+      this.setState({
+        connexion: true
+      })
+    } else {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((geolocPosition) => {
+          this.setState({
+            longitude: geolocPosition.coords.longitude,
+            latitude: geolocPosition.coords.latitude
+          })
+        })
+      } else {
+        axios.get(`https://freegeoip.net/json/`).then((res3) => { 
+          this.setState({
+            longitude: res3.data.longitude,
+            latitude: res3.data.latitude
+          })
+        }).catch((err3) => {console.log(err3)})
+      }
+    }
   }
   render () {
     return (
@@ -183,7 +163,8 @@ class Volet extends Component {
           }
           { !this.state.connexion ? (
             <div>
-              <Link className='word_volet' to='/'>Oubli ?</Link>
+              <Link className='word_volet' to='/'>Accueil</Link>
+              <Link className='word_volet' to='/oubli'>Oubli ?</Link>
             </div>
           ) : (
             <div>

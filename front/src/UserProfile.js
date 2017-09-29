@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
-// import {Pill, Button} from 'elemental'
 import RaisedButton from 'material-ui/RaisedButton'
 import Chip from 'material-ui/Chip'
 import './StyleSheet.css'
@@ -104,21 +103,20 @@ class UserProfile extends Component {
           }, this)
         }
         axiosInst().get(`./like/getlike/${this.props.match.params.login}`).then((res1) => {
-            this.setState({
-              login: res.data.result[0].login,
-              nom: res.data.result[0].nom,
-              prenom: res.data.result[0].prenom,
-              date: res.data.result[0].date,
-              age: res.data.result[0].age,
-              sexe: res.data.result[0].sexe,
-              img: res.data.result[0].img,
-              tag: res.data.result[0].tag,
-              location: res.data.result[0].location,
-              popularite: res.data.result[0].popularite,
-              block: capteur,
-              like: res1.data.like
-            })
-            // this.props.history.push('/')
+          this.setState({
+            login: res.data.result[0].login,
+            nom: res.data.result[0].nom,
+            prenom: res.data.result[0].prenom,
+            date: res.data.result[0].date,
+            age: res.data.result[0].age,
+            sexe: res.data.result[0].sexe,
+            img: res.data.result[0].img,
+            tag: res.data.result[0].tag,
+            location: res.data.result[0].location,
+            popularite: res.data.result[0].popularite,
+            block: capteur,
+            like: res1.data.like
+          })
         }).catch((err1) => {
           console.log(err1)
         })
@@ -127,7 +125,6 @@ class UserProfile extends Component {
       })
     }
   }
-
   render () {
     return (
       <div>
@@ -171,18 +168,18 @@ class UserProfile extends Component {
             </div>
             <div className='buttonForLikeAndBlock'>
               { !this.state.like ? (
-                <RaisedButton label='Like' primary={true} onClick={() => {this.likeProfile(this.state.login)}} />
+                <RaisedButton label='Like' primary={true} onClick={() => { this.likeProfile(this.state.login) }} />
               ) : (
-                <RaisedButton label='DisLike' secondary={true} onClick={() => {this.unlikeProfile(this.state.login)}} />
+                <RaisedButton label='DisLike' secondary={true} onClick={() => { this.unlikeProfile(this.state.login) }} />
               )
               }
               { !this.state.block ? (
-                <RaisedButton label='Block' secondary={true} onClick={() => {this.blockUser(this.state.login)}} />
+                <RaisedButton label='Block' secondary={true} onClick={() => { this.blockUser(this.state.login) }} />
               ) : (
-                <RaisedButton label='UnBlock' secondary={true} onClick={() => {this.unBlockUser(this.state.login)}} />
+                <RaisedButton label='UnBlock' secondary={true} onClick={() => { this.unBlockUser(this.state.login) }} />
               )
               }
-              <RaisedButton label='ReportUser' secondary={true} onClick={() => {this.blockUser(this.state.login)}} />
+              <RaisedButton label='ReportUser' secondary={true} onClick={() => { this.blockUser(this.state.login) }} />
             </div>
           </div>
         </div>

@@ -3,8 +3,7 @@ const db = require('../../db.js')
 module.exports = (req, res) => {
   if (req.user.toMatch === 'Homme' || req.user.toMatch === 'Femme') {
     db.get().then((db) => {
-      db.collection('Users').find({to_match: {$in: [req.user.sexe, 'All']}, sexe: req.user.toMatch
-      }).toArray((err, result) => {
+      db.collection('Users').find({to_match: {$in: [req.user.sexe, 'All']}, sexe: req.user.toMatch}).toArray((err, result) => {
         if (err) {
           res.status(404)
           return res.json({
@@ -15,18 +14,16 @@ module.exports = (req, res) => {
         // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
         // console.log(result)
         if (result) {
-          let blocklist
-          result.map((e) => {
-              console.log(e.login)
-            if (e.login === req.user.login) {
-              blocklist = e.block
-            }
-          })
-          
+          // let blocklist
+          // result.map((e) => {
+          //     console.log(e.login)
+          //   if (e.login === req.user.login) {
+          //     blocklist = e.block
+          //   }
+          // })
           var tab = result.filter(result => {
             return result.login !== req.user.login
           })
-
           // var moi = result.filter(result => {
           //   return result.login === req.user.login
           // })
@@ -38,14 +35,6 @@ module.exports = (req, res) => {
           //   }
           // })
           // console.log(tabfilter)
-          
-          
-          
-          
-          
-          
-          
-          
           result.forEach((tab) => {
             delete tab.passwd
             delete tab.tokens

@@ -28,6 +28,20 @@ function erreur (res, text) {
   })
 }
 module.exports = (req, res) => {
+  let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
+  axios.get(url).then((res2) => {
+    db.get().then((db) => {
+      db.collection('Users').updateOne({login: req.body.login}, {$set:
+      {
+        long: req.body.longitude,
+        lat: req.body.latitude,
+        location: res2.data.results[0].formatted_address
+      }
+      })
+    })
+  }).catch((err2) => {
+    console.log(err2)
+  })
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     res.status(400)
     return res.json({
@@ -91,25 +105,4 @@ module.exports = (req, res) => {
       Message: 'Internal server error'
     })
   })
-  // let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
-  // axios.get(url).then((res2) => {
-  //   console.log('ok')
-  //   let adresse
-  //   if (req.body.latitude !== 0 && req.body.longitude !== 0) {
-  //     adresse = res2.data.results[0].formatted_address
-  //   } else {
-  //     adresse = 'Paris, France'
-  //   }
-  //   db.get().then((db) => {
-  //     db.collection('Users').updateOne({login: req.body.login}, {$set:
-  //     {
-  //       long: req.body.longitude,
-  //       lat: req.body.latitude,
-  //       location: adresse
-  //     }
-  //     })
-  //   })
-  // }).catch((err2) => {
-  //   console.log(err2)
-  // })
 }

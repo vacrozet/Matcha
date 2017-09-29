@@ -9,6 +9,7 @@ import Navbar from './Navbar.js'
 import Profile from './Profile.js'
 import Modify from './ModifyProfile.js'
 import UserProfile from './UserProfile.js'
+import Oubli from './Oubli.js'
 import './styles.min.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './index.css'
@@ -26,8 +27,12 @@ class Index extends React.Component {
   }
 
   componentWillMount () {
-    if (!global.localStorage.getItem('token') && this.props.location.pathname !== '/') {
-      this.props.history.push('/')
+    if (!global.localStorage.getItem('token')) {
+      if (this.props.location.pathname === '/oubli') {
+        this.props.history.push('/oubli')
+      } else {
+        this.props.history.push('/')
+      }
     }
     if (global.localStorage.getItem('token') && this.props.location.pathname === '/') {
       this.props.history.push('/accueil')
@@ -49,6 +54,9 @@ class Index extends React.Component {
           null
         )}
         <Switch>
+          <Route exact path='/oubli' render={({history, match, location}) =>
+            <Oubli history={history} match={match} notification={this._notificationSystem} /> 
+          } />
           <Route exact path='/inscription' render={({history, match, location}) =>
             <Inscription history={history} match={match} notification={this._notificationSystem} />
           } />

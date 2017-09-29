@@ -127,3 +127,17 @@ textarea {
 #sizeButton {
     width: 100px;
 }
+.pageOubli {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cadreOubli{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
