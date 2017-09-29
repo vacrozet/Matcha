@@ -4,6 +4,7 @@ import Paper from 'material-ui/Paper'
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
 import RaisedButton from 'material-ui/RaisedButton'
+import axiosInst from './utils/axios.js'
 
 class Oubli extends Component {
   constructor (props) {
@@ -15,9 +16,25 @@ class Oubli extends Component {
   }
   handleSend () {
     console.log(this.state.mail)
-    // if (this.state.mail) {
-
-    // }
+    axiosInst().post('/reset/passwd', {
+      mail: this.state.mail
+    }).then((res) => {
+      if (res.data.success === true) {
+        console.log(res)
+        this.props.notification.addNotification({
+          level: 'success',
+          message: 'Mail envoyer'
+        })
+        this.props.history.push('/')
+      } else {
+        this.props.notification.addNotification({
+          level: 'error',
+          message: 'Mail not foun'
+        })
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
   }
   handleChange (event) {
     this.setState({mail: event.target.value})

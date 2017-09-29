@@ -10,8 +10,9 @@ import Profile from './Profile.js'
 import Modify from './ModifyProfile.js'
 import UserProfile from './UserProfile.js'
 import Oubli from './Oubli.js'
+import ResetPasswd from './ResetPasswd.js'
 import './styles.min.css'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import './index.css'
 
 var NotificationSystem = require('react-notification-system')
@@ -27,12 +28,8 @@ class Index extends React.Component {
   }
 
   componentWillMount () {
-    if (!global.localStorage.getItem('token')) {
-      if (this.props.location.pathname === '/oubli') {
-        this.props.history.push('/oubli')
-      } else {
-        this.props.history.push('/')
-      }
+    if (!global.localStorage.getItem('token') && this.props.location.pathname.indexOf('/reset/resetpasswd/') === -1) {
+      this.props.history.push('/')
     }
     if (global.localStorage.getItem('token') && this.props.location.pathname === '/') {
       this.props.history.push('/accueil')
@@ -55,7 +52,7 @@ class Index extends React.Component {
         )}
         <Switch>
           <Route exact path='/oubli' render={({history, match, location}) =>
-            <Oubli history={history} match={match} notification={this._notificationSystem} /> 
+            <Oubli history={history} match={match} notification={this._notificationSystem} />
           } />
           <Route exact path='/inscription' render={({history, match, location}) =>
             <Inscription history={history} match={match} notification={this._notificationSystem} />
@@ -69,8 +66,11 @@ class Index extends React.Component {
           <Route exact path='/profile' render={({history, match, location}) =>
             <Profile history={history} match={match} notification={this._notificationSystem} />
           } />
-          <Route path='/userprofile/:login' render={({history, match, location}) =>
+          <Route exact path='/userprofile/:login' render={({history, match, location}) =>
             <UserProfile history={history} match={match} notification={this._notificationSystem} />
+          } />
+          <Route path='/reset/resetpasswd/:hash' render={({history, match, location}) =>
+            <ResetPasswd history={history} match={match} notification={this._notificationSystem} />
           } />
           <Route path='/' component={AccueilKo} />
         </Switch>
@@ -90,4 +90,9 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
+
+
+
 registerServiceWorker()
+
+          // <Redirect to='/accueil' />

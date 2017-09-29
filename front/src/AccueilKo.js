@@ -4,7 +4,9 @@ import {Link} from 'react-router-dom'
 
 class AccueilKo extends Component {
   componentWillMount () {
-
+    if (global.localStorage.getItem('token')) {
+      this.props.history.push('/accueil')
+    }
   }
 
   render () {

@@ -16,11 +16,12 @@ class Acceuil extends Component {
     this.props.history.push(`/userprofile/${login}`)
   }
   componentWillMount () {
-    if (global.localStorage.getItem('token')) {
+    if (!global.localStorage.getItem('token')) {
+      this.props.history.push('/')
+    } else {
       axiosInst().get('/user/alluser').then((res) => {
         const tabl = res.data.tab
         if (tabl.length > 0) {
-          console.log('je passe')
           this.setState({
             tab: res.data.tab
           })

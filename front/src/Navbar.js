@@ -60,7 +60,7 @@ class Volet extends Component {
               login: res.data.login,
               age: res.data.age,
               sexe: res.data.sexe,
-              img: res.data.img,
+              img: res.data.img
             }, () => {
               this.props.notification.addNotification({
                 message: 'Connected',
@@ -85,7 +85,15 @@ class Volet extends Component {
   }
   logoutUser () {
     global.localStorage.removeItem('token')
-    this.props.history.push('/')
+    axios.get('https://freegeoip.net/json/').then((res4) => {
+      this.setState({
+        longitude: res4.data.longitude,
+        latitude: res4.data.latitude
+      })
+    }).catch((err4) => {
+      console.log(err4)
+    })
+    this.props.history.push('/acceuilko')
     this.props.notification.addNotification({
       message: 'Disconnected',
       level: 'success'
@@ -103,15 +111,21 @@ class Volet extends Component {
           login: res.data.result[0].login,
           age: res.data.result[0].age,
           sexe: res.data.result[0].sexe,
-          img: res.data.result[0].img
+          img: res.data.result[0].img,
+          connexion: true
         })
       }).catch((err) => {
         console.log(err)
       })
-      this.setState({
-        connexion: true
-      })
     } else {
+      axios.get('https://freegeoip.net/json/').then((res3) => {
+        this.setState({
+          longitude: res3.data.longitude,
+          latitude: res3.data.latitude
+        })
+      }).catch((err3) => {
+        console.log(err3)
+      })
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((geolocPosition) => {
           this.setState({
@@ -119,13 +133,6 @@ class Volet extends Component {
             latitude: geolocPosition.coords.latitude
           })
         })
-      } else {
-        axios.get(`https://freegeoip.net/json/`).then((res3) => { 
-          this.setState({
-            longitude: res3.data.longitude,
-            latitude: res3.data.latitude
-          })
-        }).catch((err3) => {console.log(err3)})
       }
     }
   }

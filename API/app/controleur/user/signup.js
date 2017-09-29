@@ -106,6 +106,7 @@ module.exports = (req, res) => {
         let tab = {
           _id: id,
           actif: true,
+          completed: false,
           login: req.body.login,
           nom: req.body.nom,
           prenom: req.body.prenom,
@@ -116,6 +117,7 @@ module.exports = (req, res) => {
           age: hbirthday,
           bio: req.body.bio,
           passwd: hash,
+          hash: '',
           popularite: 50,
           long: '',
           lat: '',
