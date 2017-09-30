@@ -56,7 +56,9 @@ module.exports = (req, res) => {
           error: 'Internal server error'
         })
       }
-      if (!results.length === 1) return erreur(res, 'User Not Found')
+      console.log(results.length)
+      if (results.length !== 1) return erreur(res, 'User Not Found')
+      console.log('je passe')
       if (!bcrypt.compareSync(req.body.passwd, results[0].passwd)) return erreur(res, 'Wrong Passwd')
       let objToken = {}
       objToken.token = genToken()
@@ -97,12 +99,6 @@ module.exports = (req, res) => {
           message: 'erreur'
         })
       })
-    })
-  }).catch((err) => {
-    console.log(err)
-    res.status(500)
-    return res.json({
-      Message: 'Internal server error'
     })
   })
 }

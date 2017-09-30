@@ -41,7 +41,7 @@ class Profile extends Component {
   }
 
   sendPicture (pic, index) {
-    axiosInst().put('/picture/' + index, {
+    axiosInst().post('/picture/' + index, {
       pic: pic
     }).then((res) => {
       if (res.data.success === true) {

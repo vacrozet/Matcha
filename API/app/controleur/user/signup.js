@@ -93,7 +93,7 @@ module.exports = (req, res) => {
   var hash = bcrypt.hashSync(req.body.passwd, 10)
 
   db.get().then((db) => {
-    db.collection('Users').find({login: req.body.login}).toArray((error, results) => {
+    db.collection('Users').find({login: req.body.login, mail: req.body.mail}).toArray((error, results) => {
       if (error) {
         res.status(500)
         return res.json({
@@ -121,6 +121,7 @@ module.exports = (req, res) => {
           popularite: 50,
           long: '',
           lat: '',
+          distance: '',
           img: [],
           tokens: [],
           tag: [req.body.tag],
@@ -131,7 +132,6 @@ module.exports = (req, res) => {
         }
         db.collection('Users').insert(tab, null, (error, result) => {
           if (error) {
-            console.log(new Error(error))
             res.status(500)
             return res.json({
               message: 'Internal server error',

@@ -90,9 +90,4 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-
-
-
 registerServiceWorker()
-
-          // <Redirect to='/accueil' />

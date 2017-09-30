@@ -26,34 +26,34 @@ class modifyProfile extends Component {
     this.setState({[event.target.name]: event.target.value})
   }
   handleKeyPress (event) {
-      axiosInst().patch('/user/modifyprofile',
-        {
-          login: this.state.login,
-          prenom: this.state.prenom,
-          nom: this.state.nom,
-          mail: this.state.mail,
-          passwd: this.state.passwd,
-          rePasswd: this.state.rePasswd,
-          birthday: this.state.birthday,
-          bio: this.state.bio,
-          toSexe: this.state.toSexe,
-          location: this.state.location 
-        }).then((res) => {
-          if (res.data.success === 'OK') {
-            this.props.notification.addNotification({
-              level: 'success',
-              message: res.data.message
-            })
-            this.props.history.push('/profile')
-          } else {
-            this.props.notification.addNotification({
-              message: 'Profile Not Update',
-              level: 'error'
-            })
-          }
-        }).catch((err) => {
-          console.log(err)
-        })
+    axiosInst().patch('/user/modifyprofile',
+      {
+        login: this.state.login,
+        prenom: this.state.prenom,
+        nom: this.state.nom,
+        mail: this.state.mail,
+        passwd: this.state.passwd,
+        rePasswd: this.state.rePasswd,
+        birthday: this.state.birthday,
+        bio: this.state.bio,
+        toSexe: this.state.toSexe,
+        location: this.state.location
+      }).then((res) => {
+        if (res.data.success === 'OK') {
+          this.props.notification.addNotification({
+            level: 'success',
+            message: res.data.message
+          })
+          this.props.history.push('/profile')
+        } else {
+          this.props.notification.addNotification({
+            message: 'Profile Not Update',
+            level: 'error'
+          })
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
   }
   componentWillMount () {
     axiosInst().get('/user/profile').then((res) => {
@@ -72,35 +72,35 @@ class modifyProfile extends Component {
           <div className='cmp'>login: {this.state.login}</div>
           <div className='cmp'>
             <p>Prenom</p>
-            <input value={this.state.prenom} name='prenom' onChange={this.handleChange}  />
+            <input type='text' value={this.state.prenom} name='prenom' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>Nom</p>
-            <input value={this.state.nom} name='nom' onChange={this.handleChange} />
+            <input type='text' value={this.state.nom} name='nom' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>Email</p>
-            <input value={this.state.mail} name='mail' onChange={this.handleChange} />
+            <input type='mail' value={this.state.mail} name='mail' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>Passwd</p>
-            <input value={this.state.passwd} name='passwd' onChange={this.handleChange} />
+            <input type='passwd' value={this.state.passwd} name='passwd' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>RePasswd</p>
-            <input value={this.state.rePasswd} name='rePasswd' onChange={this.handleChange} />
+            <input type='passwd' value={this.state.rePasswd} name='rePasswd' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>Birthday</p>
-            <input value={this.state.birthday} name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-JJ' />
+            <input type='text' value={this.state.birthday} name='birthday' onChange={this.handleChange} placeholder='YYYY-MM-JJ' />
           </div>
           <div className='cmp'>
             <p>Adresse</p>
-            <input value={this.state.location} name='location' onChange={this.handleChange} />
+            <input type='text' value={this.state.location} name='location' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>Bio</p>
-            <input value={this.state.bio} name='bio' onChange={this.handleChange} />
+            <input type='text' value={this.state.bio} name='bio' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>Recherche:</p>
@@ -111,7 +111,7 @@ class modifyProfile extends Component {
               <option value='Femme'>Femme</option>
             </select><br />
           </div><br />
-          <RaisedButton label="confirmer" primary={true} onClick={this.handleKeyPress}/>
+          <RaisedButton label='confirmer' primary={true} onClick={this.handleKeyPress} />
         </div>
       </div>
     )

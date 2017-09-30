@@ -1,15 +1,9 @@
-
+const db = require('../../db.js')
 const path = require('path')
 const fs = require('fs')
 const dir = path.dirname(require.main.filename) + '/pictures/'
 
 module.exports = (req, res) => {
-  // console.log(req)
-  // console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
-  // console.log(req.user)
-  // console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
-  // console.log(req.params)
-  // console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
@@ -23,10 +17,16 @@ module.exports = (req, res) => {
       error: 'False picture id'
     })
   }
-
-  res.status(202)
-  res.json({
-    success: true
+  db.get().then((db) => {
+    db.collection('Users').updateOne({login: req.user.login}, {$set:
+    {
+      completed: true
+    }})
+  }).then((res1) => {
+    res.status(200)
+    return res.json({
+      success: true
+    })
   })
   let base64Data = req.body.pic.replace(/^data:image\/png;base64,/, '')
 

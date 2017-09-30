@@ -91,9 +91,7 @@ class UserProfile extends Component {
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
-      console.log(this.props.match.params.login)
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
-        console.log('requete')
         let capteur = false
         if (res.data.result[0].block.length > 0) {
           res.data.result[0].block.forEach((element) => {

@@ -1,16 +1,18 @@
 const db = require('../../db.js')
 
+function error (status, res, success, message) {
+  res.status(status)
+  return res.json({
+    success: success,
+    message: message
+  })
+}
+
 module.exports = (req, res) => {
   if (req.user.toMatch === 'Homme' || req.user.toMatch === 'Femme') {
     db.get().then((db) => {
       db.collection('Users').find({to_match: {$in: [req.user.sexe, 'All']}, sexe: req.user.toMatch}).toArray((err, result) => {
-        if (err) {
-          res.status(404)
-          return res.json({
-            succes: false,
-            message: 'Collection not found'
-          })
-        }
+        if (err) return error(404, res, false, 'Collection not found')
         // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
         // console.log(result)
         if (result) {
@@ -52,14 +54,8 @@ module.exports = (req, res) => {
     })
   } else {
     db.get().then((db) => {
-      db.collection('Users').find({to_match: req.user.sexe}).toArray((err, result) => {
-        if (err) {
-          res.status(404)
-          return res.json({
-            succes: false,
-            message: 'Collection not found'
-          })
-        }
+      db.collection('Users').find({to_match: req.user.sexe}).toArray((err2, result) => {
+        if (err2) return error(404, res, false, 'Collection not found')
         // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
         if (result) {
           var tab = result.filter(result => {

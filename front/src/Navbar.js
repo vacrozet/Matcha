@@ -75,10 +75,7 @@ class Volet extends Component {
             })
           }
         }).catch((err) => {
-          this.props.notification.addNotification({
-            message: err,
-            level: 'error'
-          })
+          console.log(err)
         })
       }
     }
