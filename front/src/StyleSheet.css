@@ -37,19 +37,19 @@ textarea {
 }
 .body_accueil_search{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     height: 100vh;
     width: 100vw;
     padding: 50px;
     overflow: hidden;
 }
-.multiProfile{
+/* .multiProfile{
     height: 400px;
     width: 250px;
     background-color: white;
     border-radius: 10px;
-}
+} */
 .photoProfileMulti{
     display: flex;
     height: 40%;
@@ -140,4 +140,9 @@ textarea {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.searchProfile {
+    border: solid 1px red;
+    width: 100%;
+    background-color: white;
 }

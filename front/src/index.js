@@ -13,7 +13,6 @@ import Oubli from './Oubli.js'
 import ResetPasswd from './ResetPasswd.js'
 import './styles.min.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import './index.css'
 
 var NotificationSystem = require('react-notification-system')
 

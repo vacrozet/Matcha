@@ -1,5 +1,4 @@
 const db = require('../../db.js')
-const rad = require('Math')
 // VERIFIER CONST RAD ////////////
 
 function error (status, res, success, message) {
