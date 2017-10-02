@@ -20,7 +20,6 @@ var NotificationSystem = require('react-notification-system')
 class Index extends React.Component {
   constructor (props) {
     super(props)
-
     this._notificationSystem = null
     this.state = {
       _notificationSystem: false
