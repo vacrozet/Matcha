@@ -23,32 +23,66 @@ function distance () {
 module.exports = (req, res) => {
   if (req.user.toMatch === 'Homme' || req.user.toMatch === 'Femme') {
     db.get().then((db) => {
-      db.collection('Users').find({to_match: {$in: [req.user.sexe, 'All']}, sexe: req.user.toMatch}).toArray((err, result) => {
+      console.log({to_match: {
+        $in: [
+          req.user.sexe,
+          'All'
+        ]
+      },
+        sexe: req.user.toMatch,
+        popularite: {
+          $gte: parseInt(req.query.populariteMin),
+          $lte: parseInt(req.query.populariteMax)
+        },
+        age: {
+          $gte: parseInt(req.query.AgeMin),
+          $lte: parseInt(req.query.AgeMax)
+        },
+        $nin: {
+          login: 'vacrozet'
+        }
+      })
+      db.collection('Users').find({to_match: {
+        $in: [
+          req.user.sexe,
+          'All'
+        ]
+      },
+        sexe: req.user.toMatch,
+        popularite: {
+          $gte: parseInt(req.query.populariteMin),
+          $lte: parseInt(req.query.populariteMax)
+        },
+        age: {
+          $gte: parseInt(req.query.AgeMin),
+          $lte: parseInt(req.query.AgeMax)
+        },
+        login: {
+          $nin: req.user.block
+        }
+      }).toArray((err, result) => {
         if (err) return error(404, res, false, 'Collection not found')
-        // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
-        // console.log(result)
+        if (req.query.tag !== '' && typeof req.query.tag === 'string') {
+          var newTab = []
+          let tagsearch = req.query.tag.substring(1)
+          for (var index = 0; index < result.length; index++) {
+            var element = result[index]
+            for (var i = 0; i < element.tag.length; i++) {
+              if (element.tag[i] === tagsearch) {
+                newTab.push(result[index])
+              }
+            }
+          }
+          result = newTab
+        }
         if (result) {
-          // let blocklist
-          // result.map((e) => {
-          //     console.log(e.login)
-          //   if (e.login === req.user.login) {
-          //     blocklist = e.block
-          //   }
-          // })
+          console.log(result)
           var tab = result.filter(result => {
             return result.login !== req.user.login
           })
-          // var moi = result.filter(result => {
-          //   return result.login === req.user.login
-          // })
-          // console.log(moi)
-          // moi = moi[0].block
-          // // var tabfilter = tab.filter(tab => {
-          //   if (moi[0].block.indexOf(req.user.login) !== -1) {
-          //     return tab
-          //   }
-          // })
-          // console.log(tabfilter)
+
+          // //////////////////////// INCLURE LA DISTANCE /////////////////////////
+
           result.forEach((tab) => {
             delete tab.passwd
             delete tab.tokens

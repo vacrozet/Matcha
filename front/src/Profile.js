@@ -187,9 +187,9 @@ class Profile extends Component {
       console.log(err)
     })
   }
-  enterKeyPress (event){
-    if (event.key === 'Enter'){
-    this.handleKeyPress()
+  enterKeyPress (event) {
+    if (event.key === 'Enter') {
+      this.handleKeyPress()
     }
   }
   handleKeyPress () {
@@ -263,7 +263,7 @@ class Profile extends Component {
             <div>Sexe: {this.state.sexe}</div>
             <div>Interessé par: {this.state.toSexe}</div>
             <div>Age: {this.state.age}</div>
-            <div>Adresse: {this.state.location}</div>          
+            <div>Adresse: {this.state.location}</div>
             <div>Bio: {this.state.bio}</div>
             <div><Link className='bmp primary' to='/profile/modify'><RaisedButton label='Modifier' primary={true} /></Link></div>
           </div>
@@ -271,7 +271,7 @@ class Profile extends Component {
             <div className='affichage_tag'>
               { this.state.tagProfile ? this.state.tagProfile.map((tag) => {
                 return (
-                  <Chip key={Math.random()} type='primary' value={`#${tag}`} onRequestDelete={() => {this.handleClear(tag)}}>{`#${tag}`}</Chip> 
+                  <Chip key={Math.random()} type='primary' value={`#${tag}`} onRequestDelete={() => { this.handleClear(tag) }}>{`#${tag}`}</Chip>
                 )
               }
               ) : (
@@ -280,7 +280,7 @@ class Profile extends Component {
             </div>
             <div className='binput'>
               <input type='name' name='tag' value={this.state.tag} onChange={this.handleChange} placeholder='#TAG' onKeyPress={this.enterKeyPress} />
-              <RaisedButton label='ajouter' value='ajouter' primary={true} onClick={() => {this.handleKeyPress()}} />
+              <RaisedButton label='ajouter' value='ajouter' primary={true} onClick={() => { this.handleKeyPress() }} />
             </div>
           </div>
         </div>

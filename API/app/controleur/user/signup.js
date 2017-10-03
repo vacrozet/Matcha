@@ -122,6 +122,8 @@ module.exports = (req, res) => {
           long: '',
           lat: '',
           distance: '',
+          location: '',
+          ville: '',
           img: [],
           tokens: [],
           tag: [req.body.tag],

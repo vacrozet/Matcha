@@ -23,7 +23,6 @@ function getAge (datestring) {
 }
 
 function erreur (res, text) {
-  console.log('je rentre ici')
   return res.json({
     error: text
   })
@@ -37,7 +36,6 @@ module.exports = (req, res) => {
     })
   }
   let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
-  // console.log(url)
   axios.get(url).then((res2) => {
     console.log('ok')
     let adresse

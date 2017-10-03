@@ -4,6 +4,7 @@ import axiosInst from './utils/axios.js'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const items = []
 for (let i = 18; i < 99; i++) {
@@ -15,11 +16,15 @@ for (let i = 99; i > 18; i--) {
 }
 const items2 = []
 for (let i = 0; i < 99; i++) {
-  items2.push(<MenuItem value={i} key={i} primaryText={`Supérieur à ${i}`} />)
+  items2.push(<MenuItem value={i} key={i} primaryText={`popularite Superieur à ${i}`} />)
+}
+const items4 = []
+for (let i = 100; i > 0; i--) {
+  items4.push(<MenuItem value={i} key={i} primaryText={`popularite inferieur à ${i}`} />)
 }
 const items3 = []
 for (let i = 100; i > 1; i--) {
-  items3.push(<MenuItem value={i} key={i} primaryText={`Inférieur à ${i}`} />)
+  items3.push(<MenuItem value={i} key={i} primaryText={`Distance Inférieur à ${i}`} />)
 }
 
 class Acceuil extends React.Component {
@@ -30,14 +35,18 @@ class Acceuil extends React.Component {
       connexion: false,
       AgeMin: 18,
       AgeMax: 99,
-      popularite: 0,
-      distance: 100,
+      populariteMin: 0,
+      populariteMax: 100,
+      distance: '',
+      tag: '',
       tab: []
     }
     this.handleChangeAgeMin = this.handleChangeAgeMin.bind(this)
     this.handleChangeAgeMax = this.handleChangeAgeMax.bind(this)
-    this.handleChangePopularite = this.handleChangePopularite.bind(this)
+    this.handleChangePopulariteMin = this.handleChangePopulariteMin.bind(this)
+    this.handleChangePopulariteMax = this.handleChangePopulariteMax.bind(this)
     this.handleChangedistance = this.handleChangedistance.bind(this)
+    this.handleChangeTag = this.handleChangeTag.bind(this)
   }
   handleButtonPress (login) {
     this.props.history.push(`/userprofile/${login}`)
@@ -48,18 +57,83 @@ class Acceuil extends React.Component {
   handleChangeAgeMax (event, index, value) {
     this.setState({AgeMax: value})
   }
-  handleChangePopularite (event, index, value) {
-    this.setState({popularite: value})
+  handleChangePopulariteMin (event, index, value) {
+    this.setState({populariteMin: value})
+  }
+  handleChangePopulariteMax (event, index, value) {
+    this.setState({populariteMax: value})
   }
   handleChangedistance (event, index, value) {
     this.setState({distance: value})
   }
+  handleChangeTag (event) {
+    this.setState({tag: event.target.value})
+  }
+  handleKeyPress (event) {
+    var tag = true
+    var age = true
+    var popularite = true
+    if (this.state.tag !== '') {
+      var tagtab = this.state.tag.split(' ')
+      if (tagtab.length !== 1 || tagtab[0][0] !== '#') {
+        this.props.notification.addNotification({
+          message: '#Tag Mal renseigné',
+          level: 'error'
+        })
+        tag = false
+      } else {
+        tag = true
+      }
+    }
+    if (this.state.AgeMin > this.state.AgeMax) {
+      this.props.notification.addNotification({
+        message: 'Age Mal renseigné',
+        level: 'error'
+      })
+      age = false
+    }
+    if (this.state.populariteMin > this.state.populariteMax) {
+      this.props.notification.addNotification({
+        message: 'popularité Mal renseigné',
+        level: 'error'
+      })
+      popularite = false
+    }
 
+    if (age === true && popularite === true && tag === true) {
+      axiosInst().get('/user/alluser', {
+        params: {
+          AgeMin: this.state.AgeMin,
+          AgeMax: this.state.AgeMax,
+          populariteMin: this.state.populariteMin,
+          populariteMax: this.state.populariteMax,
+          distance: this.state.distance,
+          tag: this.state.tag
+        }
+      }).then((res) => {
+        console.log(res)
+      }).catch((err1) => {
+        console.log(err1)
+      })
+    } else {
+      this.props.notification.addNotification({
+        message: 'Critère Mal renseigné',
+        level: 'error'
+      })
+    }
+  }
   componentWillMount () {
     if (!global.localStorage.getItem('token')) {
       this.props.history.push('/')
     } else {
-      axiosInst().get('/user/alluser').then((res) => {
+      axiosInst().get('/user/alluser', {
+        params: {
+          AgeMin: this.state.AgeMin,
+          AgeMax: this.state.AgeMax,
+          populariteMin: this.state.populariteMin,
+          populariteMax: this.state.populariteMax
+        }
+      }).then((res) => {
         const tabl = res.data.tab
         if (tabl.length > 0) {
           this.setState({
@@ -88,13 +162,17 @@ class Acceuil extends React.Component {
             <SelectField hintText='Age-Max' value={this.state.AgeMax} onChange={this.handleChangeAgeMax} maxHeight={200}>
               {items1}
             </SelectField>
-            <SelectField hintText='Popularité' value={this.state.popularite} onChange={this.handleChangePopularite} maxHeight={200}>
+            <SelectField hintText='Popularité Min' value={this.state.populariteMin} onChange={this.handleChangePopulariteMin} maxHeight={200}>
               {items2}
+            </SelectField>
+            <SelectField hintText='Popularité Max' value={this.state.populariteMax} onChange={this.handleChangePopulariteMax} maxHeight={200}>
+              {items4}
             </SelectField>
             <SelectField hintText='Distance' value={this.state.distance} onChange={this.handleChangedistance} maxHeight={200}>
               {items3}
-            </SelectField>
-            <TextField hintText='#tag' value={this.state.newpasswd} type='password' underlineShow={true} onChange={this.handleChangeNp} />
+            </SelectField><br />
+            <TextField hintText='#tag' value={this.state.tag} type='text' underlineShow={true} onChange={this.handleChangeTag} />
+            <RaisedButton label='Rechercher' primary={true} onClick={() => { this.handleKeyPress() }} />
           </div>
         </div>
       </div>
