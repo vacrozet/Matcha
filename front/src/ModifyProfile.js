@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-// import { Button } from 'elemental'
-import './card.css'
-import axiosInst from './utils/axios.js'
 import RaisedButton from 'material-ui/RaisedButton'
+import React, { Component } from 'react'
+import axiosInst from './utils/axios.js'
+import './card.css'
 
 class modifyProfile extends Component {
   constructor (props) {

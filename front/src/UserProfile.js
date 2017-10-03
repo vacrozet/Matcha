@@ -1,6 +1,6 @@
+import RaisedButton from 'material-ui/RaisedButton'
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
-import RaisedButton from 'material-ui/RaisedButton'
 import Chip from 'material-ui/Chip'
 import './StyleSheet.css'
 

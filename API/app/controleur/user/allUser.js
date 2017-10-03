@@ -1,5 +1,4 @@
 const db = require('../../db.js')
-// VERIFIER CONST RAD ////////////
 
 function error (status, res, success, message) {
   res.status(status)
@@ -8,16 +7,19 @@ function error (status, res, success, message) {
     message: message
   })
 }
-function distance () {
-  var R = 6378137 // Earth’s mean radius in meter
-  var dLat = rad(p2.lat - p1.lat)
-  var dLong = rad(p2.lng - p1.lng)
+let rad = (x) => {
+  return x * Math.PI / 180
+}
+function distance (p1Lat, p1Lng, p2Lat, p2Lng) {
+  var R = 6378137
+  var dLat = rad(p2Lat - p1Lat)
+  var dLong = rad(p2Lng - p1Lng)
   var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) *
+    Math.cos(rad(p1Lat)) * Math.cos(rad(p2Lat)) *
     Math.sin(dLong / 2) * Math.sin(dLong / 2)
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
   var d = R * c
-  return d
+  return d / 1000
 }
 
 module.exports = (req, res) => {
@@ -57,13 +59,9 @@ module.exports = (req, res) => {
           result = newTab
         }
         if (result) {
-          console.log(result)
           var tab = result.filter(result => {
             return result.login !== req.user.login
           })
-
-          // //////////////////////// INCLURE LA DISTANCE /////////////////////////
-
           result.forEach((tab) => {
             delete tab.passwd
             delete tab.tokens
@@ -72,6 +70,7 @@ module.exports = (req, res) => {
             delete tab.to_match
             delete tab.prenom
             delete tab.nom
+            tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
           }, this)
           res.json({
             tab
@@ -96,7 +95,19 @@ module.exports = (req, res) => {
         }
       }).toArray((err2, result) => {
         if (err2) return error(404, res, false, 'Collection not found')
-        // //////////// ENLEVER LES UTILISATEURS QUI ONT BLOCKER LE PROFILE ///////////////////////
+        if (req.query.tag !== '' && typeof req.query.tag === 'string') {
+          var newTab = []
+          let tagsearch = req.query.tag.substring(1)
+          for (var index = 0; index < result.length; index++) {
+            var element = result[index]
+            for (var i = 0; i < element.tag.length; i++) {
+              if (element.tag[i] === tagsearch) {
+                newTab.push(result[index])
+              }
+            }
+          }
+          result = newTab
+        }
         if (result) {
           var tab = result.filter(result => {
             return result.login !== req.user.login
@@ -109,6 +120,7 @@ module.exports = (req, res) => {
             delete tab.to_match
             delete tab.prenom
             delete tab.nom
+            tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
           }, this)
           res.json({
             tab

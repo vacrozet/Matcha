@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import {Link} from 'react-router-dom'
 import axiosInst from './utils/axios.js'
+import {Link} from 'react-router-dom'
+import axios from 'axios'
 import './StyleSheet.css'
 import './Navbar.css'
 

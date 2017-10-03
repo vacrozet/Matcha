@@ -47,7 +47,9 @@ module.exports = (role) => {
             toMatch: result[0].to_match,
             sexe: result[0].sexe,
             id: result[0]._id,
-            block: result[0].block
+            block: result[0].block,
+            lat: result[0].lat,
+            long: result[0].long
           }
           next()
         }

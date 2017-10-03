@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import Paper from 'material-ui/Paper'
+import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
-import RaisedButton from 'material-ui/RaisedButton'
+import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
+import Paper from 'material-ui/Paper'
 
 class ResetPasswd extends Component {
   constructor (props) {

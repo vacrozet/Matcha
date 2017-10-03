@@ -41,6 +41,8 @@ module.exports = (req, res) => {
       axios.get(url).then((res1) => {
         if (res1.data.status === 'OK') {
           result[0].location = res1.data.results[0].formatted_address
+          result[0].lat = res1.data.results[0].geometry.location.lat
+          result[0].long = res1.data.results[0].geometry.location.lng
         }
         db.collection('Users').update({login: req.user.login}, {
           $set: {
@@ -51,7 +53,9 @@ module.exports = (req, res) => {
             bio: result[0].bio,
             mail: result[0].mail,
             to_match: result[0].to_match,
-            location: result[0].location
+            location: result[0].location,
+            lat: result[0].lat,
+            long: result[0].long
           }
         }).then((res2) => {
           return res.json({

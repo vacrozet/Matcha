@@ -1,10 +1,11 @@
+import RaisedButton from 'material-ui/RaisedButton'
+import SelectField from 'material-ui/SelectField'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import MenuItem from 'material-ui/MenuItem'
+import axiosInst from './utils/axios.js'
 import React from 'react'
 import './StyleSheet.css'
-import axiosInst from './utils/axios.js'
-import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
-import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton'
 
 const items = []
 for (let i = 18; i < 99; i++) {
@@ -174,6 +175,34 @@ class Acceuil extends React.Component {
             <TextField hintText='#tag' value={this.state.tag} type='text' underlineShow={true} onChange={this.handleChangeTag} />
             <RaisedButton label='Rechercher' primary={true} onClick={() => { this.handleKeyPress() }} />
           </div>
+          { this.state.tab ? this.state.tab.map((nam) => {   
+            return (
+              <div className='multiProfile' key={nam._id}>
+                <div className='photoProfileMulti'>
+                  <img className='photo' src={nam.img[0]} alt='photoProfile' />
+                </div>
+                <div className='descriProfilMulti'>
+                  <div className='textDescri'>Login:</div>
+                  <div>{nam.login}</div>
+                  <div className='textDescri'>Age:</div>
+                  <div>{nam.age}</div>
+                  <div className='textDescri'>Sexe:</div>
+                  <div>{nam.sexe}</div>
+                  <div className='textDescri'>Tag:</div>
+                  <div>{nam.tag[0]}</div>
+                  <div className='textDescri'>Distance:</div>
+                  <div>{nam.distance}</div>
+                  <div className='textDescri'>Connecté:</div>
+                  <div>in progress</div>
+                  <FlatButton label='Voir' primary={true} onClick={() => { this.handleButtonPress(nam.login) }} />
+                </div>
+              </div>
+            )
+          }
+          ) : (
+            <div>coucou</div>
+          )
+          }
         </div>
       </div>
     )
@@ -181,30 +210,3 @@ class Acceuil extends React.Component {
 }
 
 export default Acceuil
-      // { this.state.tab ? this.state.tab.map((nam) => {
-        
-      //   return (
-      //     <div className='multiProfile' key={nam._id}>
-      //       <div className='photoProfileMulti'>
-      //         <img className='photo' src={nam.img[0]} alt='photoProfile' />
-      //       </div>
-      //       <div className='descriProfilMulti'>
-      //         <div className='textDescri'>Login:</div>
-      //         <div>{nam.login}</div>
-      //         <div className='textDescri'>Age:</div>
-      //         <div>{nam.age}</div>
-      //         <div className='textDescri'>Sexe:</div>
-      //         <div>{nam.sexe}</div>
-      //         <div className='textDescri'>Tag:</div>
-      //         <div>{nam.tag[0]}</div>
-      //         <div className='textDescri'>Connecté:</div>
-      //         <div>in progress</div>
-      //         <FlatButton label="Voir" primary={true} onClick={() => {this.handleButtonPress(nam.login)}} />
-      //       </div>
-      //     </div>
-      //   )
-      // }
-      // ) : (
-      //   <div>coucou</div>
-      // )
-      // }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import './AccueilKo.css'
 import {Link} from 'react-router-dom'
+import './AccueilKo.css'
 
 class AccueilKo extends Component {
   componentWillMount () {

@@ -1,10 +1,10 @@
+import RaisedButton from 'material-ui/RaisedButton'
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
-import './card.css'
 import {Link} from 'react-router-dom'
 import Dropzone from 'react-dropzone'
-import RaisedButton from 'material-ui/RaisedButton'
 import Chip from 'material-ui/Chip'
+import './card.css'
 
 class Profile extends Component {
   constructor (props) {

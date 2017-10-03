@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import './StyleSheet.css'
 import axiosInst from './utils/axios.js'
+import './StyleSheet.css'
 
 class Inscription extends Component {
   constructor (props) {
