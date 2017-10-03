@@ -1,17 +1,28 @@
-import React, { Component } from 'react'
+import React from 'react'
 import './StyleSheet.css'
 import axiosInst from './utils/axios.js'
-import FlatButton from 'material-ui/FlatButton'
-import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
+import TextField from 'material-ui/TextField'
 
 const items = []
 for (let i = 18; i < 99; i++) {
-  items.push(<MenuItem value={i} key={i} primaryText={`Item ${i}`} />)
+  items.push(<MenuItem value={i} key={i} primaryText={`Age-Min ${i}`} />)
+}
+const items1 = []
+for (let i = 99; i > 18; i--) {
+  items1.push(<MenuItem value={i} key={i} primaryText={`Age-Max ${i}`} />)
+}
+const items2 = []
+for (let i = 0; i < 99; i++) {
+  items2.push(<MenuItem value={i} key={i} primaryText={`Supérieur à ${i}`} />)
+}
+const items3 = []
+for (let i = 100; i > 1; i--) {
+  items3.push(<MenuItem value={i} key={i} primaryText={`Inférieur à ${i}`} />)
 }
 
-class Acceuil extends Component {
+class Acceuil extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -19,20 +30,31 @@ class Acceuil extends Component {
       connexion: false,
       AgeMin: 18,
       AgeMax: 99,
+      popularite: 0,
+      distance: 100,
       tab: []
     }
+    this.handleChangeAgeMin = this.handleChangeAgeMin.bind(this)
+    this.handleChangeAgeMax = this.handleChangeAgeMax.bind(this)
+    this.handleChangePopularite = this.handleChangePopularite.bind(this)
+    this.handleChangedistance = this.handleChangedistance.bind(this)
   }
   handleButtonPress (login) {
-    console.log('je rentre ici')
     this.props.history.push(`/userprofile/${login}`)
   }
-  handleChangeAge (event, index, value) {
-    console.log(event)
-    console.log(value)
-    this.setState({
-      AgeMin: value
-    })
+  handleChangeAgeMin (event, index, value) {
+    this.setState({AgeMin: value})
   }
+  handleChangeAgeMax (event, index, value) {
+    this.setState({AgeMax: value})
+  }
+  handleChangePopularite (event, index, value) {
+    this.setState({popularite: value})
+  }
+  handleChangedistance (event, index, value) {
+    this.setState({distance: value})
+  }
+
   componentWillMount () {
     if (!global.localStorage.getItem('token')) {
       this.props.history.push('/')
@@ -60,15 +82,25 @@ class Acceuil extends Component {
       <div className='all'>
         <div className='body_accueil_search'>
           <div className='searchProfile'>
-            <SelectField hintText='Age-Min' value={this.state.AgeMin} onChange={this.handleChangeAge} maxHeight={99}>
+            <SelectField hintText='Age-Min' value={this.state.AgeMin} onChange={this.handleChangeAgeMin} maxHeight={200}>
               {items}
             </SelectField>
+            <SelectField hintText='Age-Max' value={this.state.AgeMax} onChange={this.handleChangeAgeMax} maxHeight={200}>
+              {items1}
+            </SelectField>
+            <SelectField hintText='Popularité' value={this.state.popularite} onChange={this.handleChangePopularite} maxHeight={200}>
+              {items2}
+            </SelectField>
+            <SelectField hintText='Distance' value={this.state.distance} onChange={this.handleChangedistance} maxHeight={200}>
+              {items3}
+            </SelectField>
+            <TextField hintText='#tag' value={this.state.newpasswd} type='password' underlineShow={true} onChange={this.handleChangeNp} />
           </div>
         </div>
       </div>
-        )
-      }
-    }
+    )
+  }
+}
 
 export default Acceuil
       // { this.state.tab ? this.state.tab.map((nam) => {
