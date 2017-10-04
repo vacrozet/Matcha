@@ -42,6 +42,10 @@ module.exports = (req, res) => {
               if (!res1.result.n === 1) return ftError(res1, false, 'Aucun changement effectuer sur la premiere table')
               db.collection('Users').find({login: req.body.login}).toArray((err, result) => {
                 if (err) return ftError(500, res, false, 'Internal connexion server')
+                if (result[0].popularite <= 98) {
+                  result[0].popularite = parseInt(result[0].popularite + 2)
+                  console.log(result[0].popularite)
+                }
                 if (result[0].like.length > 0) {
                   let present
                   result[0].like.forEach((element) => {
@@ -72,10 +76,20 @@ module.exports = (req, res) => {
                       })
                     })
                   } else {
-                    return res.json({
-                      addlike: true,
-                      message: 'like inseree et pas present dans l autre user'
-                    })
+                    db.collection('Users').updateOne({login: req.body.login},
+                      {
+                        $set: {popularite: result[0].popularite}
+                      }).then((res4) => {
+                        return res.json({
+                          addlike: true,
+                          message: 'like inseree et pas present dans l autre user'
+                        })
+                      }).catch((err4) => {
+                        return res.json({
+                          addlike: false,
+                          message: 'requete mal envoye'
+                        })
+                      })
                   }
                 } else {
                   return res.json({

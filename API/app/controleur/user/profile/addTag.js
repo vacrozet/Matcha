@@ -29,7 +29,21 @@ module.exports = (req, res) => {
                 message: 'tag deja present'
               })
             } else {
-              db.collection('Users').updateOne({login: req.user.login}, {$push: {tag: req.body.tag}})
+              console.log('-----------------------------------------------------------------------')
+              if (result[0].tag.length === 4 && parseInt(result[0].popularite) <= 98) {
+                console.log('je passe dans cette condition')
+                console.log(`Avant le changement --> ${parseInt(result[0].popularite)}`)
+                result[0].popularite = parseInt(result[0].popularite + 2)
+                console.log(`Apres changement ---> ${result[0].popularite}`)
+              }
+              console.log('-----------------------------------------------------------------------')
+
+              db.collection('Users').updateOne({login: req.user.login},
+                {
+                  $push: {tag: req.body.tag},
+                  $set: {popularite: result[0].popularite}
+                }
+              )
               return res.json({
                 success: 'OK',
                 message: 'tag ajouter'

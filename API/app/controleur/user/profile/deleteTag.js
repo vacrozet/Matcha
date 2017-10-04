@@ -17,7 +17,16 @@ module.exports = (req, res) => {
           }
         })
         if (capteur === true) {
-          db.collection('Users').updateOne({login: req.user.login}, {$pull: {tag: req.params.tag}})
+          if (result[0].tag.length === 5 && result[0].popularite >= 2) {
+            result[0].popularite = parseInt(result[0].popularite - 2)
+            console.log('je passe dedant')
+          }
+          db.collection('Users').updateOne({login: req.user.login},
+            {
+              $pull: {tag: req.params.tag},
+              $set: {popularite: result[0].popularite}
+            }
+          )
           return res.json({
             success: 'OK',
             message: 'Tag Deleted'

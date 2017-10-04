@@ -49,7 +49,8 @@ module.exports = (role) => {
             id: result[0]._id,
             block: result[0].block,
             lat: result[0].lat,
-            long: result[0].long
+            long: result[0].long,
+            popularite: result[0].popularite
           }
           next()
         }

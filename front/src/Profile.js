@@ -6,6 +6,9 @@ import Dropzone from 'react-dropzone'
 import Chip from 'material-ui/Chip'
 import './card.css'
 
+const style = {
+  height: 33
+}
 class Profile extends Component {
   constructor (props) {
     super(props)
@@ -271,7 +274,7 @@ class Profile extends Component {
             <div className='affichage_tag'>
               { this.state.tagProfile ? this.state.tagProfile.map((tag) => {
                 return (
-                  <Chip key={Math.random()} type='primary' value={`#${tag}`} onRequestDelete={() => { this.handleClear(tag) }}>{`#${tag}`}</Chip>
+                  <Chip key={Math.random()} type='primary' style={style} value={`#${tag}`} onRequestDelete={() => { this.handleClear(tag) }}>{`#${tag}`}</Chip>
                 )
               }
               ) : (

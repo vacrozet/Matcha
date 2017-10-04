@@ -175,11 +175,12 @@ class Acceuil extends React.Component {
             <TextField hintText='#tag' value={this.state.tag} type='text' underlineShow={true} onChange={this.handleChangeTag} />
             <RaisedButton label='Rechercher' primary={true} onClick={() => { this.handleKeyPress() }} />
           </div>
+          <div className='resultProfile'>
           { this.state.tab ? this.state.tab.map((nam) => {   
             return (
               <div className='multiProfile' key={nam._id}>
                 <div className='photoProfileMulti'>
-                  <img className='photo' src={nam.img[0]} alt='photoProfile' />
+                  <img className='photo' src={nam.img[0]} alt='profile' />
                 </div>
                 <div className='descriProfilMulti'>
                   <div className='textDescri'>Login:</div>
@@ -191,7 +192,7 @@ class Acceuil extends React.Component {
                   <div className='textDescri'>Tag:</div>
                   <div>{nam.tag[0]}</div>
                   <div className='textDescri'>Distance:</div>
-                  <div>{nam.distance}</div>
+                  <div>{nam.distance} km</div>
                   <div className='textDescri'>Connecté:</div>
                   <div>in progress</div>
                   <FlatButton label='Voir' primary={true} onClick={() => { this.handleButtonPress(nam.login) }} />
@@ -200,9 +201,10 @@ class Acceuil extends React.Component {
             )
           }
           ) : (
-            <div>coucou</div>
+            null
           )
           }
+          </div>
         </div>
       </div>
     )

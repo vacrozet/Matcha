@@ -70,7 +70,11 @@ module.exports = (req, res) => {
             delete tab.to_match
             delete tab.prenom
             delete tab.nom
-            tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
+            if (tab.completed === true) {
+              tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
+            } else {
+              tab.distance = 'Indisponible'
+            }
           }, this)
           res.json({
             tab
@@ -80,8 +84,10 @@ module.exports = (req, res) => {
     })
   } else {
     db.get().then((db) => {
-      db.collection('Users').find({to_match: req.user.sexe,
-        sexe: req.user.toMatch,
+      db.collection('Users').find({to_match: {
+        $in: [req.user.sexe,
+          'All']
+      },
         popularite: {
           $gte: parseInt(req.query.populariteMin),
           $lte: parseInt(req.query.populariteMax)

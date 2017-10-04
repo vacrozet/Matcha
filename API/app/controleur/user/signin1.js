@@ -56,9 +56,7 @@ module.exports = (req, res) => {
           error: 'Internal server error'
         })
       }
-      console.log(results.length)
       if (results.length !== 1) return erreur(res, 'User Not Found')
-      console.log('je passe')
       if (!bcrypt.compareSync(req.body.passwd, results[0].passwd)) return erreur(res, 'Wrong Passwd')
       let objToken = {}
       objToken.token = genToken()

@@ -36,14 +36,39 @@ module.exports = (req, res) => {
       req.body.toSexe.match(/^(Homme|Femme|All)$/)) {
         result[0].to_match = req.body.toSexe
       }
-      console.log(req.body.location)
-      let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${req.body.location}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
-      axios.get(url).then((res1) => {
-        if (res1.data.status === 'OK') {
-          result[0].location = res1.data.results[0].formatted_address
-          result[0].lat = res1.data.results[0].geometry.location.lat
-          result[0].long = res1.data.results[0].geometry.location.lng
-        }
+      if (req.body.location !== result[0].location && req.body.location !== '') {
+        let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${req.body.location}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
+        axios.get(url).then((res1) => {
+          if (res1.data.status === 'OK') {
+            result[0].location = res1.data.results[0].formatted_address
+            result[0].lat = res1.data.results[0].geometry.location.lat
+            result[0].long = res1.data.results[0].geometry.location.lng
+          }
+          db.collection('Users').update({login: req.user.login}, {
+            $set: {
+              prenom: result[0].prenom,
+              nom: result[0].nom,
+              passwd: result[0].passwd,
+              date: result[0].date,
+              bio: result[0].bio,
+              mail: result[0].mail,
+              to_match: result[0].to_match,
+              location: result[0].location,
+              lat: result[0].lat,
+              long: result[0].long
+            }
+          }).then((res2) => {
+            return res.json({
+              success: 'OK',
+              message: 'Profil Update'
+            })
+          }).catch((err2) => {
+            console.log(err2)
+          })
+        }).catch((err1) => {
+          console.log(err1)
+        })
+      } else {
         db.collection('Users').update({login: req.user.login}, {
           $set: {
             prenom: result[0].prenom,
@@ -65,9 +90,7 @@ module.exports = (req, res) => {
         }).catch((err2) => {
           console.log(err2)
         })
-      }).catch((err1) => {
-        console.log(err1)
-      })
+      }
     })
   })
 }
