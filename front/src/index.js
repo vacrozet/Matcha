@@ -4,6 +4,7 @@ import registerServiceWorker from './registerServiceWorker'
 import Inscription from './Inscription.js'
 import UserProfile from './UserProfile.js'
 import ResetPasswd from './ResetPasswd.js'
+import Websocket from 'react-websocket'
 import Modify from './ModifyProfile.js'
 import AccueilKo from './AccueilKo.js'
 import Accueil from './Accueil.js'
@@ -21,8 +22,15 @@ class Index extends React.Component {
     super(props)
     this._notificationSystem = null
     this.state = {
-      _notificationSystem: false
+      _notificationSystem: false,
+      count: 90
     }
+    this.handleData = this.handleData.bind(this)
+  }
+
+  handleData (data) {
+    let result = JSON.parse(data)
+    this.setState({count: this.state.count + result.movement})
   }
 
   componentWillMount () {
@@ -42,6 +50,7 @@ class Index extends React.Component {
   render () {
     return (
       <div id='data'>
+        <Websocket url='ws://localhost:3002/vacrozet/matcha/' onMessage={this.handleData.bind(this)} />
         <NotificationSystem ref='notificationSystem' />
         {(this.state.upNotifSys !== false) ? (
           <Navbar history={this.props.history} notification={this._notificationSystem} />
