@@ -6,6 +6,16 @@ function erreur (res) {
     message: 'test'
   })
 }
+function downLikePop (popularite) {
+  if (popularite > 0) {
+    if (popularite >= 5) {
+      popularite = parseInt(popularite - 5)
+    } else {
+      popularite = 0
+    }
+  }
+  return popularite
+}
 
 module.exports = (req, res) => {
   if (req.user.login !== '') {
@@ -25,12 +35,17 @@ module.exports = (req, res) => {
             }
           }, this)
           if (capteur === false) {
+            result[0].popularite = downLikePop(result[0].popularite)
             db.collection('Users').update({login: req.body.login},
-              {$push: {block: req.user.login}}).then((res1) => {
+              {
+                $push: {block: req.user.login},
+                $set: {popularite: result[0].popularite}
+              }).then((res1) => {
                 if (!res1.result.n === 1) return erreur(res1)
                 return res.json({
                   block: true,
-                  message: 'User blocker'
+                  message: 'User blocker',
+                  popularite: result[0].popularite
                 })
               }).catch((err1) => {
                 console.log(err1)
@@ -42,7 +57,8 @@ module.exports = (req, res) => {
           } else {
             return res.json({
               success: false,
-              message: 'User already block'
+              message: 'User already block',
+              popularite: result[0].popularite
             })
           }
         } else {

@@ -68,7 +68,8 @@ class UserProfile extends Component {
     }).then((res) => {
       if (res.data.block === true) {
         this.setState({
-          block: true
+          block: true,
+          popularite: res.data.popularite
         })
         this.props.notification.addNotification({
           message: 'User Block',
@@ -81,7 +82,8 @@ class UserProfile extends Component {
     axiosInst().delete(`./block/deleteblock/${this.state.login}`).then((res) => {
       if (res.data.Unblock === true) {
         this.setState({
-          block: false
+          block: false,
+          popularite: res.data.popularite
         })
         this.props.notification.addNotification({
           message: 'User UnBlock',
@@ -180,7 +182,7 @@ class UserProfile extends Component {
                 <RaisedButton label='UnBlock' secondary={true} onClick={() => { this.unBlockUser(this.state.login) }} />
               )
               }
-              <RaisedButton label='ReportUser' secondary={true} onClick={() => { this.blockUser(this.state.login) }} />
+              <RaisedButton label='Report' secondary={true} onClick={() => { this.blockUser(this.state.login) }} />
             </div>
           </div>
         </div>
