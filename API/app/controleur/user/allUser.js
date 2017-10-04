@@ -70,6 +70,8 @@ module.exports = (req, res) => {
             delete tab.to_match
             delete tab.prenom
             delete tab.nom
+            delete tab.notification
+            delete tab.match
             if (tab.completed === true) {
               tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
             } else {
@@ -126,6 +128,8 @@ module.exports = (req, res) => {
             delete tab.to_match
             delete tab.prenom
             delete tab.nom
+            delete tab.notification
+            delete tab.match
             tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
           }, this)
           res.json({

@@ -42,9 +42,12 @@ module.exports = (req, res) => {
               if (!res1.result.n === 1) return ftError(res1, false, 'Aucun changement effectuer sur la premiere table')
               db.collection('Users').find({login: req.body.login}).toArray((err, result) => {
                 if (err) return ftError(500, res, false, 'Internal connexion server')
-                if (result[0].popularite <= 98) {
-                  result[0].popularite = parseInt(result[0].popularite + 2)
-                  console.log(`la ---> ${result[0].popularite}`)
+                if (result[0].popularite <= 99) {
+                  if (result[0].popularite <= 98) {
+                    result[0].popularite = parseInt(result[0].popularite + 2)
+                  } else {
+                    result[0].popularite = 100
+                  }
                 }
                 if (result[0].like.length > 0) {
                   let present
@@ -54,34 +57,58 @@ module.exports = (req, res) => {
                     }
                   }, this)
                   if (present === true) {
+                    if (result[0].popularite <= 99) {
+                      if (result[0].popularite <= 90) {
+                        result[0].popularite = parseInt(result[0].popularite + 10)
+                      } else {
+                        result[0].popularite = 100
+                      }
+                    }
                     db.collection('Users').update({_id: req.user.id},
-                    {$push: {match: req.body.login}}).then((res2) => {
-                      if (!res2.result.n === 1) return erreur(res2)
-                      db.collection('Users').update({login: req.body.login},
-                        {$push: {match: req.user.login}}).then((res3) => {
-                          if (!res3.result.n === 1) return erreur(500, res3, false, res3)
-                          return res.json({
-                            addlike: true,
-                            match: true,
-                            message: 'match enregistrer dans les deux tables'
-                          })
-                        }).catch((err3) => {
-                          console.log(err3)
+                      {
+                        $push: {match: req.body.login},
+                        $set: {popularite: result[0].popularite}
+                      }).then((res2) => {
+                        if (!res2.result.n === 1) return erreur(res2)
+                        db.collection('Users').find({login: req.body.login}).toArray((error1, result1) => {
+                          if (error1) return ftError(500, res, false, 'Internal connexion server1')
+                          if (result1[0].popularite <= 99) {
+                            if (result1[0].popularite <= 88) {
+                              result1[0].popularite = parseInt(result1[0].popularite + 12)
+                            } else {
+                              result1[0].popularite = 100
+                            }
+                          }
+                          db.collection('Users').update({login: req.body.login},
+                            {
+                              $push: {match: req.user.login},
+                              $set: {popularite: result1[0].popularite}
+                            }).then((res3) => {
+                              if (!res3.result.n === 1) return erreur(500, res3, false, res3)
+                              return res.json({
+                                addlike: true,
+                                match: true,
+                                popularite: result1[0].popularite,
+                                message: 'match enregistrer dans les deux tables'
+                              })
+                            }).catch((err3) => {
+                              console.log(err3)
+                            })
                         })
-                    }).catch((err2) => {
-                      return res.json({
-                        success: 'KO',
-                        message: 'login not insert to tab match of likeur',
-                        other: err2
+                      }).catch((err2) => {
+                        return res.json({
+                          success: 'KO',
+                          message: 'login not insert to tab match of likeur',
+                          other: err2
+                        })
                       })
-                    })
                   } else {
                     db.collection('Users').update({login: req.body.login}, {$set:
                       {popularite: result[0].popularite}}).then((res4) => {
                         return res.json({
                           addlike: true,
                           message: 'like inseree et pas present dans l autre user',
-                          pop: result[0].popularite
+                          popularite: result[0].popularite
                         })
                       }).catch((err4) => {
                         return res.json({
@@ -96,7 +123,7 @@ module.exports = (req, res) => {
                         return res.json({
                           addlike: true,
                           message: 'like inseree et pop up',
-                          pop: result[0].popularite
+                          popularite: result[0].popularite
                         })
                       }).catch((err4) => {
                         return res.json({

@@ -26,7 +26,8 @@ module.exports = (req, res) => {
             }, this)
             if (capteur === true) {
               res.json({
-                message: 'tag deja present'
+                message: 'tag deja present',
+                popularite: result[0].popularite
               })
             } else {
               if (result[0].tag.length === 4 && parseInt(result[0].popularite) <= 98) {
@@ -40,7 +41,8 @@ module.exports = (req, res) => {
               )
               return res.json({
                 success: 'OK',
-                message: 'tag ajouter'
+                message: 'tag ajouter',
+                popularite: result[0].popularite
               })
             }
           }
@@ -49,7 +51,8 @@ module.exports = (req, res) => {
     } else {
       return res.json({
         success: 'KO',
-        message: 'Tag pas bien formater'
+        message: 'Tag pas bien formater',
+        popularite: req.user.popularite
       })
     }
   }

@@ -32,8 +32,10 @@ class UserProfile extends Component {
       login: this.state.login
     }).then((res) => {
       if (res.data.addlike === true) {
+        console.log(res.data.popularite)
         this.setState({
-          like: true
+          like: true,
+          popularite: res.data.popularite
         })
         this.props.notification.addNotification({
           message: 'User Like',
@@ -48,7 +50,8 @@ class UserProfile extends Component {
     axiosInst().delete(`./like/deletelike/${this.state.login}`).then((res) => {
       if (res.data.unlike === true) {
         this.setState({
-          like: false
+          like: false,
+          popularite: res.data.popularite
         })
         this.props.notification.addNotification({
           message: 'User DisLike',

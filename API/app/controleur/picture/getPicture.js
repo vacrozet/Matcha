@@ -13,14 +13,11 @@ function error (res, data, err) {
 }
 
 module.exports = (req, res) => {
-  // console.log(req.params.token)
-  // console.log(req.params.id_pict)
   if (req.params.token === undefined) {
     return error(res, 'Bad token', 200)
   }
   if (req.params.token.match(/[a-zA-Z0-9]{128}/)) {
     functionUser.getIdByToken(req.params.token).then((user) => {
-      // console.log(user)
       if (user.length === 0) return error(res, 'No user found', 200)
       if (!fs.existsSync(dir + user) ||
       !fs.existsSync(dir + user + '/' + req.params.id_pict + '.png')) {
@@ -35,7 +32,6 @@ module.exports = (req, res) => {
       error(res, 'Internal server error', 500)
     })
   } else if (validate(req.params.token, 4)) {
-    // console.log('ici')
     functionUser.getUserByToken(req.params.token).then((user) => {
       if (!fs.existsSync(dir + user[0].id) ||
       !fs.existsSync(dir + user[0].id + '/' + req.params.id + '.png')) {

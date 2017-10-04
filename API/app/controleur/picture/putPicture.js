@@ -21,7 +21,8 @@ module.exports = (req, res) => {
     }).then((res1) => {
       res.status(200)
       return res.json({
-        success: true
+        success: true,
+        popularite: req.user.popularite
       })
     })
   }
@@ -29,7 +30,8 @@ module.exports = (req, res) => {
     res.status(200)
     return res.json({
       success: false,
-      error: 'False picture id'
+      error: 'False picture id',
+      popularite: req.user.popularite
     })
   }
 

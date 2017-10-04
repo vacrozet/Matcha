@@ -29,7 +29,8 @@ module.exports = (req, res) => {
           )
           return res.json({
             success: 'OK',
-            message: 'Tag Deleted'
+            message: 'Tag Deleted',
+            popularite: result[0].popularite
           })
         } else {
           return res.json({

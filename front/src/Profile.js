@@ -30,7 +30,8 @@ class Profile extends Component {
         `http://localhost:3001/picture/${global.localStorage.getItem('token')}/2?tot=${Math.random()}`,
         `http://localhost:3001/picture/${global.localStorage.getItem('token')}/3?tot=${Math.random()}`,
         `http://localhost:3001/picture/${global.localStorage.getItem('token')}/4?tot=${Math.random()}`
-      ]
+      ],
+      popularite: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -60,6 +61,9 @@ class Profile extends Component {
           message: res.data.error
         })
       }
+      this.setState({
+        popularite: res.data.popularite
+      })
     }).catch((err) => {
       if (err) {
         console.log(err.response)
@@ -177,6 +181,9 @@ class Profile extends Component {
         message: 'Tag deleted',
         level: 'success'
       })
+      this.setState({
+        popularite: res.data.popularite
+      })
     }).catch((err) => {
       console.log(err)
     })
@@ -200,7 +207,11 @@ class Profile extends Component {
       axiosInst().post('./user/addTag', {
         tag: this.state.tag
       }).then((res) => {
-        this.setState({tag: ''})
+        console.log(res.data)
+        this.setState({
+          tag: '',
+          popularite: res.data.popularite
+        })
         if (res.data.success === 'OK') {
           this.props.notification.addNotification({
             message: 'Tag add',
@@ -226,7 +237,8 @@ class Profile extends Component {
           age: res.data.result[0].age,
           tagProfile: res.data.result[0].tag,
           bio: res.data.result[0].bio,
-          location: res.data.result[0].location
+          location: res.data.result[0].location,
+          popularite: res.data.result[0].popularite
         })
       }).catch((err) => {
         console.log(err)
@@ -268,6 +280,7 @@ class Profile extends Component {
             <div>Age: {this.state.age}</div>
             <div>Adresse: {this.state.location}</div>
             <div>Bio: {this.state.bio}</div>
+            <div>Popularite: {this.state.popularite}</div>
             <div><Link className='bmp primary' to='/profile/modify'><RaisedButton label='Modifier' primary={true} /></Link></div>
           </div>
           <div className='all_htag'>
