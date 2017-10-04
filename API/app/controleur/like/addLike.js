@@ -44,7 +44,7 @@ module.exports = (req, res) => {
                 if (err) return ftError(500, res, false, 'Internal connexion server')
                 if (result[0].popularite <= 98) {
                   result[0].popularite = parseInt(result[0].popularite + 2)
-                  console.log(result[0].popularite)
+                  console.log(`la ---> ${result[0].popularite}`)
                 }
                 if (result[0].like.length > 0) {
                   let present
@@ -76,13 +76,12 @@ module.exports = (req, res) => {
                       })
                     })
                   } else {
-                    db.collection('Users').updateOne({login: req.body.login},
-                      {
-                        $set: {popularite: result[0].popularite}
-                      }).then((res4) => {
+                    db.collection('Users').update({login: req.body.login}, {$set:
+                      {popularite: result[0].popularite}}).then((res4) => {
                         return res.json({
                           addlike: true,
-                          message: 'like inseree et pas present dans l autre user'
+                          message: 'like inseree et pas present dans l autre user',
+                          pop: result[0].popularite
                         })
                       }).catch((err4) => {
                         return res.json({
@@ -92,10 +91,19 @@ module.exports = (req, res) => {
                       })
                   }
                 } else {
-                  return res.json({
-                    addlike: true,
-                    message: 'like insert'
-                  })
+                  db.collection('Users').update({login: req.body.login}, {$set:
+                      {popularite: result[0].popularite}}).then((res4) => {
+                        return res.json({
+                          addlike: true,
+                          message: 'like inseree et pop up',
+                          pop: result[0].popularite
+                        })
+                      }).catch((err4) => {
+                        return res.json({
+                          addlike: false,
+                          message: 'requete mal envoye'
+                        })
+                      })
                 }
               })
             }).catch((err1) => {
