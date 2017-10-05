@@ -4,7 +4,6 @@ import registerServiceWorker from './registerServiceWorker'
 import Inscription from './Inscription.js'
 import UserProfile from './UserProfile.js'
 import ResetPasswd from './ResetPasswd.js'
-import Websocket from 'react-websocket'
 import Modify from './ModifyProfile.js'
 import AccueilKo from './AccueilKo.js'
 import Accueil from './Accueil.js'
@@ -50,7 +49,7 @@ class Index extends React.Component {
   render () {
     return (
       <div id='data'>
-        <Websocket url='ws://localhost:3002/vacrozet/matcha/' onMessage={this.handleData.bind(this)} />
+        <script src='/socket.io/socket.io.js'>var socket = io()</script>
         <NotificationSystem ref='notificationSystem' />
         {(this.state.upNotifSys !== false) ? (
           <Navbar history={this.props.history} notification={this._notificationSystem} />
