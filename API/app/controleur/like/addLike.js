@@ -9,7 +9,6 @@ function ftError (nb, res, success, message) {
 }
 
 function erreur (res) {
-  console.log('je passe ici')
   return res.json({
     success: 'KO',
     message: 'test'

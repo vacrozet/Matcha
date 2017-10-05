@@ -9,12 +9,18 @@ import AccueilKo from './AccueilKo.js'
 import Accueil from './Accueil.js'
 import Profile from './Profile.js'
 import ReactDOM from 'react-dom'
+// import io from 'socket.io-client'
 import Navbar from './Navbar.js'
 import Oubli from './Oubli.js'
 import React from 'react'
 import './styles.min.css'
 
 var NotificationSystem = require('react-notification-system')
+
+// const socket = io(`http://localhost:3005`)
+// socket.on('connection', () => {
+//   console.log('connecter')
+// })
 
 class Index extends React.Component {
   constructor (props) {
@@ -49,7 +55,6 @@ class Index extends React.Component {
   render () {
     return (
       <div id='data'>
-        <script src='/socket.io/socket.io.js'>var socket = io()</script>
         <NotificationSystem ref='notificationSystem' />
         {(this.state.upNotifSys !== false) ? (
           <Navbar history={this.props.history} notification={this._notificationSystem} />

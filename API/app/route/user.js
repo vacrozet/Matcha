@@ -10,4 +10,7 @@ router.post('/addTag', middle('USER'), require('../controleur/user/profile/addTa
 router.delete('/deletetag/:tag', middle('USER'), require('../controleur/user/profile/deleteTag.js'))
 router.get('/alluser', middle('USER'), require('../controleur/user/allUser.js'))
 router.get('/userprofile/:login', middle('USER'), require('../controleur/user/getProfileUser.js'))
+router.post('/connected', require('../controleur/user/connected.js'))
+router.post('/disconnected', require('../controleur/user/disconnected.js'))
+
 module.exports = router

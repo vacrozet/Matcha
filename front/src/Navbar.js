@@ -1,9 +1,16 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
 import {Link} from 'react-router-dom'
+import io from 'socket.io-client'
+// import io from 'socket.io'
 import axios from 'axios'
 import './StyleSheet.css'
 import './Navbar.css'
+
+const socket = io(`http://localhost:3005`)
+socket.on('connection', () => {
+  console.log('connecter')
+})
 
 class Volet extends Component {
   constructor (props) {
@@ -19,7 +26,8 @@ class Volet extends Component {
       img: [],
       longitude: '',
       latitude: '',
-      adresse: ''
+      adresse: '',
+      connected: false
     }
     this.myFunction = this.myFunction.bind(this)
     this.signIn = this.signIn.bind(this)
@@ -54,6 +62,19 @@ class Volet extends Component {
           latitude: this.state.latitude
         }).then((res) => {
           if (res.data.success === true) {
+            socket.emit('UserLoginConnected', {
+              login: this.state.login
+            })
+            axiosInst().post('/user/connected', {
+              login: this.state.login,
+              token: res.data.token
+            }).then((res1) => {
+              this.setState({
+                connected: true
+              })
+            }).catch((err1) => {
+              console.log(err1)
+            })
             global.localStorage.setItem('token', res.data.token)
             this.setState({
               connexion: true,
@@ -90,15 +111,26 @@ class Volet extends Component {
     }).catch((err4) => {
       console.log(err4)
     })
+    socket.emit('UserLoginDisconnected', {
+      login: this.state.login
+    })
+    axiosInst().post('/user/disconnected', {
+      login: this.state.login,
+      token: global.localStorage.getItem('token')
+    }).then((res1) => {
+      this.setState({
+        connected: false,
+        connexion: false,
+        login: '',
+        passwd: false
+      })
+    }).catch((err1) => {
+      console.log(err1)
+    })
     this.props.history.push('/acceuilko')
     this.props.notification.addNotification({
       message: 'Disconnected',
       level: 'success'
-    })
-    this.setState({
-      connexion: false,
-      login: '',
-      passwd: false
     })
   }
   componentWillMount () {

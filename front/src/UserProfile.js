@@ -1,8 +1,11 @@
 import RaisedButton from 'material-ui/RaisedButton'
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
+import io from 'socket.io-client'
 import Chip from 'material-ui/Chip'
 import './StyleSheet.css'
+
+const socket = io(`http://localhost:3005`)
 
 class UserProfile extends Component {
   constructor (props) {
@@ -13,6 +16,7 @@ class UserProfile extends Component {
       nom: '',
       prenom: '',
       date: '',
+      connected: '',
       age: '',
       sexe: '',
       img: [],
@@ -25,8 +29,12 @@ class UserProfile extends Component {
     this.likeProfile = this.likeProfile.bind(this)
     this.unlikeProfile = this.unlikeProfile.bind(this)
     this.blockUser = this.blockUser.bind(this)
-    this.unBlockUser = this.unBlockUser.bind(this)
+    // this.unBlockUser = this.unBlockUser.bind(this)
   }
+  // componentDidMount () {
+  //   this.timer = setInterval(this.log, 100)
+  // }
+
   likeProfile (event) {
     axiosInst().post('./like/addlike', {
       login: this.state.login
@@ -46,6 +54,10 @@ class UserProfile extends Component {
       console.log(err)
     })
   }
+  // componentWillUnmount () {
+  //   clearInterval(this.timer)
+  // }
+
   unlikeProfile (event) {
     axiosInst().delete(`./like/deletelike/${this.state.login}`).then((res) => {
       if (res.data.unlike === true) {
@@ -78,6 +90,10 @@ class UserProfile extends Component {
       }
     })
   }
+
+  // log () {
+  //   console.log('salut')
+  // }
   unBlockUser () {
     axiosInst().delete(`./block/deleteblock/${this.state.login}`).then((res) => {
       if (res.data.Unblock === true) {
@@ -96,6 +112,13 @@ class UserProfile extends Component {
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
+      socket.on('afficheLoginConnect', (data) => {
+        if (data.login === this.state.login) {
+          this.setState({
+            connected: false
+          })
+        }
+      })
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
         let capteur = false
         if (res.data.result[0].block.length > 0) {
@@ -118,7 +141,8 @@ class UserProfile extends Component {
             location: res.data.result[0].location,
             popularite: res.data.result[0].popularite,
             block: capteur,
-            like: res1.data.like
+            like: res1.data.like,
+            connected: this.res1.data.connected
           })
         }).catch((err1) => {
           console.log(err1)
@@ -143,6 +167,8 @@ class UserProfile extends Component {
             <div className='detailProfileUser'>
               <div className='textUserProfile'>Login: </div>
               <div>{this.state.login}</div>
+              <div className='textUserProfile'>connected: </div>
+              <div>{this.state.connected}</div>
               <div className='textUserProfile'>Popularité: </div>
               <div>{this.state.popularite}</div>
               <div className='textUserProfile'>Prenom: </div>
@@ -171,18 +197,18 @@ class UserProfile extends Component {
             </div>
             <div className='buttonForLikeAndBlock'>
               { !this.state.like ? (
-                <RaisedButton label='Like' primary={true} onClick={() => { this.likeProfile(this.state.login) }} />
+                <RaisedButton label='Like' primary onClick={() => { this.likeProfile(this.state.login) }} />
               ) : (
-                <RaisedButton label='DisLike' secondary={true} onClick={() => { this.unlikeProfile(this.state.login) }} />
+                <RaisedButton label='DisLike' secondary onClick={() => { this.unlikeProfile(this.state.login) }} />
               )
               }
               { !this.state.block ? (
-                <RaisedButton label='Block' secondary={true} onClick={() => { this.blockUser(this.state.login) }} />
+                <RaisedButton label='Block' secondary onClick={() => { this.blockUser(this.state.login) }} />
               ) : (
-                <RaisedButton label='UnBlock' secondary={true} onClick={() => { this.unBlockUser(this.state.login) }} />
+                <RaisedButton label='UnBlock' secondary onClick={() => { this.unBlockUser(this.state.login) }} />
               )
               }
-              <RaisedButton label='Report' secondary={true} onClick={() => { this.blockUser(this.state.login) }} />
+              <RaisedButton label='Report' secondary onClick={() => { this.blockUser(this.state.login) }} />
             </div>
           </div>
         </div>

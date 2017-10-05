@@ -107,6 +107,8 @@ module.exports = (req, res) => {
           _id: id,
           actif: true,
           completed: false,
+          connected: false,
+          lastConnected: false,
           login: req.body.login,
           nom: req.body.nom,
           prenom: req.body.prenom,
@@ -143,9 +145,10 @@ module.exports = (req, res) => {
         })
         tab = {
           _id: id,
-          login: [req.body.login]
+          login: req.body.login,
+          message: []
         }
-        db.collection('Like_User').insert(tab, null, (error, results) => {
+        db.collection('Message_Users').insert(tab, null, (error, results) => {
           if (error) {
             console.log(new Error(error))
             res.status(500)
