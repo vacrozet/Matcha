@@ -102,13 +102,25 @@ module.exports = (req, res) => {
                               }
                             }).then((res3) => {
                               if (!res3.result.n === 1) return erreur(500, res3, false, res3)
+                              let message = {}
+                              message.login = req.user.login
+                              message.message = {}
                               db.collection('Message_Users').update({login: req.user.login},
                                 {
-                                  $push: {chat: req.body.login}
+                                  $push: {
+                                    chat: req.body.login,
+                                    conversation: message
+                                  }
                                 })
+                              let message1 = {}
+                              message1.login = req.user.login
+                              message1.message = {}
                               db.collection('Message_Users').update({login: req.body.login},
                                 {
-                                  $push: {chat: req.user.login}
+                                  $push: {
+                                    chat: req.user.login,
+                                    conversation: message1
+                                  }
                                 })
                               return res.json({
                                 addlike: true,
