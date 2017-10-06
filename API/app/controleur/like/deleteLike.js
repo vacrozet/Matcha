@@ -72,6 +72,21 @@ module.exports = (req, res) => {
                     popularite: populariteUser
                   }
                 }).then((res4) => {
+                  db.collection('Message_Users').update({login: req.params.login},
+                    {
+                      $pull: {
+                        chat: {$in: [req.user.login]},
+                        conversation: {login: req.user.login}
+                      }
+                    }).then((res5) => {
+                      db.collection('Message_Users').update({login: req.user.login},
+                        {
+                          $pull: {
+                            chat: {$in: [req.params.login]},
+                            conversation: {login: req.params.login}
+                          }
+                        })
+                    })
                   return res.json({
                     unlike: true,
                     message: 'match et like supprimer',

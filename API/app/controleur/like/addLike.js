@@ -14,6 +14,7 @@ function erreur (res) {
     message: 'test'
   })
 }
+
 module.exports = (req, res) => {
   let capteur = false
   if (req.user.id !== '') {
@@ -103,7 +104,7 @@ module.exports = (req, res) => {
                             }).then((res3) => {
                               if (!res3.result.n === 1) return erreur(500, res3, false, res3)
                               let message = {}
-                              message.login = req.user.login
+                              message.login = req.body.login
                               message.message = {}
                               db.collection('Message_Users').update({login: req.user.login},
                                 {

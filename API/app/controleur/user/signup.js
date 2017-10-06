@@ -147,7 +147,6 @@ module.exports = (req, res) => {
         tab = {
           _id: id,
           login: req.body.login,
-          message: [],
           chat: []
         }
         db.collection('Message_Users').insert(tab, null, (error, results) => {
