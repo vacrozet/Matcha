@@ -1,4 +1,5 @@
 const db = require('../../db.js')
+const moment = require('moment')
 
 function error (status, res, success, message) {
   res.status(status)
@@ -20,6 +21,11 @@ function distance (p1Lat, p1Lng, p2Lat, p2Lng) {
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
   var d = R * c
   return d / 1000
+}
+function lastConnection (time) {
+  time = Math.round(time / 1000)
+  time = moment.unix(time).startOf().fromNow()
+  return time
 }
 
 module.exports = (req, res) => {
@@ -77,6 +83,9 @@ module.exports = (req, res) => {
             } else {
               tab.distance = 'Indisponible'
             }
+            if (tab.connected !== true) {
+              tab.connected = lastConnection(tab.connected)
+            }
           }, this)
           res.json({
             tab
@@ -130,7 +139,14 @@ module.exports = (req, res) => {
             delete tab.nom
             delete tab.notification
             delete tab.match
-            tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
+            if (tab.completed === true) {
+              tab.distance = distance(req.user.lat, req.user.long, tab.lat, tab.long).toFixed(1)
+            } else {
+              tab.distance = 'Indisponible'
+            }
+            if (tab.connected !== true) {
+              tab.connected = lastConnection(tab.connected)
+            }
           }, this)
           res.json({
             tab

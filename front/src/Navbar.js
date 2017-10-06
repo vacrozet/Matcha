@@ -27,7 +27,9 @@ class Volet extends Component {
       longitude: '',
       latitude: '',
       adresse: '',
-      connected: false
+      connected: false,
+      newNotification: false,
+      newNotificationMess: false
     }
     this.myFunction = this.myFunction.bind(this)
     this.signIn = this.signIn.bind(this)
@@ -141,6 +143,8 @@ class Volet extends Component {
           age: res.data.result[0].age,
           sexe: res.data.result[0].sexe,
           img: res.data.result[0].img,
+          newNotification: res.data.result[0].newNotification,
+          newNotificationMess: res.data.result[0].newNotificationMess,
           connexion: true
         })
       }).catch((err) => {
@@ -206,7 +210,18 @@ class Volet extends Component {
             <div>
               <Link className='word_volet' to='/accueil'>Accueil</Link>
               <Link className='word_volet' to='/profile'>Profile</Link>
-              <Link className='word_volet' to='/notification'>Notification</Link>
+              {this.state.newNotification ? (
+                <Link className='word_volet_true' to='/notification'>Notification</Link>
+              ) : (
+                <Link className='word_volet' to='/notification'>Notification</Link>
+              )
+              }
+              {this.state.newNotificationMess ? (
+                <Link className='word_volet_true' to='/messenger'>Messenger</Link>
+              ) : (
+                <Link className='word_volet' to='/messenger'>Messenger</Link>
+              )
+              }
               <Link className='word_volet' to='/' onClick={this.logoutUser}>Deconnexion</Link>
             </div>
           )

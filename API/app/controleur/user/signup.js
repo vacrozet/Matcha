@@ -109,6 +109,8 @@ module.exports = (req, res) => {
           completed: false,
           connected: false,
           lastConnected: false,
+          newNotification: false,
+          newNotificationMess: false,
           login: req.body.login,
           nom: req.body.nom,
           prenom: req.body.prenom,
@@ -125,7 +127,6 @@ module.exports = (req, res) => {
           lat: '',
           distance: '',
           location: '',
-          ville: '',
           img: [],
           tokens: [],
           tag: [req.body.tag],
@@ -146,7 +147,8 @@ module.exports = (req, res) => {
         tab = {
           _id: id,
           login: req.body.login,
-          message: []
+          message: [],
+          chat: []
         }
         db.collection('Message_Users').insert(tab, null, (error, results) => {
           if (error) {

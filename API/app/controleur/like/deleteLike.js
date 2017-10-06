@@ -58,7 +58,9 @@ module.exports = (req, res) => {
               $pull: {
                 match: {$in: [req.user.login]}
               },
-              $set: {popularite: result[0].popularite}
+              $set: {
+                popularite: result[0].popularite
+              }
             }).then((res3) => {
               db.collection('Users').update({login: req.user.login},
                 {
@@ -66,7 +68,9 @@ module.exports = (req, res) => {
                     match: {$in: [req.params.login]},
                     like: {$in: [req.params.login]}
                   },
-                  $set: {popularite: populariteUser}
+                  $set: {
+                    popularite: populariteUser
+                  }
                 }).then((res4) => {
                   return res.json({
                     unlike: true,
@@ -87,7 +91,9 @@ module.exports = (req, res) => {
               result[0].popularite = downLikePop(result[0].popularite)
               db.collection('Users').update({login: req.params.login},
                 {
-                  $set: {popularite: result[0].popularite}
+                  $set: {
+                    popularite: result[0].popularite
+                  }
                 }).then((res2) => {
                   return res.json({
                     unlike: true,

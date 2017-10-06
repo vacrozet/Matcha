@@ -112,14 +112,11 @@ class Acceuil extends React.Component {
           tag: this.state.tag
         }
       }).then((res) => {
-        console.log(res)
+        this.setState({
+          tab: res.data.tab
+        })
       }).catch((err1) => {
         console.log(err1)
-      })
-    } else {
-      this.props.notification.addNotification({
-        message: 'Critère Mal renseigné',
-        level: 'error'
       })
     }
   }
@@ -140,9 +137,9 @@ class Acceuil extends React.Component {
           this.setState({
             tab: res.data.tab
           })
-          res.data.tab.forEach((element) => {
-            console.log(element)
-          }, this)
+          // res.data.tab.forEach((element) => {
+          //   console.log(element)
+          // }, this)
         }
       }).catch((erreur) => {
         console.log(erreur)
@@ -172,34 +169,34 @@ class Acceuil extends React.Component {
             <SelectField hintText='Distance' value={this.state.distance} onChange={this.handleChangedistance} maxHeight={200}>
               {items3}
             </SelectField><br />
-            <TextField hintText='#tag' value={this.state.tag} type='text' underlineShow={true} onChange={this.handleChangeTag} />
-            <RaisedButton label='Rechercher' primary={true} onClick={() => { this.handleKeyPress() }} />
+            <TextField hintText='#tag' value={this.state.tag} type='text' underlineShow onChange={this.handleChangeTag} />
+            <RaisedButton label='Rechercher' primary onClick={() => { this.handleKeyPress() }} />
           </div>
           <div className='resultProfile'>
-          { this.state.tab ? this.state.tab.map((nam) => {   
-            return (
-              <div className='multiProfile' key={nam._id}>
-                <div className='photoProfileMulti'>
-                  <img className='photo' src={nam.img[0]} alt='profile' />
+            { this.state.tab ? this.state.tab.map((nam) => {
+              return (
+                <div className='multiProfile' key={nam._id}>
+                  <div className='photoProfileMulti'>
+                    <img className='photo' src={nam.img[0]} alt='profile' />
+                  </div>
+                  <div className='descriProfilMulti'>
+                    <div className='textDescri'>Login:</div>
+                    <div>{nam.login}</div>
+                    <div className='textDescri'>Age:</div>
+                    <div>{nam.age}</div>
+                    <div className='textDescri'>Sexe:</div>
+                    <div>{nam.sexe}</div>
+                    <div className='textDescri'>Tag:</div>
+                    <div>{nam.tag[0]}</div>
+                    <div className='textDescri'>Distance:</div>
+                    <div>{nam.distance} km</div>
+                    <div className='textDescri'>Etat de connexion:</div>
+                    <div>{nam.connected}</div>
+                    <FlatButton label='Voir' primary onClick={() => { this.handleButtonPress(nam.login) }} />
+                  </div>
                 </div>
-                <div className='descriProfilMulti'>
-                  <div className='textDescri'>Login:</div>
-                  <div>{nam.login}</div>
-                  <div className='textDescri'>Age:</div>
-                  <div>{nam.age}</div>
-                  <div className='textDescri'>Sexe:</div>
-                  <div>{nam.sexe}</div>
-                  <div className='textDescri'>Tag:</div>
-                  <div>{nam.tag[0]}</div>
-                  <div className='textDescri'>Distance:</div>
-                  <div>{nam.distance} km</div>
-                  <div className='textDescri'>Connecté:</div>
-                  <div>in progress</div>
-                  <FlatButton label='Voir' primary={true} onClick={() => { this.handleButtonPress(nam.login) }} />
-                </div>
-              </div>
-            )
-          }
+              )
+            }
           ) : (
             null
           )

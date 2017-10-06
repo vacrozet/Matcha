@@ -1,11 +1,13 @@
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
+import Notification from './Notification.js'
 import Inscription from './Inscription.js'
 import UserProfile from './UserProfile.js'
 import ResetPasswd from './ResetPasswd.js'
 import Modify from './ModifyProfile.js'
 import AccueilKo from './AccueilKo.js'
+import Messenger from './Messenger.js'
 import Accueil from './Accueil.js'
 import Profile from './Profile.js'
 import ReactDOM from 'react-dom'
@@ -62,6 +64,9 @@ class Index extends React.Component {
           null
         )}
         <Switch>
+          <Route exact path='/messenger' render={({history, match, location}) =>
+            <Messenger history={history} match={match} notification={this._notificationSystem} />
+          } />
           <Route exact path='/oubli' render={({history, match, location}) =>
             <Oubli history={history} match={match} notification={this._notificationSystem} />
           } />
@@ -70,6 +75,9 @@ class Index extends React.Component {
           } />
           <Route exact path='/accueil' render={({history, match, location}) =>
             <Accueil history={history} match={match} location={location} notification={this._notificationSystem} />
+          } />
+          <Route exact path='/notification' render={({history, match, location}) =>
+            <Notification history={history} match={match} location={location} notification={this._notificationSystem} />
           } />
           <Route exact path='/profile/modify' render={({history, match, location}) =>
             <Modify history={history} match={match} notification={this._notificationSystem} />

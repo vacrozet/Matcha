@@ -63,12 +63,24 @@ module.exports = (req, res) => {
                         result[0].popularite = 100
                       }
                     }
+                    let noti = []
+                    noti.push(Date.now())
+                    noti.push(`Vous avez matche avec ${req.body.login}`)
                     db.collection('Users').update({_id: req.user.id},
                       {
-                        $push: {match: req.body.login},
-                        $set: {popularite: result[0].popularite}
+                        $push: {
+                          match: req.body.login,
+                          notification: noti
+                        },
+                        $set: {
+                          popularite: result[0].popularite,
+                          newNotification: true
+                        }
                       }).then((res2) => {
                         if (!res2.result.n === 1) return erreur(res2)
+                        let noti1 = []
+                        noti1.push(Date.now())
+                        noti1.push(`Vous avez matche avec ${req.user.login}`)
                         db.collection('Users').find({login: req.body.login}).toArray((error1, result1) => {
                           if (error1) return ftError(500, res, false, 'Internal connexion server1')
                           if (result1[0].popularite <= 99) {
@@ -80,10 +92,24 @@ module.exports = (req, res) => {
                           }
                           db.collection('Users').update({login: req.body.login},
                             {
-                              $push: {match: req.user.login},
-                              $set: {popularite: result1[0].popularite}
+                              $push: {
+                                match: req.user.login,
+                                notification: noti1
+                              },
+                              $set: {
+                                popularite: result1[0].popularite,
+                                newNotification: true
+                              }
                             }).then((res3) => {
                               if (!res3.result.n === 1) return erreur(500, res3, false, res3)
+                              db.collection('Message_Users').update({login: req.user.login},
+                                {
+                                  $push: {chat: req.body.login}
+                                })
+                              db.collection('Message_Users').update({login: req.body.login},
+                                {
+                                  $push: {chat: req.user.login}
+                                })
                               return res.json({
                                 addlike: true,
                                 match: true,
@@ -102,8 +128,19 @@ module.exports = (req, res) => {
                         })
                       })
                   } else {
-                    db.collection('Users').update({login: req.body.login}, {$set:
-                      {popularite: result[0].popularite}}).then((res4) => {
+                    let noti = []
+                    noti.push(Date.now())
+                    noti.push(`${req.user.login} a like votre profil`)
+                    db.collection('Users').update({login: req.body.login},
+                      {
+                        $set: {
+                          popularite: result[0].popularite,
+                          newNotification: true
+                        },
+                        $push: {
+                          notification: noti
+                        }
+                      }).then((res4) => {
                         return res.json({
                           addlike: true,
                           message: 'like inseree et pas present dans l autre user',
@@ -117,19 +154,29 @@ module.exports = (req, res) => {
                       })
                   }
                 } else {
-                  db.collection('Users').update({login: req.body.login}, {$set:
-                      {popularite: result[0].popularite}}).then((res4) => {
-                        return res.json({
-                          addlike: true,
-                          message: 'like inseree et pop up',
-                          popularite: result[0].popularite
-                        })
-                      }).catch((err4) => {
-                        return res.json({
-                          addlike: false,
-                          message: 'requete mal envoye'
-                        })
-                      })
+                  let noti = []
+                  noti.push(Date.now())
+                  noti.push(`${req.user.login} a like votre profil`)
+                  db.collection('Users').update({login: req.body.login}, {
+                    $set: {
+                      popularite: result[0].popularite,
+                      newNotification: true
+                    },
+                    $push: {
+                      notification: noti
+                    }
+                  }).then((res4) => {
+                    return res.json({
+                      addlike: true,
+                      message: 'like inseree et pop up',
+                      popularite: result[0].popularite
+                    })
+                  }).catch((err4) => {
+                    return res.json({
+                      addlike: false,
+                      message: 'requete mal envoye'
+                    })
+                  })
                 }
               })
             }).catch((err1) => {

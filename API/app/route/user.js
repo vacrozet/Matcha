@@ -12,5 +12,7 @@ router.get('/alluser', middle('USER'), require('../controleur/user/allUser.js'))
 router.get('/userprofile/:login', middle('USER'), require('../controleur/user/getProfileUser.js'))
 router.post('/connected', require('../controleur/user/connected.js'))
 router.post('/disconnected', require('../controleur/user/disconnected.js'))
+router.get('/notification', middle('USER'), require('../controleur/user/notification.js'))
+router.get('/getchat', middle('USER'), require('../controleur/user/getChat.js'))
 
 module.exports = router

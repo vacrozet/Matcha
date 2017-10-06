@@ -112,10 +112,11 @@ class UserProfile extends Component {
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
-      socket.on('afficheLoginConnect', (data) => {
+      socket.on('afficheLoginDisconnect', (data) => {
+        console.log('je passe la')
         if (data.login === this.state.login) {
           this.setState({
-            connected: false
+            connected: 'offline'
           })
         }
       })
@@ -129,6 +130,10 @@ class UserProfile extends Component {
           }, this)
         }
         axiosInst().get(`./like/getlike/${this.props.match.params.login}`).then((res1) => {
+          if (res.data.result[0].connected === true) {
+            res.data.result[0].connected = 'connecte'
+          }
+          // console.log(res)
           this.setState({
             login: res.data.result[0].login,
             nom: res.data.result[0].nom,
@@ -142,7 +147,7 @@ class UserProfile extends Component {
             popularite: res.data.result[0].popularite,
             block: capteur,
             like: res1.data.like,
-            connected: this.res1.data.connected
+            connected: res.data.result[0].connected
           })
         }).catch((err1) => {
           console.log(err1)

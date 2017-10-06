@@ -29,16 +29,16 @@ app.listen(port, hostname, () => {
 })
 io.on('connection', (socket) => {
   socket.on('UserLoginConnected', (data) => {
-    console.log(data)
-    // socket.emit('afficheLoginConnect', {
-    //   login: data.login
-    // })
+    // console.log(data)
+    socket.emit('afficheLoginConnect', {
+      login: data.login
+    })
   })
   socket.on('UserLoginDisconnected', (data) => {
-    console.log(data)
-    // socket.emit('afficheLoginDisconnect', {
-    //   login: data.login
-    // })
+    // console.log(data)
+    socket.emit('afficheLoginDisconnect', {
+      login: data.login
+    })
   })
 })
 server.listen(3005, () => {
