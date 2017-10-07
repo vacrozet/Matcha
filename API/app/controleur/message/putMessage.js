@@ -34,19 +34,18 @@ module.exports = (req, res) => {
       console.log(object.login)
       console.log(object.message)
       db.collection('Message_Users').update({login: req.body.login},
-        {
-          conversation: [
-            {login: req.user.login},
-            {
-              message: {object}
-            }}
-          ]
+        {conversation: {
+          login: req.user.login,
+          $push: {
+            message: object
+          }
+        }
         })
       db.collection('Message_Users').update({login: req.body.login},
         {
-          $push: {
-            conversation: {
-              login: req.user.login,
+          conversation: {
+            login: req.user.login,
+            $push: {
               message: {object1}
             }
           }
