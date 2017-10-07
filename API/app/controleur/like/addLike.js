@@ -106,7 +106,7 @@ module.exports = (req, res) => {
                               let message = {}
                               message.login = req.body.login
                               message.lastMessage = ''
-                              message.message = {}
+                              message.message = []
                               db.collection('Message_Users').update({login: req.user.login},
                                 {
                                   $push: {
@@ -117,7 +117,7 @@ module.exports = (req, res) => {
                               let message1 = {}
                               message1.login = req.user.login
                               message1.lastMessage = ''
-                              message1.message = {}
+                              message1.message = []
                               db.collection('Message_Users').update({login: req.body.login},
                                 {
                                   $push: {

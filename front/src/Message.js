@@ -23,10 +23,12 @@ class Message extends Component {
   sendMessage (message) {
     console.log(message)
     axiosInst().post('/message/sendmessage', {
-      message: this.state.message
+      message: this.state.message,
+      login: this.state.login
     }).then((res) => {
       this.setState({
-        discution: res.data.result
+        discution: res.data.result,
+        nb: res.data.present
       })
     })
   }
@@ -37,7 +39,8 @@ class Message extends Component {
         if (res.data.success === true) {
           this.setState({
             discution: res.data.result,
-            nb: res.data.present
+            nb: res.data.present,
+            login: this.props.match.params.login
           })
         }
       })
@@ -53,7 +56,7 @@ class Message extends Component {
           <div className='conversation'>
             <Paper zDepth={3}>
               <div className='UserDescription'>
-                coucou
+                {this.props.match.params.login}
               </div>
             </Paper>
             <Paper zDepth={3}>
