@@ -78,7 +78,7 @@ class UserProfile extends Component {
     axiosInst().post('./block/addblock', {
       login: this.state.login
     }).then((res) => {
-      if (res.data.block === true) {
+      if (res.data.block === true && res.data.success !== true) {
         this.setState({
           block: true,
           popularite: res.data.popularite
@@ -86,6 +86,12 @@ class UserProfile extends Component {
         this.props.notification.addNotification({
           message: 'User Block',
           level: 'success'
+        })
+      } else {
+        this.setState({
+          block: true,
+          popularite: res.data.popularite,
+          like: false
         })
       }
     })

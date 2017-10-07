@@ -1,4 +1,5 @@
 const db = require('../../db.js')
+const uuid = require('uuid')
 
 function ftError (nb, res, success, message) {
   res.status(nb)
@@ -103,28 +104,34 @@ module.exports = (req, res) => {
                               }
                             }).then((res3) => {
                               if (!res3.result.n === 1) return erreur(500, res3, false, res3)
-                              let message = {}
-                              message.login = req.body.login
-                              message.lastMessage = ''
-                              message.message = []
+                              let id = uuid()
+                              let chat = {}
+                              chat.login = req.body.login
+                              chat.lastmessage = ''
+                              chat.message = id
                               db.collection('Message_Users').update({login: req.user.login},
                                 {
                                   $push: {
                                     chat: req.body.login,
-                                    conversation: message
+                                    conversation: chat
                                   }
                                 })
-                              let message1 = {}
-                              message1.login = req.user.login
-                              message1.lastMessage = ''
-                              message1.message = []
+                              let chat1 = {}
+                              chat1.login = req.user.login
+                              chat1.lastMessage = ''
+                              chat1.con = id
                               db.collection('Message_Users').update({login: req.body.login},
                                 {
                                   $push: {
                                     chat: req.user.login,
-                                    conversation: message1
+                                    conversation: chat1
                                   }
                                 })
+                              let tab = {
+                                _id: id,
+                                convers: []
+                              }
+                              db.collection('Conversations').insert(tab, null)
                               return res.json({
                                 addlike: true,
                                 match: true,

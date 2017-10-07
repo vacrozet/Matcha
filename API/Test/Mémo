@@ -1,0 +1,7 @@
+/////// -----TO DO LIST------ /////////
+- Bloquer le Signin d'un user quand il a perdu son MDP
+- Enlever les like et les match des deux personnes quand on bloque une personne --> Patch Verifier si les requetes sont bonnes.
+    |-> Penser aux points de popularité --> NoPatch
+    |-> Supprimer le tableau de conversation --> NoPatch
+- Faire le Chat
+    |-> Trouver un moyen de limiter les requètes
