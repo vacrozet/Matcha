@@ -13,7 +13,16 @@ module.exports = (req, res) => {
     db.get().then((db) => {
       db.collection('Message_Users').find({login: req.user.login}).toArray((error, result) => {
         if (error) return erreur(res, 500, false, 'connexion server')
-        console.log(result)
+        if (result.length === 1) {
+          return res.json({
+            success: true,
+            result: result[0].conversation
+          })
+        } else {
+          return res.json({
+            success: false
+          })
+        }
       })
     })
   }

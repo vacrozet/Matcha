@@ -105,6 +105,7 @@ module.exports = (req, res) => {
                               if (!res3.result.n === 1) return erreur(500, res3, false, res3)
                               let message = {}
                               message.login = req.body.login
+                              message.lastMessage = ''
                               message.message = {}
                               db.collection('Message_Users').update({login: req.user.login},
                                 {
@@ -115,6 +116,7 @@ module.exports = (req, res) => {
                                 })
                               let message1 = {}
                               message1.login = req.user.login
+                              message1.lastMessage = ''
                               message1.message = {}
                               db.collection('Message_Users').update({login: req.body.login},
                                 {

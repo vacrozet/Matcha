@@ -4,6 +4,7 @@ import registerServiceWorker from './registerServiceWorker'
 import Notification from './Notification.js'
 import Inscription from './Inscription.js'
 import UserProfile from './UserProfile.js'
+import Message from './Message.js'
 import ResetPasswd from './ResetPasswd.js'
 import Modify from './ModifyProfile.js'
 import AccueilKo from './AccueilKo.js'
@@ -66,6 +67,9 @@ class Index extends React.Component {
         <Switch>
           <Route exact path='/messenger' render={({history, match, location}) =>
             <Messenger history={history} match={match} notification={this._notificationSystem} />
+          } />
+          <Route exact path='/message/:login' render={({history, match, location}) =>
+            <Message history={history} match={match} notification={this._notificationSystem} />
           } />
           <Route exact path='/oubli' render={({history, match, location}) =>
             <Oubli history={history} match={match} notification={this._notificationSystem} />

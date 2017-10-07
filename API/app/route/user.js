@@ -14,5 +14,6 @@ router.post('/connected', require('../controleur/user/connected.js'))
 router.post('/disconnected', require('../controleur/user/disconnected.js'))
 router.get('/notification', middle('USER'), require('../controleur/user/notification.js'))
 router.get('/getchat', middle('USER'), require('../controleur/user/getChat.js'))
+router.get('/getmessage/:login', middle('USER'), require('../controleur/user/getMessage.js'))
 
 module.exports = router
