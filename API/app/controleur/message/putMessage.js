@@ -37,7 +37,7 @@ module.exports = (req, res) => {
         {
           conversation: [
             {login: req.user.login},
-            {$push: {
+            {
               message: {object}
             }}
           ]
