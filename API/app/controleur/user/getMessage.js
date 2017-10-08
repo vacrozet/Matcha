@@ -8,13 +8,14 @@ function erreur (res, status, bool, message) {
   })
 }
 
-function renvoi (res, status, bool, message, result, nb) {
+function renvoi (res, status, bool, message, result, nb, idConv) {
   res.status(status)
   return res.json({
     success: bool,
     message: message,
     result: result,
-    present: nb
+    present: nb,
+    idConv: idConv
   })
 }
 
@@ -22,11 +23,11 @@ module.exports = (req, res) => {
   if (req.params.login !== '' && req.params.login !== undefined) {
     db.get().then((db) => {
       db.collection('Message_Users').find({login: req.user.login}).toArray((error, result) => {
-        if (error) erreur(res, 500, false, 'connexion server')
+        if (error) return erreur(res, 500, false, 'connexion server')
         if (result.length === 1) {
           let capteur = false
-          result[0].chat.forEach((element) => {
-            if (element === req.params.login) {
+          result[0].conversation.forEach((element) => {
+            if (element.login === req.params.login) {
               capteur = true
             }
           }, this)
@@ -37,10 +38,20 @@ module.exports = (req, res) => {
                 capteur = element.message
               }
             }, this)
-            if (capteur.length > 0) {
-              nb = true
-            }
-            return renvoi(res, 200, true, 'user found', capteur, nb)
+            db.collection('Conversations').find({_id: capteur}).toArray((err, results) => {
+              if (err) return erreur(res, 500, false, 'connexion server')
+              if (results.length === 1) {
+                var tabAllConvers = false
+                if (results[0].convers.length > 0) {
+                  tabAllConvers = results[0].convers
+                  nb = true
+                  return renvoi(res, 200, true, 'user found', tabAllConvers, nb, capteur)
+                }
+                return renvoi(res, 200, true, 'Conversation any', tabAllConvers, nb, capteur)
+              } else {
+                return erreur(res, 404, false, 'tab not found')
+              }
+            })
           } else {
             return erreur(res, 404, false, 'user not found in table chat')
           }

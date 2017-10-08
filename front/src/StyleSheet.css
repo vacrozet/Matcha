@@ -240,11 +240,21 @@ textarea {
     height: 95%;
     width: 95%;
     border: solid 1px red;
-    border-radius: 10px;
+    border-radius: 3px;
     margin: auto;
-    
+    overflow: auto; 
 }
 .notMessage {
     height: 100px;
     text-align: center;
+}
+.convUserOther {
+    margin-top: 10px;
+    background-color: grey;
+}
+.convUserLogin {
+    margin: 10px;  
+    background-color: #1DE9B6;
+    border-radius: 3px;
+    text-align: right;
 }

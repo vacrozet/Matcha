@@ -19,70 +19,26 @@ function renvoi (res, status, bool, message, result, nb) {
 }
 
 module.exports = (req, res) => {
-  console.log(req.user.login)
-  console.log(req.body.message)
-  if (req.body.message !== '') {
+  if (req.body.message !== '' && req.body.idConv !== '') {
     db.get().then((db) => {
-      console.log('arrive ici')
       let object = {}
       object.login = req.user.login
       object.message = req.body.message
-      let object1 = {}
-      object1.login = req.user.login
-      object1.message = req.body.message
-      console.log('object --->')
-      console.log(object.login)
-      console.log(object.message)
-      db.collection('Message_Users').update({login: req.body.login},
-        {conversation: {
-          login: req.user.login,
-          $push: {
-            message: object
-          }
-        }
-        })
-      db.collection('Message_Users').update({login: req.body.login},
+      db.collection('Conversations').update({_id: req.body.idConv},
         {
-          conversation: {
-            login: req.user.login,
-            $push: {
-              message: {object1}
-            }
+          $push: {
+            convers: object
           }
         }).then((res1) => {
-          db.collection('Message_Users').find({login: req.user.login}).toArray((err, result) => {
-            if (err) return erreur(res, 500, false, 'connexion serveur')
+          db.collection('Conversations').find({_id: req.body.idConv}).toArray((error, result) => {
+            if (error) return erreur(res, 500, false, 'erreur requet db found')
             if (result.length === 1) {
-              let capteur = false
-              result[0].chat.forEach((element) => {
-                if (element === req.params.login) {
-                  capteur = true
-                }
-              }, this)
-              if (capteur === true) {
-                let nb = false
-                result[0].conversation.forEach((element) => {
-                  if (element.login === req.params.login) {
-                    console.log(element.message)
-                    capteur = element.message
-                  }
-                }, this)
-                if (capteur.length > 0) {
-                  nb = true
-                }
-                return renvoi(res, 200, true, 'user found', capteur, nb)
-              } else {
-                return erreur(res, 404, false, 'user not found in table chat')
-              }
-            } else {
-              erreur(res, 404, false, 'user not found')
-            }
+              let Message = result[0].convers
+              console.log(Message)
+              return renvoi(res, 200, true, 'Result found', Message, true)
+            } else { return erreur(res, 404, false, 'Result not found') }
           })
-        }).catch((err1) => {
-          console.log(err1)
-        })
+        }).catch((err1) => { return erreur(res, 404, false, 'Connexion Server') })
     })
-  } else {
-
-  }
+  } else { return erreur(res, 404, false, 'Message Not Receved') }
 }

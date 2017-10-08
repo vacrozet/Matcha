@@ -10,7 +10,8 @@ class Message extends Component {
       login: '',
       discution: '',
       message: '',
-      nb: false
+      nb: false,
+      idConv: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
@@ -22,9 +23,11 @@ class Message extends Component {
   }
   sendMessage (message) {
     console.log(message)
+    console.log(this.state.idConv)
     axiosInst().post('/message/sendmessage', {
       message: this.state.message,
-      login: this.state.login
+      login: this.state.login,
+      idConv: this.state.idConv
     }).then((res) => {
       this.setState({
         discution: res.data.result,
@@ -40,8 +43,12 @@ class Message extends Component {
           this.setState({
             discution: res.data.result,
             nb: res.data.present,
-            login: this.props.match.params.login
+            login: this.props.match.params.login,
+            idConv: res.data.idConv
           })
+          setTimeout(() => {
+            console.log(this.state.discution)
+          }, 2000)
         }
       })
     } else {
@@ -64,16 +71,29 @@ class Message extends Component {
                 <div className='cadreMessage'>
                   <div className='discution'>
                     {this.state.nb ? (this.state.discution.map((conv) => {
+                      console.log('je passe la')
                       if (conv.login === this.props.match.params.login) {
                         return (
-                          <div className='convUserOther'>
-                            {conv.mess}
-                          </div>
+                          <Paper zDepth={3} key={Math.random()}>
+                            <div className='convUserOther' key={Math.random()}>
+                              <div className='loginOtherUser' key={Math.random()}>
+                                {conv.login} :
+                              </div>
+                              <div className='convOtherUser' key={Math.random()}>
+                                {conv.message}
+                              </div>
+                            </div>
+                          </Paper>
                         )
                       } else {
                         return (
-                          <div className='convUserLogin'>
-                            {conv.mess}
+                          <div className='convUserLogin' key={Math.random()}>
+                              <div className='loginUser' key={Math.random()}>
+                                {conv.login} :
+                              </div>
+                              <div className='convUser' key={Math.random()}>
+                                {conv.message}
+                              </div>
                           </div>
                         )
                       }
