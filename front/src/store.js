@@ -1,8 +1,5 @@
-import mobx, { observable, action } from 'mobx-react'
+import { observable, action } from 'mobx'
 import React, { Component } from 'react'
-
-mobx.use('strict')
-
 
 class Store extends Component {
   @observable chat = []

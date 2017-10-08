@@ -2,13 +2,15 @@ const express = require('express')
 const hostname = 'localhost'
 const bodyParser = require('body-parser')
 const app = express()
-var server = require('http').Server(app)
-var io = require('socket.io')(server)
 const cors = require('cors')
 const db = require('./db.js')
 const port = 3001
 
+global.app = app
+
 db.connect()
+
+require('./socket.js')
 
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true, limit: '512kb'}))
@@ -27,32 +29,8 @@ app.use((req, res) => {
 app.listen(port, hostname, () => {
   console.log('Mon serveur fonctionne sur http://' + hostname + ':' + port)
 })
-io.on('connection', (socket) => {
-  console.log('connexion')
-  socket.on('userViewProfile', (data) => {
-    console.log('socket arriver en back')
-    console.log(data.login)
-    socket.emit('activNotif', {
-      login: data.login
-    })
-    console.log('socket envoyer')
-  })
-  socket.on('UserLoginConnected', (data) => {
-    console.log(data)
-    socket.emit('afficheLoginConnect', {
-      login: data.login
-    })
-  })
-  socket.on('UserLoginDisconnected', (data) => {
-    // console.log(data)
-    socket.emit('afficheLoginDisconnect', {
-      login: data.login
-    })
-  })
-})
-server.listen(3005, () => {
-  console.log('listening on *:3005')
-})
+
+
 
 process.on('SIGINT', () => {
   db.close()

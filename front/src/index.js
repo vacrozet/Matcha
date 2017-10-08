@@ -38,6 +38,9 @@ class Index extends React.Component {
 
   handleData (data) {
     let result = JSON.parse(data)
+    ws.emit('send', {
+      'sdaa'
+    })
     this.setState({count: this.state.count + result.movement})
   }
 

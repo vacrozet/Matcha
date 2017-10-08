@@ -10,10 +10,10 @@ import './StyleSheet.css'
 const socket = io(`http://localhost:3005`)
 socket.on('connection', () => {
 })
-/////// TEST /////
-    socket.on('activNotif', (data) => {
-      console.log('socket arriver')
-    })
+// ///// TEST /////
+socket.on('activNotif', (data) => {
+  console.log('socket arriver')
+})
 
 class UserProfile extends Component {
   constructor (props) {

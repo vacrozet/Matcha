@@ -2,6 +2,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import React, { Component } from 'react'
 import store from './store.js'
 import axiosInst from './utils/axios.js'
+import socket from './socket.js'
 
 class Message extends Component {
   constructor (props) {
@@ -20,18 +21,26 @@ class Message extends Component {
       message: event.target.value
     })
   }
-  sendMessage (message) {
-    axiosInst().post('/message/sendmessage', {
-      message: this.state.message,
-      login: this.state.login,
-      idConv: this.state.idConv
-    }).then((res) => {
-      this.setState({
-        discution: res.data.result,
-        nb: res.data.present,
+  sendMessage (message, evt) {
+    if ((evt.key === 'Enter' || evt.target.name === 'submit') && message.trim() !== '') {
+      let obj = {
+        login: '',
         message: ''
-      })
-    })
+      }
+      socket.emit('sendChat', obj)
+      store.addChat(obj)
+      // axiosInst().post('/message/sendmessage', {
+      //   message: this.state.message,
+      //   login: this.state.login,
+      //   idConv: this.state.idConv
+      // }).then((res) => {
+      //   store.setChat(res.data.result)
+      //   this.setState({
+      //     nb: res.data.present,
+      //     message: ''
+      //   })
+      // })
+    }
   }
   componentWillMount () {
     if (global.localStorage.getItem('token') && this.props.match.params.login !== '') {
@@ -48,6 +57,9 @@ class Message extends Component {
     } else {
       this.props.history.push('/')
     }
+    socket.on('receiveChat', (data) => {
+      store.addChat(data)
+    })
   }
 
   render () {
@@ -83,10 +95,10 @@ class Message extends Component {
             </div>
             <div className='cadreSendMessage'>
               <div className='inputMessage'>
-                <input className='inputMessage1' name='message' value={this.state.message} onChange={this.handleChange} />
+                <input className='inputMessage1' name='message' value={this.state.message} onChange={this.handleChange} onKeyPress={(evt) => { this.sendMessage(this.state.message, evt) }} />
               </div>
               <div className='buttonSend'>
-                <RaisedButton label='Envoyer' primary onClick={() => { this.sendMessage(this.state.message) }} />
+                <RaisedButton label='Envoyer' name='submit' primary onClick={(evt) => { this.sendMessage(this.state.message, evt) }} />
               </div>
             </div>
           </div>
