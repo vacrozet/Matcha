@@ -1,5 +1,6 @@
 import RaisedButton from 'material-ui/RaisedButton'
 import React, { Component } from 'react'
+import store from './store.js'
 import axiosInst from './utils/axios.js'
 
 class Message extends Component {
@@ -7,7 +8,6 @@ class Message extends Component {
     super(props)
     this.state = {
       login: '',
-      discution: '',
       message: '',
       nb: false,
       idConv: ''
@@ -37,8 +37,8 @@ class Message extends Component {
     if (global.localStorage.getItem('token') && this.props.match.params.login !== '') {
       axiosInst().get(`/user/getmessage/${this.props.match.params.login}`).then((res) => {
         if (res.data.success === true) {
+          store.setChat(res.data.result)
           this.setState({
-            discution: res.data.result,
             nb: res.data.present,
             login: this.props.match.params.login,
             idConv: res.data.idConv
@@ -60,7 +60,7 @@ class Message extends Component {
             </div>
             <div className='cadreMessage'>
               <div className='discution'>
-                {this.state.nb ? (this.state.discution.map((conv) => {
+                {this.state.nb ? (store.chat.map((conv) => {
                   if (conv.login === this.props.match.params.login) {
                     return (
                       <div className='convUserOther' key={Math.random()}>
@@ -79,7 +79,7 @@ class Message extends Component {
                 <div className='notMessage'>aucun Message a afficher</div>
               )
               }
-            </div>
+              </div>
             </div>
             <div className='cadreSendMessage'>
               <div className='inputMessage'>
@@ -96,56 +96,4 @@ class Message extends Component {
   }
 }
 
-  export default Message
-
-  // <div className='conversation'>
-  //   <Paper zDepth={3}>
-  //     <div className='UserDescription'>
-  //       {this.props.match.params.login}
-  //     </div>
-  //   </Paper>
-  //   <Paper zDepth={3}>
-  //     <div className='UserMessage'>
-  //       <div className='cadreMessage'>
-  //         <div className='discution'>
-  //           {this.state.nb ? (this.state.discution.map((conv) => {
-  //             console.log('je passe la')
-  //             if (conv.login === this.props.match.params.login) {
-  //               return (
-  //                 <div className='convUserOther' key={Math.random()}>
-  //                   <div className='loginOtherUser' key={Math.random()}>
-  //                     {conv.login} :
-  //                   </div>
-  //                   <div className='convOtherUser' key={Math.random()}>
-  //                     {conv.message}
-  //                   </div>
-  //                 </div>
-  //               )
-  //             } else {
-  //               return (
-  //                 <div className='convUserLogin' key={Math.random()}>
-  //                   <div className='loginUser' key={Math.random()}>
-  //                     {conv.login} :
-  //                   </div>
-  //                   <div className='convUser' key={Math.random()}>
-  //                     {conv.message}
-  //                   </div>
-  //                 </div>
-  //               )
-  //             }
-  //           })
-  //           ) : (
-  //             <Paper zDepth={3}>
-  //               <div className='notMessage'>aucun Message a afficher</div>
-  //             </Paper>
-  //         )
-  //         }
-  //         </div>
-  //       </div>
-  //       <div className='cadreSendMessage'>
-  //         <input className='inputMessage' name='message' value={this.state.message} onChange={this.handleChange} />
-  // <RaisedButton label='Envoyer' primary onClick={() => { this.sendMessage(this.state.message) }} />
-  //       </div>
-  //     </div>
-  //   </Paper>
-  // </div>
+export default Message
