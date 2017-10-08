@@ -2,14 +2,22 @@ import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client'
-// import io from 'socket.io'
 import axios from 'axios'
 import './StyleSheet.css'
 import './Navbar.css'
 
+let user = {
+  login: ''
+}
 const socket = io(`http://localhost:3005`)
 socket.on('connection', () => {
-  console.log('connecter')
+  socket.on('activNotif', (data) => {
+    console.log('socket recu')
+    console.log(data)
+    if (data.login === user.login) {
+      document.getElementById('Notification').setAttribute('style', 'color: red')
+    }
+  })
 })
 
 class Volet extends Component {
@@ -147,6 +155,8 @@ class Volet extends Component {
           newNotificationMess: res.data.result[0].newNotificationMess,
           connexion: true
         })
+        user.login = res.data.result[0].login
+        console.log(`ici ---> ${user.login}`)
       }).catch((err) => {
         console.log(err)
       })
@@ -211,9 +221,9 @@ class Volet extends Component {
               <Link className='word_volet' to='/accueil'>Accueil</Link>
               <Link className='word_volet' to='/profile'>Profile</Link>
               {this.state.newNotification ? (
-                <Link className='word_volet_true' to='/notification'>Notification</Link>
+                <Link id='Notification' className='word_volet_true' to='/notification'>Notification</Link>
               ) : (
-                <Link className='word_volet' to='/notification'>Notification</Link>
+                <Link id='Notification' className='word_volet' to='/notification'>Notification</Link>
               )
               }
               {this.state.newNotificationMess ? (

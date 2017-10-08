@@ -41,7 +41,8 @@ module.exports = (req, res) => {
               }).then((res1) => {
                 return res.json({
                   result,
-                  user: req.user.login
+                  user: req.user.login,
+                  userView: req.user.login
                 })
               })
           } else {

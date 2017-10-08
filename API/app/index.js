@@ -28,8 +28,17 @@ app.listen(port, hostname, () => {
   console.log('Mon serveur fonctionne sur http://' + hostname + ':' + port)
 })
 io.on('connection', (socket) => {
+  console.log('connexion')
+  socket.on('userViewProfile', (data) => {
+    console.log('socket arriver en back')
+    console.log(data.login)
+    socket.emit('activNotif', {
+      login: data.login
+    })
+    console.log('socket envoyer')
+  })
   socket.on('UserLoginConnected', (data) => {
-    // console.log(data)
+    console.log(data)
     socket.emit('afficheLoginConnect', {
       login: data.login
     })

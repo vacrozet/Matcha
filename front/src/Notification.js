@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import io from 'socket.io-client'
 import axiosInst from './utils/axios.js'
 import './StyleSheet.css'
 
@@ -19,6 +20,7 @@ class Notifaction extends Component {
             notification: res.data.result[0].notification,
             nb: true
           })
+          document.getElementById('Notification').setAttribute('style', 'color: white')
         } else {
           this.setState({
             notification: res.data.result[0].notification,

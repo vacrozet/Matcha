@@ -31,13 +31,16 @@ module.exports = (req, res) => {
               capteur = true
             }
           }, this)
+          console.log(capteur)
           if (capteur === true) {
             let nb = false
             result[0].conversation.forEach((element) => {
+              console.log(element)
               if (element.login === req.params.login) {
                 capteur = element.message
               }
             }, this)
+            console.log(capteur)
             db.collection('Conversations').find({_id: capteur}).toArray((err, results) => {
               if (err) return erreur(res, 500, false, 'connexion server')
               if (results.length === 1) {

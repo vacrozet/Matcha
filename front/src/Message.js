@@ -1,7 +1,6 @@
 import RaisedButton from 'material-ui/RaisedButton'
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
-import Paper from 'material-ui/Paper'
 
 class Message extends Component {
   constructor (props) {
@@ -22,8 +21,6 @@ class Message extends Component {
     })
   }
   sendMessage (message) {
-    console.log(message)
-    console.log(this.state.idConv)
     axiosInst().post('/message/sendmessage', {
       message: this.state.message,
       login: this.state.login,
@@ -31,14 +28,14 @@ class Message extends Component {
     }).then((res) => {
       this.setState({
         discution: res.data.result,
-        nb: res.data.present
+        nb: res.data.present,
+        message: ''
       })
     })
   }
   componentWillMount () {
-    if (global.localStorage.getItem('token')) {
+    if (global.localStorage.getItem('token') && this.props.match.params.login !== '') {
       axiosInst().get(`/user/getmessage/${this.props.match.params.login}`).then((res) => {
-        console.log(res)
         if (res.data.success === true) {
           this.setState({
             discution: res.data.result,
@@ -46,9 +43,6 @@ class Message extends Component {
             login: this.props.match.params.login,
             idConv: res.data.idConv
           })
-          setTimeout(() => {
-            console.log(this.state.discution)
-          }, 2000)
         }
       })
     } else {
@@ -61,57 +55,40 @@ class Message extends Component {
       <div>
         <div className='bodyMessage'>
           <div className='conversation'>
-            <Paper zDepth={3}>
-              <div className='UserDescription'>
-                {this.props.match.params.login}
-              </div>
-            </Paper>
-            <Paper zDepth={3}>
-              <div className='UserMessage'>
-                <div className='cadreMessage'>
-                  <div className='discution'>
-                    {this.state.nb ? (this.state.discution.map((conv) => {
-                      console.log('je passe la')
-                      if (conv.login === this.props.match.params.login) {
-                        return (
-                          <Paper zDepth={3} key={Math.random()}>
-                            <div className='convUserOther' key={Math.random()}>
-                              <div className='loginOtherUser' key={Math.random()}>
-                                {conv.login} :
-                              </div>
-                              <div className='convOtherUser' key={Math.random()}>
-                                {conv.message}
-                              </div>
-                            </div>
-                          </Paper>
-                        )
-                      } else {
-                        return (
-                          <div className='convUserLogin' key={Math.random()}>
-                              <div className='loginUser' key={Math.random()}>
-                                {conv.login} :
-                              </div>
-                              <div className='convUser' key={Math.random()}>
-                                {conv.message}
-                              </div>
-                          </div>
-                        )
-                      }
-                    })
-                    ) : (
-                      <Paper zDepth={3}>
-                        <div className='notMessage'>aucun Message a afficher</div>
-                      </Paper>
-                  )
+            <div className='UserDescription'>
+              <div>{this.props.match.params.login}</div>
+            </div>
+            <div className='cadreMessage'>
+              <div className='discution'>
+                {this.state.nb ? (this.state.discution.map((conv) => {
+                  if (conv.login === this.props.match.params.login) {
+                    return (
+                      <div className='convUserOther' key={Math.random()}>
+                        {conv.message}
+                      </div>
+                    )
+                  } else {
+                    return (
+                      <div className='convUserLogin' key={Math.random()}>
+                        {conv.message}
+                      </div>
+                    )
                   }
-                  </div>
-                </div>
-                <div className='cadreSendMessage'>
-                  <input className='inputMessage' name='message' value={this.state.message} onChange={this.handleChange} />
-                  <RaisedButton label='Envoyer' primary onClick={() => { this.sendMessage(this.state.message) }} />
-                </div>
+                })
+              ) : (
+                <div className='notMessage'>aucun Message a afficher</div>
+              )
+              }
+            </div>
+            </div>
+            <div className='cadreSendMessage'>
+              <div className='inputMessage'>
+                <input className='inputMessage1' name='message' value={this.state.message} onChange={this.handleChange} />
               </div>
-            </Paper>
+              <div className='buttonSend'>
+                <RaisedButton label='Envoyer' primary onClick={() => { this.sendMessage(this.state.message) }} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -119,4 +96,56 @@ class Message extends Component {
   }
 }
 
-export default Message
+  export default Message
+
+  // <div className='conversation'>
+  //   <Paper zDepth={3}>
+  //     <div className='UserDescription'>
+  //       {this.props.match.params.login}
+  //     </div>
+  //   </Paper>
+  //   <Paper zDepth={3}>
+  //     <div className='UserMessage'>
+  //       <div className='cadreMessage'>
+  //         <div className='discution'>
+  //           {this.state.nb ? (this.state.discution.map((conv) => {
+  //             console.log('je passe la')
+  //             if (conv.login === this.props.match.params.login) {
+  //               return (
+  //                 <div className='convUserOther' key={Math.random()}>
+  //                   <div className='loginOtherUser' key={Math.random()}>
+  //                     {conv.login} :
+  //                   </div>
+  //                   <div className='convOtherUser' key={Math.random()}>
+  //                     {conv.message}
+  //                   </div>
+  //                 </div>
+  //               )
+  //             } else {
+  //               return (
+  //                 <div className='convUserLogin' key={Math.random()}>
+  //                   <div className='loginUser' key={Math.random()}>
+  //                     {conv.login} :
+  //                   </div>
+  //                   <div className='convUser' key={Math.random()}>
+  //                     {conv.message}
+  //                   </div>
+  //                 </div>
+  //               )
+  //             }
+  //           })
+  //           ) : (
+  //             <Paper zDepth={3}>
+  //               <div className='notMessage'>aucun Message a afficher</div>
+  //             </Paper>
+  //         )
+  //         }
+  //         </div>
+  //       </div>
+  //       <div className='cadreSendMessage'>
+  //         <input className='inputMessage' name='message' value={this.state.message} onChange={this.handleChange} />
+  // <RaisedButton label='Envoyer' primary onClick={() => { this.sendMessage(this.state.message) }} />
+  //       </div>
+  //     </div>
+  //   </Paper>
+  // </div>

@@ -5,7 +5,15 @@ import io from 'socket.io-client'
 import Chip from 'material-ui/Chip'
 import './StyleSheet.css'
 
+  // document.getElementById('Notification').setAttribute('style', 'color: red')
+
 const socket = io(`http://localhost:3005`)
+socket.on('connection', () => {
+})
+/////// TEST /////
+    socket.on('activNotif', (data) => {
+      console.log('socket arriver')
+    })
 
 class UserProfile extends Component {
   constructor (props) {
@@ -29,18 +37,14 @@ class UserProfile extends Component {
     this.likeProfile = this.likeProfile.bind(this)
     this.unlikeProfile = this.unlikeProfile.bind(this)
     this.blockUser = this.blockUser.bind(this)
-    // this.unBlockUser = this.unBlockUser.bind(this)
+    this.unBlockUser = this.unBlockUser.bind(this)
   }
-  // componentDidMount () {
-  //   this.timer = setInterval(this.log, 100)
-  // }
 
   likeProfile (event) {
     axiosInst().post('./like/addlike', {
       login: this.state.login
     }).then((res) => {
       if (res.data.addlike === true) {
-        console.log(res.data.popularite)
         this.setState({
           like: true,
           popularite: res.data.popularite
@@ -54,9 +58,6 @@ class UserProfile extends Component {
       console.log(err)
     })
   }
-  // componentWillUnmount () {
-  //   clearInterval(this.timer)
-  // }
 
   unlikeProfile (event) {
     axiosInst().delete(`./like/deletelike/${this.state.login}`).then((res) => {
@@ -97,9 +98,6 @@ class UserProfile extends Component {
     })
   }
 
-  // log () {
-  //   console.log('salut')
-  // }
   unBlockUser () {
     axiosInst().delete(`./block/deleteblock/${this.state.login}`).then((res) => {
       if (res.data.Unblock === true) {
@@ -119,7 +117,6 @@ class UserProfile extends Component {
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
       socket.on('afficheLoginDisconnect', (data) => {
-        console.log('je passe la')
         if (data.login === this.state.login) {
           this.setState({
             connected: 'offline'
@@ -139,7 +136,6 @@ class UserProfile extends Component {
           if (res.data.result[0].connected === true) {
             res.data.result[0].connected = 'connecte'
           }
-          // console.log(res)
           this.setState({
             login: res.data.result[0].login,
             nom: res.data.result[0].nom,
@@ -154,6 +150,9 @@ class UserProfile extends Component {
             block: capteur,
             like: res1.data.like,
             connected: res.data.result[0].connected
+          })
+          socket.emit('userViewProfile', {
+            login: res.data.result[0].login
           })
         }).catch((err1) => {
           console.log(err1)
