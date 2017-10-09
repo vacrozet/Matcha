@@ -57,9 +57,9 @@ class Message extends Component {
     } else {
       this.props.history.push('/')
     }
-    socket.on('receiveChat', (data) => {
-      store.addChat(data)
-    })
+    // socket.on('receiveChat', (data) => {
+    //   store.addChat(data)
+    // })
   }
 
   render () {
