@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
 import {Link} from 'react-router-dom'
-import io from 'socket.io-client'
-import ws from './socket.js'
+// import io from 'socket.io-client'
+import socket from './socket.js'
 import axios from 'axios'
 import './StyleSheet.css'
 import './Navbar.css'
 
-
+socket.on('activNotif', (data) => {
+  document.getElementById('Notification').setAttribute('style', 'color: red')
+})
 class Volet extends Component {
   constructor (props) {
     super(props)
@@ -60,18 +62,15 @@ class Volet extends Component {
           latitude: this.state.latitude
         }).then((res) => {
           if (res.data.success === true) {
-            // socket.emit('UserLoginConnected', {
-            //   login: this.state.login
-            // })
+            socket.emit('UserLoginConnected', {
+              login: this.state.login
+            })
             axiosInst().post('/user/connected', {
               login: this.state.login,
               token: res.data.token
             }).then((res1) => {
               this.setState({
                 connected: true
-              })
-              ws.emit('UserLoginconnected', {
-                login: this.state.login
               })
             }).catch((err1) => {
               console.log(err1)
@@ -112,9 +111,9 @@ class Volet extends Component {
     }).catch((err4) => {
       console.log(err4)
     })
-    // socket.emit('UserLoginDisconnected', {
-    //   login: this.state.login
-    // })
+    socket.emit('UserLoginDisconnected', {
+      login: this.state.login
+    })
     axiosInst().post('/user/disconnected', {
       login: this.state.login,
       token: global.localStorage.getItem('token')
@@ -145,6 +144,9 @@ class Volet extends Component {
           newNotification: res.data.result[0].newNotification,
           newNotificationMess: res.data.result[0].newNotificationMess,
           connexion: true
+        })
+        socket.emit('UserLoginConnected', {
+          login: res.data.result[0].login
         })
       }).catch((err) => {
         console.log(err)

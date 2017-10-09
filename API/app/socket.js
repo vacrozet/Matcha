@@ -3,32 +3,78 @@ var io = require('socket.io')(server)
 
 let tabUser = []
 io.on('connection', (socket) => {
+  console.log('socket activé')
+
   socket.on('UserLoginConnected', (data) => {
-    console.log('socket user connecter --- >')
-    console.log(data.login)
-    tabUser.push(data.login)
+    console.log(`socket user connecter --- > ${data.login}`)
+    let isPresent = true
+    tabUser.forEach((element) => {
+      if (element.login === data.login) {
+        console.log('user deja present dans le tabUser')
+        isPresent = false
+      }
+    }, this)
+    if (isPresent === true) {
+      tabUser.push({
+        login: data.login,
+        socket: socket
+      })
+    // element.socket.emit('activOnline', {
+    //   view: 'view'
+    // })
+    } else {
+      console.log('user already present')
+    }
+    console.log(tabUser)
+  })
+  socket.on('userViewProfile', (data) => {
+    console.log('socket recu')
+    console.log(tabUser)
+    tabUser.forEach((element) => {
+      if (element.login === data.login) {
+        element.socket.emit('activNotif', {})
+      }
+    }, this)
+    // tabUser[1].socket.emit('activNotif', {
+    //   login: data.login
+    // })
   })
 
-  socket.on('userViewProfile', (data) => {
-    console.log('socket arriver en back')
-    console.log(data.login)
-    socket.emit('activNotif', {
-      login: data.login
-    })
-    console.log('socket envoyer')
-  })
   socket.on('UserLoginDisconnected', (data) => {
-    // console.log(data)
-    socket.emit('afficheLoginDisconnect', {
-      login: data.login
-    })
+    console.log(`socket user Disconnected --> ${data.login}`)
+    tabUser.splice(data.login)
+    // tabUser.forEach((element) => {
+    //   if (element === data.login) {
+    //     delete [element]
+    //   }
+    // }, this)
+    console.log(tabUser)
   })
+
+  // socket.on('UserLoginDisconnected', (data) => {
+  //   // console.log(data)
+  //   socket.emit('afficheLoginDisconnect', {
+  //     login: data.login
+  //   })
+  // })
   socket.on('sendChat', (data) => {
   // Recuperer la socket de l'utilisateur qui doit recevoir le message (lui envoyer)
-  //  Ajouter le chat dans la db
+    tabUser.forEach((element) => {
+      if (element.login === data.login) {
+        element.socket.emit('receiveChat', {
+          message: data.message
+        })
+      }
+    }, this)
+  //   db.collection('Conversation').
+  // // Ajouter le chat dans la db
   })
 })
 
 server.listen(3005, () => {
   console.log('listening on *:3005')
 })
+
+// setInterval(() => {
+//   console.log(tabUser)
+// }, 2000)

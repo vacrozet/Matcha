@@ -13,6 +13,20 @@ function getAge (datestring) {
   return age
 }
 
+function error (res, nb, success, message) {
+  res.status(nb)
+  return res.json({
+    message: message
+  })
+}
+function renvoi (res, nb, success, message) {
+  res.status(nb)
+  return res.json({
+    success: success,
+    message: message
+  })
+}
+
 module.exports = (req, res) => {
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
     return res.json({
@@ -92,17 +106,18 @@ module.exports = (req, res) => {
   // //////////---- HASH PASSWORD BCRYPT -----/////
   var hash = bcrypt.hashSync(req.body.passwd, 10)
 
+  var resultat = false
   db.get().then((db) => {
-    db.collection('Users').find({login: req.body.login, mail: req.body.mail}).toArray((error, results) => {
-      if (error) {
-        res.status(500)
-        return res.json({
-          error: 'Internal server error'
-        })
+    db.collection('Users').find({mail: req.body.email}).toArray((error1, results1) => {
+      if (error1) return error(res, 500, 'Internal server error')
+      if (results1.length !== 0) {
+        resultat = true
       }
-  // ///////-----CREATION D'UN NOUVEL USER-----////////////
+    })
+    db.collection('Users').find({login: req.body.login}).toArray((error, results) => {
+      if (error) return error(res, 500, 'Internal server error')
       let id = uuid()
-      if (results.length !== 1) {
+      if (results.length !== 1 && resultat !== true) {
         let tab = {
           _id: id,
           actif: true,
@@ -136,13 +151,7 @@ module.exports = (req, res) => {
           notification: []
         }
         db.collection('Users').insert(tab, null, (error, result) => {
-          if (error) {
-            res.status(500)
-            return res.json({
-              message: 'Internal server error',
-              error: error
-            })
-          }
+          if (error) return error(res, 500, 'Internal server error')
         })
         tab = {
           _id: id,
@@ -150,35 +159,14 @@ module.exports = (req, res) => {
           chat: []
         }
         db.collection('Message_Users').insert(tab, null, (error, results) => {
-          if (error) {
-            console.log(new Error(error))
-            res.status(500)
-            return res.json({
-              success: false,
-              message: 'Internal server error',
-              error: error
-            })
-          }
+          if (error) return error(res, 500, 'Internal server error')
         })
-        res.status(200)
-        return res.json({
-          success: true,
-          message: 'INSCRIPTION REUSSIE'
-        })
+        renvoi(res, 200, true, 'INSCRIPTION REUSSIE')
       } else {
-        res.status(200)
-        return res.json({
-          success: true,
-          message: 'utilisateur deja present'
-        })
+        renvoi(res, 200, true, 'utilisateur deja present')
       }
     })
   }).catch((err) => {
-    console.log(err)
-    res.status(500)
-    return res.json({
-      success: false,
-      Message: 'Internal server error'
-    })
+    return error(res, 500, err)
   })
 }

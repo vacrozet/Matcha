@@ -5,6 +5,7 @@ import Notification from './Notification.js'
 import Inscription from './Inscription.js'
 import UserProfile from './UserProfile.js'
 import Message from './Message.js'
+
 import ResetPasswd from './ResetPasswd.js'
 import Modify from './ModifyProfile.js'
 import AccueilKo from './AccueilKo.js'
@@ -13,12 +14,14 @@ import Accueil from './Accueil.js'
 import Profile from './Profile.js'
 import ReactDOM from 'react-dom'
 // import io from 'socket.io-client'
+// import ws from './socket.js'
 import Navbar from './Navbar.js'
 import Oubli from './Oubli.js'
 import React from 'react'
 import './styles.min.css'
 
 var NotificationSystem = require('react-notification-system')
+
 
 // const socket = io(`http://localhost:3005`)
 // socket.on('connection', () => {
@@ -38,13 +41,13 @@ class Index extends React.Component {
 
   handleData (data) {
     let result = JSON.parse(data)
-    // ws.emit('send', {
-    //   'sdaa'
-    // })
     this.setState({count: this.state.count + result.movement})
   }
 
   componentWillMount () {
+    // ws.emit('UserLoginConnected', {
+    //   login: 'coucou'
+    // })
     if (!global.localStorage.getItem('token') && this.props.location.pathname.indexOf('/reset/resetpasswd/') === -1) {
       this.props.history.push('/')
     }

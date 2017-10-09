@@ -119,7 +119,7 @@ module.exports = (req, res) => {
                               let chat1 = {}
                               chat1.login = req.user.login
                               chat1.lastMessage = ''
-                              chat1.con = id
+                              chat1.message = id
                               db.collection('Message_Users').update({login: req.body.login},
                                 {
                                   $push: {

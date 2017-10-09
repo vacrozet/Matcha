@@ -24,16 +24,17 @@ class Message extends Component {
   sendMessage (message, evt) {
     if ((evt.key === 'Enter' || evt.target.name === 'submit') && message.trim() !== '') {
       let obj = {
-        login: '',
-        message: ''
+        login: this.state.login,
+        message: this.state.message
       }
       socket.emit('sendChat', obj)
       store.addChat(obj)
-      // axiosInst().post('/message/sendmessage', {
-      //   message: this.state.message,
-      //   login: this.state.login,
-      //   idConv: this.state.idConv
-      // }).then((res) => {
+      axiosInst().post('/message/sendmessage', {
+        message: this.state.message,
+        login: this.state.login,
+        idConv: this.state.idConv
+      })
+      // .then((res) => {
       //   store.setChat(res.data.result)
       //   this.setState({
       //     nb: res.data.present,
@@ -57,9 +58,9 @@ class Message extends Component {
     } else {
       this.props.history.push('/')
     }
-    // socket.on('receiveChat', (data) => {
-    //   store.addChat(data)
-    // })
+    socket.on('receiveChat', (data) => {
+      store.addChat(data.message)
+    })
   }
 
   render () {

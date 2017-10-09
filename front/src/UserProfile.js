@@ -1,19 +1,13 @@
 import RaisedButton from 'material-ui/RaisedButton'
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
-import io from 'socket.io-client'
+import socket from './socket.js'
 import Chip from 'material-ui/Chip'
 import './StyleSheet.css'
 
-  // document.getElementById('Notification').setAttribute('style', 'color: red')
-
-const socket = io(`http://localhost:3005`)
-socket.on('connection', () => {
-})
-// ///// TEST /////
-socket.on('activNotif', (data) => {
-  console.log('socket arriver')
-})
+// socket.on('activPresence', {
+//   document.get
+// })
 
 class UserProfile extends Component {
   constructor (props) {
@@ -45,6 +39,9 @@ class UserProfile extends Component {
       login: this.state.login
     }).then((res) => {
       if (res.data.addlike === true) {
+        socket.emit('userViewProfile', {
+          login: this.props.match.params.login
+        })
         this.setState({
           like: true,
           popularite: res.data.popularite
@@ -62,6 +59,9 @@ class UserProfile extends Component {
   unlikeProfile (event) {
     axiosInst().delete(`./like/deletelike/${this.state.login}`).then((res) => {
       if (res.data.unlike === true) {
+        socket.emit('userViewProfile', {
+          login: this.props.match.params.login
+        })
         this.setState({
           like: false,
           popularite: res.data.popularite
@@ -80,6 +80,9 @@ class UserProfile extends Component {
       login: this.state.login
     }).then((res) => {
       if (res.data.block === true && res.data.success !== true) {
+        socket.emit('userViewProfile', {
+          login: this.props.match.params.login
+        })
         this.setState({
           block: true,
           popularite: res.data.popularite
@@ -101,6 +104,9 @@ class UserProfile extends Component {
   unBlockUser () {
     axiosInst().delete(`./block/deleteblock/${this.state.login}`).then((res) => {
       if (res.data.Unblock === true) {
+        socket.emit('userViewProfile', {
+          login: this.props.match.params.login
+        })
         this.setState({
           block: false,
           popularite: res.data.popularite
@@ -152,7 +158,7 @@ class UserProfile extends Component {
             connected: res.data.result[0].connected
           })
           socket.emit('userViewProfile', {
-            login: res.data.result[0].login
+            login: this.props.match.params.login
           })
         }).catch((err1) => {
           console.log(err1)

@@ -1,5 +1,7 @@
 import { observable, action } from 'mobx'
-import React, { Component } from 'react'
+import { Component } from 'react'
+
+// const socket = io.connect(`http://localhost:3005`)
 
 class Store extends Component {
   @observable chat = []

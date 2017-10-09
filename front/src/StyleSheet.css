@@ -166,18 +166,19 @@ textarea {
     display: flex;
     background-color: white;
     border-radius: 10px;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: center;
+    align-items: center;
     margin: auto;
+    overflow: auto;
     padding: 15px;
-    height: auto;
-    width: auto;
+    height: 100%;
+    width: 70%;
 }
 .allNotification {
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;    
+    text-align: center;
+    align-items: center;
 }
 .bodyMessenger {
     height: 100vh;
