@@ -9,7 +9,6 @@ function lastConnection (time) {
 
 module.exports = (req, res) => {
   if (req.params.login !== '' && req.params.login !== undefined) {
-    // console.log(req.params.login)
     db.get().then((db) => {
       db.collection('Users').find({login: req.params.login}).toArray((err, result) => {
         if (err) {

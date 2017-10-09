@@ -2,7 +2,6 @@ const db = require('../../db.js')
 
 module.exports = (req, res) => {
   var auth = req.get('Authorization').split(' ')
-  // let nb
   db.get().then((db) => {
     db.collection('Users').find({
       tokens: { // tokens
