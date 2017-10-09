@@ -10,30 +10,26 @@ function genToken () {
   }
   return (token)
 }
+function error1 (res, status, message) {
+  res.status(status)
+  res.json({
+    message: message
+  })
+}
 
 module.exports = (req, res) => {
   if (req.body.mail !== '' && req.body.mail.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
     let hash = genToken()
     db.get().then((db) => {
       db.collection('Users').find({mail: req.body.mail}).toArray((err, result) => {
-        if (err) {
-          res.status(500)
-          return res.json({
-            message: 'Internal server Erreur'
-          })
-        }
+        if (err) return error1(res, 500, 'Internal server Erreur')
         if (result.length === 1) {
           db.collection('Users').updateOne({mail: req.body.mail}, {$set: {
             actif: false,
             hash: hash
           }})
           nodemailer.createTestAccount((err, account) => {
-            if (err) {
-              res.status(500)
-              return res.json({
-                message: 'mail not send'
-              })
-            }
+            if (err) return error1(res, 500, 'mail not send')
             let transporter = nodemailer.createTransport({
               host: 'smtp.gmail.com',
               port: 465,
@@ -52,12 +48,7 @@ module.exports = (req, res) => {
               html: `Hey,<b>Pour reset ton passwd clique <a href=${url}>ici</a></b>` // html body
             }
             transporter.sendMail(mailOptions, (error, info) => {
-              if (error) {
-                res.status(500)
-                return res.json({
-                  message: 'mail not send'
-                })
-              }
+              if (error) return error1(res, 500, 'mail not send')
               return res.json({
                 success: true,
                 message: 'mail send'

@@ -27,6 +27,13 @@ function erreur (res, text) {
     error: text
   })
 }
+
+function error1 (res, status, message) {
+  res.status(status)
+  res.json({
+    error: message
+  })
+}
 module.exports = (req, res) => {
   let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.latitude},${req.body.longitude}&key=AIzaSyBO7tyw2-nedpTDffo6qR3isxTMCuzaNs8`
   axios.get(url).then((res2) => {
@@ -50,12 +57,7 @@ module.exports = (req, res) => {
   }
   db.get().then((db) => {
     db.collection('Users').find({login: req.body.login}).toArray((error, results) => {
-      if (error) {
-        res.status(500)
-        return res.json({
-          error: 'Internal server error'
-        })
-      }
+      if (error) return error1(res, 500, 'Internal server error')
       if (results.length !== 1) return erreur(res, 'User Not Found')
       if (!bcrypt.compareSync(req.body.passwd, results[0].passwd)) return erreur(res, 'Wrong Passwd')
       let objToken = {}

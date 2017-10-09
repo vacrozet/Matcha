@@ -1,6 +1,7 @@
 const db = require('../../db.js')
 const uuid = require('uuid')
 const bcrypt = require('bcryptjs')
+const zxcvbn = require('zxcvbn')
 
 function getAge (datestring) {
   var today = new Date()
@@ -26,86 +27,57 @@ function renvoi (res, nb, success, message) {
     message: message
   })
 }
+function errorform (res, success, message) {
+  res.json({
+    success: success,
+    message: message
+  })
+}
 
 module.exports = (req, res) => {
   if (req.body.login === undefined || !req.body.login.match(/^([a-zA-Z0-9]+)$/)) {
-    return res.json({
-      success: false,
-      message: 'login incorrect'
-    })
+    return errorform(res, false, 'login incorrect')
   }
   if (req.body.nom.length < 3 || req.body.nom === '') {
-    return res.json({
-      success: false,
-      message: 'nom incorrect'
-    })
+    return errorform(res, false, 'nom incorrect')
   }
   if (req.body.prenom === undefined || req.body.prenom.length < 3 || req.body.prenom === '') {
-    return res.json({
-      success: false,
-      message: 'prenom incorrect'
-    })
+    return errorform(res, false, 'prenom incorrect')
   }
   if (req.body.tag === undefined || req.body.tag[0] === '#' || req.body.tag.length < 2) {
-    return res.json({
-      success: false,
-      message: 'tag incorrect'
-    })
+    return errorform(res, false, 'tag incorrect')
   }
   if (req.body.isSexe === undefined || !req.body.isSexe.match(/^(Homme|Femme)$/)) {
-    return res.json({
-      success: false,
-      message: 'sexe incorrect'
-    })
+    return errorform(res, false, 'sexe incorrect')
   }
   if (req.body.toSexe === undefined || !req.body.toSexe.match(/^(Homme|Femme|All)$/)) {
-    return res.json({
-      success: false,
-      message: 'interssé par: incorrect'
-    })
+    return errorform(res, false, 'interssé par: incorrect')
   }
   if (req.body.passwd === undefined || req.body.passwd === '') {
-    return res.json({
-      success: false,
-      message: 'Pass Not Completed'
-    })
+    return errorform(res, false, 'Pass Not Completed')
   }
   if (req.body.rePasswd === undefined || req.body.rePasswd === '') {
-    return res.json({
-      success: false,
-      message: 'RePass Not Completed'
-    })
+    return errorform(res, false, 'RePass Not Completed')
   }
   if (req.body.rePasswd !== req.body.passwd) {
-    return res.json({
-      success: false,
-      message: 'Pass And RePass Not Same'
-    })
+    return errorform(res, false, 'Pass And RePass Not Same')
+  }
+  if (!req.body.passwd.match(/^([a-zA-Z0-9!@#$%^&*()\\/]+)$/) ||
+  req.body.passwd.length < 8 || zxcvbn(req.body.passwd).score <= 2) {
+    return errorform(res, false, 'Pass not very secur')
   }
   if (req.body.email === undefined || req.body.email === '' ||
   !req.body.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-    return res.json({
-      success: false,
-      message: 'Email Incorrect'
-    })
+    return errorform(res, false, 'Email Incorrect')
   }
   if (req.body.date === undefined || !req.body.date.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
-    return res.json({
-      success: false,
-      message: 'date incorrect'
-    })
+    return errorform(res, false, 'date incorrect')
   }
   if (req.body.bio === undefined) {
-    return res.json({
-      success: false,
-      message: 'bio not defined'
-    })
+    return errorform(res, false, 'bio not defined')
   }
   let hbirthday = getAge(req.body.date)
-
-  // //////////---- HASH PASSWORD BCRYPT -----/////
   var hash = bcrypt.hashSync(req.body.passwd, 10)
-
   var resultat = false
   db.get().then((db) => {
     db.collection('Users').find({mail: req.body.email}).toArray((error1, results1) => {
