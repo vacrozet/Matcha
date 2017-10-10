@@ -184,7 +184,7 @@ class Volet extends Component {
               <div className='Signin_navbar'>
                 <div className='input_connect' >
                   <input className='input_connexion_volet' name='login' onChange={this.handleChange} type='login' placeholder='Login' onKeyPress={this.handleKeyPress} />
-                  <input className='input_connexion_volet' name='passwd' onChange={this.handleChange} type='passwd' placeholder='Password' onKeyPress={this.handleKeyPress} />
+                  <input className='input_connexion_volet' name='passwd' onChange={this.handleChange} type='password' placeholder='Password' onKeyPress={this.handleKeyPress} />
                   <button className='button_connexion_volet' value='connexion' onKeyPress={this.handleKeyPress} onClick={this.handleKeyPress}>Connexion</button>
                 </div>
                 <div className='Signin_navbar' onClick={this.signIn}>SignIn</div>

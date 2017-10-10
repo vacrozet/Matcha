@@ -1,5 +1,6 @@
 var server = require('http').Server(global.app)
 var io = require('socket.io')(server)
+const db = require('./db.js')
 
 let tabUser = []
 io.on('connection', (socket) => {
@@ -11,6 +12,7 @@ io.on('connection', (socket) => {
     tabUser.forEach((element) => {
       if (element.login === data.login) {
         console.log('user deja present dans le tabUser')
+        element.socket = socket
         isPresent = false
       }
     }, this)
@@ -58,16 +60,30 @@ io.on('connection', (socket) => {
   //   })
   // })
   socket.on('sendChat', (data) => {
+    console.log(' je rentre dans le socket')
+    console.log(data)
+    console.log(tabUser)
   // Recuperer la socket de l'utilisateur qui doit recevoir le message (lui envoyer)
     tabUser.forEach((element) => {
-      if (element.login === data.login) {
+      if (element.login === data.desti) {
+        console.log('Socket Emit')
         element.socket.emit('receiveChat', {
-          message: data.message
+          message: data.message,
+          login: data.login
         })
       }
     }, this)
-  //   db.collection('Conversation').
-  // // Ajouter le chat dans la db
+    db.get().then((db) => {
+      db.collection('Conversations').update({_id: data.idConv},
+        {
+          $push: {
+            convers: {
+              login: data.login,
+              message: data.message
+            }
+          }
+        })
+    })
   })
 })
 

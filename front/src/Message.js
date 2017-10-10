@@ -9,6 +9,7 @@ class Message extends Component {
     super(props)
     this.state = {
       login: '',
+      loginSend: '',
       message: '',
       nb: false,
       idConv: ''
@@ -22,25 +23,16 @@ class Message extends Component {
     })
   }
   sendMessage (message, evt) {
-    if ((evt.key === 'Enter' || evt.target.name === 'submit') && message.trim() !== '') {
+    if ((evt.key === 'Enter' || evt === 'submit') && message.trim() !== '') {
       let obj = {
-        login: this.state.login,
-        message: this.state.message
+        login: this.state.loginSend,
+        message: this.state.message,
+        desti: this.state.login,
+        idConv: this.state.idConv
       }
+      this.setState({message: ''})
       socket.emit('sendChat', obj)
       store.addChat(obj)
-      axiosInst().post('/message/sendmessage', {
-        message: this.state.message,
-        login: this.state.login,
-        idConv: this.state.idConv
-      })
-      // .then((res) => {
-      //   store.setChat(res.data.result)
-      //   this.setState({
-      //     nb: res.data.present,
-      //     message: ''
-      //   })
-      // })
     }
   }
   componentWillMount () {
@@ -51,16 +43,14 @@ class Message extends Component {
           this.setState({
             nb: res.data.present,
             login: this.props.match.params.login,
-            idConv: res.data.idConv
+            idConv: res.data.idConv,
+            loginSend: res.data.loginSend
           })
         }
       })
     } else {
       this.props.history.push('/')
     }
-    socket.on('receiveChat', (data) => {
-      store.addChat(data.message)
-    })
   }
 
   render () {
@@ -99,7 +89,7 @@ class Message extends Component {
                 <input className='inputMessage1' name='message' value={this.state.message} onChange={this.handleChange} onKeyPress={(evt) => { this.sendMessage(this.state.message, evt) }} />
               </div>
               <div className='buttonSend'>
-                <RaisedButton label='Envoyer' name='submit' primary onClick={(evt) => { this.sendMessage(this.state.message, evt) }} />
+                <RaisedButton label='Envoyer' name='submit' primary onClick={(evt) => { this.sendMessage(this.state.message, 'submit') }} />
               </div>
             </div>
           </div>

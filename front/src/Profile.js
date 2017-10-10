@@ -281,7 +281,7 @@ class Profile extends Component {
             <div>Adresse: {this.state.location}</div>
             <div>Bio: {this.state.bio}</div>
             <div>Popularite: {this.state.popularite}</div>
-            <div><Link className='bmp primary' to='/profile/modify'><RaisedButton label='Modifier' primary={true} /></Link></div>
+            <div><Link className='bmp primary' to='/profile/modify'><RaisedButton label='Modifier' primary /></Link></div>
           </div>
           <div className='all_htag'>
             <div className='affichage_tag'>
@@ -296,7 +296,7 @@ class Profile extends Component {
             </div>
             <div className='binput'>
               <input type='name' name='tag' value={this.state.tag} onChange={this.handleChange} placeholder='#TAG' onKeyPress={this.enterKeyPress} />
-              <RaisedButton label='ajouter' value='ajouter' primary={true} onClick={() => { this.handleKeyPress() }} />
+              <RaisedButton label='ajouter' value='ajouter' primary onClick={() => { this.handleKeyPress() }} />
             </div>
           </div>
         </div>

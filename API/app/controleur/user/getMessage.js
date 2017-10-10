@@ -8,14 +8,15 @@ function erreur (res, status, bool, message) {
   })
 }
 
-function renvoi (res, status, bool, message, result, nb, idConv) {
+function renvoi (res, status, bool, message, result, nb, idConv, loginSend) {
   res.status(status)
   return res.json({
     success: bool,
     message: message,
     result: result,
     present: nb,
-    idConv: idConv
+    idConv: idConv,
+    loginSend: loginSend
   })
 }
 
@@ -45,9 +46,9 @@ module.exports = (req, res) => {
                 if (results[0].convers.length > 0) {
                   tabAllConvers = results[0].convers
                   nb = true
-                  return renvoi(res, 200, true, 'user found', tabAllConvers, nb, capteur)
+                  return renvoi(res, 200, true, 'user found', tabAllConvers, nb, capteur, req.user.login)
                 }
-                return renvoi(res, 200, true, 'Conversation any', tabAllConvers, nb, capteur)
+                return renvoi(res, 200, true, 'Conversation any', tabAllConvers, nb, capteur, req.user.login)
               } else {
                 return erreur(res, 404, false, 'tab not found')
               }

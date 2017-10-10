@@ -68,6 +68,19 @@ module.exports = (req, res) => {
           var tab = result.filter(result => {
             return result.login !== req.user.login
           })
+          // A TEST //////////////////
+          tab.sort((a, b) => {
+            if (a.popularite < b.popularite) {
+              return -1
+            }
+            if (a.popularite === b.popularite) {
+              return 0
+            }
+            if (a.popularite > b.popularite) {
+              return 1
+            }
+          })
+          // ///////////////////
           result.forEach((tab) => {
             delete tab.passwd
             delete tab.tokens
