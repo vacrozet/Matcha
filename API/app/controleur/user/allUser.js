@@ -71,13 +71,13 @@ module.exports = (req, res) => {
           // A TEST //////////////////
           tab.sort((a, b) => {
             if (a.popularite < b.popularite) {
-              return -1
+              return 1
             }
             if (a.popularite === b.popularite) {
               return 0
             }
             if (a.popularite > b.popularite) {
-              return 1
+              return -1
             }
           })
           // ///////////////////

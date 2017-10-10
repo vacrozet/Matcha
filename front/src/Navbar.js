@@ -61,9 +61,9 @@ class Volet extends Component {
           latitude: this.state.latitude
         }).then((res) => {
           if (res.data.success === true) {
-            // socket.emit('UserLoginConnected', {
-            //   login: this.state.login
-            // })
+            socket.emit('UserLoginConnected', {
+              login: this.state.login
+            })
             axiosInst().post('/user/connected', {
               login: this.state.login,
               token: res.data.token
@@ -109,6 +109,9 @@ class Volet extends Component {
       })
     }).catch((err4) => {
       console.log(err4)
+    })
+    socket.emit('UserLoginDisconnected', {
+      login: this.state.login
     })
     axiosInst().post('/user/disconnected', {
       login: this.state.login,

@@ -10,7 +10,6 @@ io.on('connection', (socket) => {
     let isPresent = true
     tabUser.forEach((element) => {
       if (element.login === data.login) {
-        console.log('user deja present dans le tabUser')
         element.socket = socket
         isPresent = false
       }
@@ -20,6 +19,9 @@ io.on('connection', (socket) => {
         login: data.login,
         socket: socket
       })
+    socket.broadcast.emit('UserConnected', {
+      login: data.login
+    })
     } else {
       console.log('user already present')
     }
@@ -34,6 +36,9 @@ io.on('connection', (socket) => {
 
   socket.on('UserLoginDisconnected', (data) => {
     console.log(`socket user Disconnected --> ${data.login}`)
+    socket.broadcast.emit('UserDisconnected', {
+      login: data.login
+    })
     tabUser.splice(data.login)
   })
   socket.on('sendChat', (data) => {

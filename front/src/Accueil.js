@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import MenuItem from 'material-ui/MenuItem'
 import axiosInst from './utils/axios.js'
+import socket from './socket.js'
 import React from 'react'
 import './StyleSheet.css'
 
@@ -48,6 +49,28 @@ class Acceuil extends React.Component {
     this.handleChangePopulariteMax = this.handleChangePopulariteMax.bind(this)
     this.handleChangedistance = this.handleChangedistance.bind(this)
     this.handleChangeTag = this.handleChangeTag.bind(this)
+    socket.on('UserDisconnected', (data) => {
+      var maj = this.state.tab
+      maj.forEach((element) => {
+        if (element.login === data.login) {
+          element.connected = 'Offline'
+        }
+      }, this)
+      this.setState({
+        tab: maj
+      })
+    })
+    socket.on('UserConnected', (data) => {
+      var maj = this.state.tab
+      maj.forEach((element) => {
+        if (element.login === data.login) {
+          element.connected = 'Online'
+        }
+      }, this)
+      this.setState({
+        tab: maj
+      })
+    })
   }
   handleButtonPress (login) {
     this.props.history.push(`/userprofile/${login}`)
@@ -134,12 +157,14 @@ class Acceuil extends React.Component {
       }).then((res) => {
         const tabl = res.data.tab
         if (tabl.length > 0) {
+          tabl.forEach((element) => {
+            if (element.connected === true) {
+              element.connected = 'Online'
+            }
+          }, this)
           this.setState({
             tab: res.data.tab
           })
-          // res.data.tab.forEach((element) => {
-          //   console.log(element)
-          // }, this)
         }
       }).catch((erreur) => {
         console.log(erreur)

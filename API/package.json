@@ -33,6 +33,7 @@
     "nodemailer": "^4.1.1",
     "passport-facebook": "^2.1.1",
     "path": "^0.12.7",
+    "require_optional": "^1.0.1",
     "socket.io": "^2.0.3",
     "uuid": "^3.0.1",
     "uuid-validate": "0.0.2",
