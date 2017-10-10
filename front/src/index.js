@@ -13,20 +13,12 @@ import Messenger from './Messenger.js'
 import Accueil from './Accueil.js'
 import Profile from './Profile.js'
 import ReactDOM from 'react-dom'
-// import io from 'socket.io-client'
-// import ws from './socket.js'
 import Navbar from './Navbar.js'
 import Oubli from './Oubli.js'
 import React from 'react'
 import './styles.min.css'
 
 var NotificationSystem = require('react-notification-system')
-
-
-// const socket = io(`http://localhost:3005`)
-// socket.on('connection', () => {
-//   console.log('connecter')
-// })
 
 class Index extends React.Component {
   constructor (props) {
@@ -45,9 +37,6 @@ class Index extends React.Component {
   }
 
   componentWillMount () {
-    // ws.emit('UserLoginConnected', {
-    //   login: 'coucou'
-    // })
     if (!global.localStorage.getItem('token') && this.props.location.pathname.indexOf('/reset/resetpasswd/') === -1) {
       this.props.history.push('/')
     }

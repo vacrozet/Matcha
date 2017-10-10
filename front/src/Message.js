@@ -4,6 +4,11 @@ import store from './store.js'
 import axiosInst from './utils/axios.js'
 import socket from './socket.js'
 
+function scrollbutton() {
+  var element = document.getElementById('discution')
+  element.scrollTop = element.scrollHeight
+}
+
 class Message extends Component {
   constructor (props) {
     super(props)
@@ -11,17 +16,27 @@ class Message extends Component {
       login: '',
       loginSend: '',
       message: '',
-      nb: false,
       idConv: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
+    socket.on('receiveChat', (data) => {
+      let obj = {
+        login: data.login,
+        message: data.message
+      }
+      store.addChat(obj)
+      this.setState({})
+      scrollbutton()
+    })
   }
+
   handleChange (event) {
     this.setState({
       message: event.target.value
     })
   }
+
   sendMessage (message, evt) {
     if ((evt.key === 'Enter' || evt === 'submit') && message.trim() !== '') {
       let obj = {
@@ -33,12 +48,17 @@ class Message extends Component {
       this.setState({message: ''})
       socket.emit('sendChat', obj)
       store.addChat(obj)
+      setTimeout(() => {
+        scrollbutton()
+      }, 100)
     }
   }
+
   componentWillMount () {
     if (global.localStorage.getItem('token') && this.props.match.params.login !== '') {
       axiosInst().get(`/user/getmessage/${this.props.match.params.login}`).then((res) => {
         if (res.data.success === true) {
+          console.log(res.data.result)
           store.setChat(res.data.result)
           this.setState({
             nb: res.data.present,
@@ -47,6 +67,7 @@ class Message extends Component {
             loginSend: res.data.loginSend
           })
         }
+        scrollbutton()
       })
     } else {
       this.props.history.push('/')
@@ -62,26 +83,25 @@ class Message extends Component {
               <div>{this.props.match.params.login}</div>
             </div>
             <div className='cadreMessage'>
-              <div className='discution'>
-                {this.state.nb ? (store.chat.map((conv) => {
+              <div id='discution' className='discution'>
+                {store.chat ? (store.chat.map((conv, i) => {
                   if (conv.login === this.props.match.params.login) {
                     return (
-                      <div className='convUserOther' key={Math.random()}>
+                      <div className='convUserOther' key={i}>
                         {conv.message}
                       </div>
                     )
                   } else {
                     return (
-                      <div className='convUserLogin' key={Math.random()}>
+                      <div className='convUserLogin' key={i}>
                         {conv.message}
                       </div>
                     )
                   }
                 })
               ) : (
-                <div className='notMessage'>aucun Message a afficher</div>
-              )
-              }
+                null
+              )}
               </div>
             </div>
             <div className='cadreSendMessage'>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
 import {Link} from 'react-router-dom'
-// import io from 'socket.io-client'
 import socket from './socket.js'
 import axios from 'axios'
 import './StyleSheet.css'
@@ -62,9 +61,9 @@ class Volet extends Component {
           latitude: this.state.latitude
         }).then((res) => {
           if (res.data.success === true) {
-            socket.emit('UserLoginConnected', {
-              login: this.state.login
-            })
+            // socket.emit('UserLoginConnected', {
+            //   login: this.state.login
+            // })
             axiosInst().post('/user/connected', {
               login: this.state.login,
               token: res.data.token
@@ -110,9 +109,6 @@ class Volet extends Component {
       })
     }).catch((err4) => {
       console.log(err4)
-    })
-    socket.emit('UserLoginDisconnected', {
-      login: this.state.login
     })
     axiosInst().post('/user/disconnected', {
       login: this.state.login,

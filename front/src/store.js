@@ -1,7 +1,7 @@
-import { observable, action } from 'mobx'
+import { observable, action, useStrict } from 'mobx'
 import { Component } from 'react'
 
-// const socket = io.connect(`http://localhost:3005`)
+useStrict(true)
 
 class Store extends Component {
   @observable chat = []
@@ -10,7 +10,13 @@ class Store extends Component {
   @action
   addChat (chat) {
     this.chat.push(chat)
+    // this.chat = this.chat.slice(0)
   }
+
+  @action
+   getChat() {
+     return this.chat
+   }
 
   @action
   setChat (chat) {

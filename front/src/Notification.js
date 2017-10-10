@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
-// import io from 'socket.io-client'
 import axiosInst from './utils/axios.js'
 import './StyleSheet.css'
+
+function scrollbutton() {
+  var element = document.getElementById('scroll')
+  element.scrollTop = element.scrollHeight
+}
 
 class Notifaction extends Component {
   constructor (props) {
@@ -27,6 +31,7 @@ class Notifaction extends Component {
             nb: false
           })
         }
+        scrollbutton()
       }).catch((err) => {
         console.log(err)
       })
@@ -39,7 +44,7 @@ class Notifaction extends Component {
     return (
       <div>
         <div className='bodyNotification'>
-          <div className='notification'>
+          <div id='scroll' className='notification'>
             { this.state.nb ? (this.state.notification.map((oklm) => {
               return (
                 <div className='allNotification' key={Math.random()}>

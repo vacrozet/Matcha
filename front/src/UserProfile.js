@@ -122,13 +122,13 @@ class UserProfile extends Component {
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
-      socket.on('afficheLoginDisconnect', (data) => {
-        if (data.login === this.state.login) {
-          this.setState({
-            connected: 'offline'
-          })
-        }
-      })
+      // socket.on('afficheLoginDisconnect', (data) => {
+      //   if (data.login === this.state.login) {
+      //     this.setState({
+      //       connected: 'offline'
+      //     })
+      //   }
+      // })
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
         let capteur = false
         if (res.data.result[0].block.length > 0) {
