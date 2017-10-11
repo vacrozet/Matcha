@@ -25,9 +25,10 @@ module.exports = (req, res) => {
         if (err) return error1(res, 500, 'Internal server Erreur')
         if (result.length === 1) {
           db.collection('Users').updateOne({mail: req.body.mail}, {$set: {
-            actif: false,
-            hash: hash
-          }})
+              actif: false,
+              hash: hash
+            }
+          })
           nodemailer.createTestAccount((err, account) => {
             if (err) return error1(res, 500, 'mail not send')
             let transporter = nodemailer.createTransport({
@@ -39,22 +40,22 @@ module.exports = (req, res) => {
                 pass: 'Apwn789123'  // generated ethereal password
               }
             })
-            let url = `http://localhost:3000/reset/resetpasswd/${hash}`
-            let mailOptions = {
-              from: '"Matcha Admin" <admmatcha@gmail.com>', // sender address
-              to: result[0].mail, // list of receivers
-              subject: 'Reset Passwd', // Subject line
-              text: 'merci de cliquer sur l\'url pour reset votre Mdp', // plain text body
-              html: `Hey,<b>Pour reset ton passwd clique <a href=${url}>ici</a></b>` // html body
-            }
-            transporter.sendMail(mailOptions, (error, info) => {
-              if (error) return error1(res, 500, 'mail not send')
-              return res.json({
-                success: true,
-                message: 'mail send'
+              let url = `http://localhost:3000/reset/resetpasswd/${hash}`
+              let mailOptions = {
+                from: '"Matcha Admin" <admmatcha@gmail.com>', // sender address
+                to: result[0].mail, // list of receivers
+                subject: 'Reset Passwd', // Subject line
+                text: 'merci de cliquer sur l\'url pour reset votre Mdp', // plain text body
+                html: `Hey,<b>Pour reset ton passwd clique <a href=${url}>ici</a></b>` // html body
+              }
+              transporter.sendMail(mailOptions, (error, info) => {
+                if (error) return error1(res, 500, 'mail not send')
+                return res.json({
+                  success: true,
+                  message: 'mail send'
+                })
               })
             })
-          })
         } else {
           return res.json({
             success: false

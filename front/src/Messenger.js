@@ -46,7 +46,7 @@ class Messenger extends Component {
               <div className='cadreApercu' key={Math.random()}>
                 <div>{conv.login}</div>
                 <div>{conv.lastMessage}</div>
-                <RaisedButton label='Primary' primary onClick={() => { this.handleClick(conv.login) }} />
+                <RaisedButton label='voir' primary onClick={() => { this.handleClick(conv.login) }} />
               </div>
             </Paper>
           )

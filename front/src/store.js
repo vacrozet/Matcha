@@ -5,12 +5,20 @@ useStrict(true)
 
 class Store extends Component {
   @observable chat = []
-  @observable notification = {}
+  @observable UserConnected = []
 
   @action
   addChat (chat) {
-    this.chat.push(chat)
+    if (chat.length === 0) {
+      this.chat = chat
+    } else {
+      this.chat.push(chat)
+    }
     // this.chat = this.chat.slice(0)
+  }
+  @action
+  addUser (User) {
+    this.UserConnected.push(User)
   }
 
   @action

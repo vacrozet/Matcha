@@ -22,7 +22,6 @@ function getAge (datestring) {
   return age
 }
 function erreur (res, text) {
-  console.log('je rentre ici')
   return res.json({
     error: text
   })
@@ -59,6 +58,7 @@ module.exports = (req, res) => {
     db.collection('Users').find({login: req.body.login}).toArray((error, results) => {
       if (error) return error1(res, 500, 'Internal server error')
       if (results.length !== 1) return erreur(res, 'User Not Found')
+      if (results[0].actif === false) return erreur(res, 'Please Check Your mail')
       if (!bcrypt.compareSync(req.body.passwd, results[0].passwd)) return erreur(res, 'Wrong Passwd')
       let objToken = {}
       objToken.token = genToken()

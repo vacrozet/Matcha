@@ -212,10 +212,14 @@ class UserProfile extends Component {
               )}
             </div>
             <div className='buttonForLikeAndBlock'>
-              { !this.state.like ? (
-                <RaisedButton label='Like' primary onClick={() => { this.likeProfile(this.state.login) }} />
+              {!this.state.block ? (
+                !this.state.like ? (
+                  <RaisedButton label='Like' primary onClick={() => { this.likeProfile(this.state.login) }} />
+                ) : (
+                  <RaisedButton label='DisLike' secondary onClick={() => { this.unlikeProfile(this.state.login) }} />
+                )
               ) : (
-                <RaisedButton label='DisLike' secondary onClick={() => { this.unlikeProfile(this.state.login) }} />
+                <RaisedButton label='like' disabled />
               )
               }
               { !this.state.block ? (

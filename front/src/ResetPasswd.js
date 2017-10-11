@@ -11,22 +11,22 @@ class ResetPasswd extends Component {
     this.state = {
       hash: '',
       newpasswd: '',
-      newpasswd1: ''
+      newpasswd1: '',
+      send: true
     }
     this.handleChangeNp = this.handleChangeNp.bind(this)
     this.handleChangeNp1 = this.handleChangeNp1.bind(this)
   }
   handleSend () {
     if (this.state.newpasswd === this.state.newpasswd1) {
-      console.log(this.state.newpasswd)
-      console.log(this.state.newpasswd1)
-      console.log(this.state.hash)
+      this.setState({
+        send: false
+      })
       axiosInst().post('/reset/resetpasswd', {
         newpasswd: this.state.newpasswd,
         newpasswd1: this.state.newpasswd1,
         hash: this.state.hash
       }).then((res) => {
-        console.log(res)
         if (res.data.success === true) {
           this.props.notification.addNotification({
             message: 'Passwd Modifie',
@@ -59,12 +59,15 @@ class ResetPasswd extends Component {
         <div className='pageOubli'>
           <div className='cadreOubli'>
             <Paper zDepth={2}>
-              <TextField hintText='New Passwd' value={this.state.newpasswd} type='password' underlineShow={true} onChange={this.handleChangeNp} /><br />
-              <TextField hintText='New Passwd' value={this.state.newpasswd1} type='password' underlineShow={true} onChange={this.handleChangeNp1} />
+              <TextField hintText='New Passwd' value={this.state.newpasswd} type='password' underlineShow onChange={this.handleChangeNp} /><br />
+              <TextField hintText='New Passwd' value={this.state.newpasswd1} type='password' underlineShow onChange={this.handleChangeNp1} />
               <Divider />
-              <RaisedButton label='Envoyer' fullWidth={true} onClick={() => {
-                this.handleSend()
-              }} />
+              {this.state.send ? (
+                <RaisedButton label='Envoyer' fullWidth onClick={() => { this.handleSend() }} />
+              ) : (
+                <RaisedButton label='Envoyer' disabled fullWidth />
+              )
+              }
             </Paper>
           </div>
         </div>

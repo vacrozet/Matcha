@@ -10,31 +10,33 @@ class Oubli extends Component {
   constructor (props) {
     super(props)
     this.state = ({
-      mail: ''
+      mail: '',
+      send: false
     })
     this.handleChange = this.handleChange.bind(this)
   }
   handleSend () {
-    console.log(this.state.mail)
-    axiosInst().post('/reset/passwd', {
-      mail: this.state.mail
-    }).then((res) => {
-      if (res.data.success === true) {
-        console.log(res)
-        this.props.notification.addNotification({
-          level: 'success',
-          message: 'Mail envoyer'
-        })
-        this.props.history.push('/')
-      } else {
-        this.props.notification.addNotification({
-          level: 'error',
-          message: 'Mail not foun'
-        })
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
+    if (this.state.mail.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+      this.setState({send: true})
+      axiosInst().post('/reset/passwd', {
+        mail: this.state.mail
+      }).then((res) => {
+        if (res.data.success === true) {
+          this.props.history.push('/')
+          this.props.notification.addNotification({
+            level: 'success',
+            message: 'Mail envoyer'
+          })
+        } else {
+          this.props.notification.addNotification({
+            level: 'error',
+            message: 'Mail not foun'
+          })
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
   }
   handleChange (event) {
     this.setState({mail: event.target.value})
@@ -53,9 +55,12 @@ class Oubli extends Component {
 
               <TextField hintText='Email' value={this.state.mail} underlineShow={false} onChange={this.handleChange} />
               <Divider />
-              <RaisedButton label='Envoyer' fullWidth={true} onClick={() => {
-                this.handleSend()
-              }} />
+              {!this.state.send ? (
+                <RaisedButton label='Envoyer' fullWidth onClick={() => { this.handleSend() }} />
+              ) : (
+                <RaisedButton label='Envoyer' disabled fullWidth onClick={() => { this.handleSend() }} />
+              )
+              }
             </Paper>
           </div>
         </div>

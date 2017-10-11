@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import MenuItem from 'material-ui/MenuItem'
 import axiosInst from './utils/axios.js'
+import LinearProgress from 'material-ui/LinearProgress'
 import socket from './socket.js'
 import React from 'react'
 import './StyleSheet.css'
@@ -24,11 +25,9 @@ const items4 = []
 for (let i = 100; i > 0; i--) {
   items4.push(<MenuItem value={i} key={i} primaryText={`popularite inferieur à ${i}`} />)
 }
-const items3 = []
-for (let i = 100; i > 1; i--) {
-  items3.push(<MenuItem value={i} key={i} primaryText={`Distance Inférieur à ${i}`} />)
+const style = {
+  margin: 5
 }
-
 class Acceuil extends React.Component {
   constructor (props) {
     super(props)
@@ -49,7 +48,9 @@ class Acceuil extends React.Component {
     this.handleChangePopulariteMax = this.handleChangePopulariteMax.bind(this)
     this.handleChangedistance = this.handleChangedistance.bind(this)
     this.handleChangeTag = this.handleChangeTag.bind(this)
+    this.handleChangeNumber = this.handleChangeNumber.bind(this)
     socket.on('UserDisconnected', (data) => {
+      console.log('je passe la')
       var maj = this.state.tab
       maj.forEach((element) => {
         if (element.login === data.login) {
@@ -93,6 +94,9 @@ class Acceuil extends React.Component {
   handleChangeTag (event) {
     this.setState({tag: event.target.value})
   }
+  handleChangeNumber (event) {
+    this.setState({distance: event.target.value})
+  }
   handleKeyPress (event) {
     var tag = true
     var age = true
@@ -123,7 +127,6 @@ class Acceuil extends React.Component {
       })
       popularite = false
     }
-
     if (age === true && popularite === true && tag === true) {
       axiosInst().get('/user/alluser', {
         params: {
@@ -190,11 +193,9 @@ class Acceuil extends React.Component {
             </SelectField>
             <SelectField hintText='Popularité Max' value={this.state.populariteMax} onChange={this.handleChangePopulariteMax} maxHeight={200}>
               {items4}
-            </SelectField>
-            <SelectField hintText='Distance' value={this.state.distance} onChange={this.handleChangedistance} maxHeight={200}>
-              {items3}
             </SelectField><br />
             <TextField hintText='#tag' value={this.state.tag} type='text' underlineShow onChange={this.handleChangeTag} />
+            <TextField hintText='Distance Max' value={this.state.distance} type='number' min='1' max='1000' underlineShow onChange={this.handleChangeNumber} />
             <RaisedButton label='Rechercher' primary onClick={() => { this.handleKeyPress() }} />
           </div>
           <div className='resultProfile'>
@@ -215,6 +216,8 @@ class Acceuil extends React.Component {
                     <div>{nam.tag[0]}</div>
                     <div className='textDescri'>Distance:</div>
                     <div>{nam.distance} km</div>
+                    <div className='textDescri'>Popularité</div>
+                    <LinearProgress mode='determinate' value={nam.popularite} style={style} />
                     <div className='textDescri'>Etat de connexion:</div>
                     <div>{nam.connected}</div>
                     <FlatButton label='Voir' primary onClick={() => { this.handleButtonPress(nam.login) }} />

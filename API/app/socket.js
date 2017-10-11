@@ -71,7 +71,7 @@ io.on('connection', (socket) => {
           $push: {
             notification: noti
           },
-          set: {
+          $set: {
             newNotification: true
           }
         })
