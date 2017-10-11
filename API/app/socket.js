@@ -2,32 +2,33 @@ var server = require('http').Server(global.app)
 var io = require('socket.io')(server)
 const db = require('./db.js')
 
+function addNotification (data) {
+  console.log('je passe dans la fonction')
+  let notification = []
+  notification.push(data.time)
+  notification.push(`${data.loginUser} à consulté votre profile`)
+  db.get().then((db) => {
+    db.collection('Users').update({login: data.login},
+    {
+      $push: {notification: notification},
+      $set: {newNotification: true}
+    })
+  })
+}
+function dislikeProfile (data) {
+  let notification = []
+  notification.push(data.time)
+  notification.push(`${data.loginUser} à Dislike votre Profile`)
+  db.get().then((db) => {
+    db.collection('Users').update({login: data.login},
+    {
+      $push: {notification: notification},
+      $set: {newNotification: true}
+    })
+  })
+}
 let tabUser = []
 io.on('connection', (socket) => {
-  function addNotification (data) {
-    let notification = []
-    notification.push(data.time)
-    notification.push(`${data.loginUser} consulte votre profile`)
-    db.get().then((db) => {
-      db.collection('Users').update({login: data.login},
-      {
-        $push: {notification: notification},
-        $set: {newNotification: true}
-      })
-    })
-  }
-  function dislikeProfile (data) {
-    let notification = []
-    notification.push(data.time)
-    notification.push(`${data.loginUser} à Dislike votre Profile`)
-    db.get().then((db) => {
-      db.collection('Users').update({login: data.login},
-      {
-        $push: {notification: notification},
-        $set: {newNotification: true}
-      })
-    })
-  }
   socket.on('UserLoginConnected', (data) => {
     let isPresent = true
     tabUser.forEach((element) => {
@@ -56,6 +57,7 @@ io.on('connection', (socket) => {
         })
       }
     }, this)
+    console.log(data)
     addNotification (data)
   })
   socket.on('likeProfile', (data) => {
@@ -90,7 +92,7 @@ io.on('connection', (socket) => {
           message: data.message,
           login: data.login
         })
-        element.socket.emit('activNotif', {
+        element.socket.emit('activEvenement', {
           login: data.login
         })
       }
