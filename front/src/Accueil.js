@@ -27,6 +27,7 @@ for (let i = 100; i > 0; i--) {
 const style = {
   margin: 5
 }
+
 class Acceuil extends React.Component {
   constructor (props) {
     super(props)
@@ -76,11 +77,13 @@ class Acceuil extends React.Component {
   }
   handleChangeNumber (event) {
     this.setState({distance: event.target.value})
+    console.log(this.state.distance)
   }
   handleKeyPress (event) {
     var tag = true
     var age = true
     var popularite = true
+    console.log(this.state.distance)
     if (this.state.tag !== '') {
       var tagtab = this.state.tag.split(' ')
       if (tagtab.length !== 1 || tagtab[0][0] !== '#') {
@@ -126,19 +129,21 @@ class Acceuil extends React.Component {
       })
     }
   }
-  handleDistance (event) {
+  handleDistance () {
     if (this.state.tab.length > 1) {
       var maj = this.state.tab
       maj.sort((a, b) => {
+        var sortvalue
         if (a.distance < b.distance) {
-          return -1
+          sortvalue = -1
         }
         if (a.distance === b.distance) {
-          return 0
+          sortvalue = 0
         }
         if (a.distance > b.distance) {
-          return 1
+          sortvalue = 1
         }
+        return sortvalue
       })
       this.setState({
         tab: maj
@@ -149,15 +154,17 @@ class Acceuil extends React.Component {
     if (this.state.tab.length > 1) {
       var maj = this.state.tab
       maj.sort((a, b) => {
+        var sortvalue
         if (a.distance < b.distance) {
-          return 1
+          sortvalue = 1
         }
         if (a.distance === b.distance) {
-          return 0
+          sortvalue = 0
         }
         if (a.distance > b.distance) {
-          return -1
+          sortvalue = -1
         }
+        return sortvalue
       })
       this.setState({
         tab: maj
@@ -168,15 +175,17 @@ class Acceuil extends React.Component {
     if (this.state.tab.length > 1) {
       var maj = this.state.tab
       maj.sort((a, b) => {
+        var sortvalue
         if (a.age < b.age) {
-          return -1
+          sortvalue = -1
         }
         if (a.age === b.age) {
-          return 0
+          sortvalue = 0
         }
         if (a.age > b.age) {
-          return 1
+          sortvalue = 1
         }
+        return sortvalue
       })
       this.setState({
         tab: maj

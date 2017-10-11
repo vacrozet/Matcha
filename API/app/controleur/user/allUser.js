@@ -68,7 +68,6 @@ module.exports = (req, res) => {
           var tab = result.filter(result => {
             return result.login !== req.user.login
           })
-          // A TEST //////////////////
           tab.sort((a, b) => {
             if (a.popularite < b.popularite) {
               return 1
@@ -80,7 +79,6 @@ module.exports = (req, res) => {
               return -1
             }
           })
-          // ///////////////////
           result.forEach((tab) => {
             delete tab.passwd
             delete tab.tokens
@@ -100,6 +98,9 @@ module.exports = (req, res) => {
               tab.connected = lastConnection(tab.connected)
             }
           }, this)
+          if (req.query.distance !== '' && req.query.distance >= 1 && typeof req.query.distance === 'number') {
+            tab = tab.filter((element) => (element.distance <= req.query.distance) ? element : null)
+          }
           res.json({
             tab
           })
@@ -142,6 +143,17 @@ module.exports = (req, res) => {
           var tab = result.filter(result => {
             return result.login !== req.user.login
           })
+          tab.sort((a, b) => {
+            if (a.popularite < b.popularite) {
+              return 1
+            }
+            if (a.popularite === b.popularite) {
+              return 0
+            }
+            if (a.popularite > b.popularite) {
+              return -1
+            }
+          })
           result.forEach((tab) => {
             delete tab.passwd
             delete tab.tokens
@@ -161,6 +173,9 @@ module.exports = (req, res) => {
               tab.connected = lastConnection(tab.connected)
             }
           }, this)
+          if (req.query.distance !== '' && req.query.distance >= 1 && typeof req.query.distance === 'number') {
+            tab = tab.filter((element) => (element.distance <= req.query.distance) ? element : null)
+          }
           res.json({
             tab
           })

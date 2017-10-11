@@ -4,8 +4,6 @@ const db = require('./db.js')
 
 let tabUser = []
 io.on('connection', (socket) => {
-  // console.log('socket activé')
-
   function addNotification (data) {
     let notification = []
     notification.push(data.time)
@@ -18,7 +16,6 @@ io.on('connection', (socket) => {
       })
     })
   }
-
   function dislikeProfile (data) {
     let notification = []
     notification.push(data.time)
@@ -124,11 +121,6 @@ io.on('connection', (socket) => {
     })
   })
 })
-
-// setInterval(() =>{
-//   console.log(tabUser)
-//   console.log('---------------------------------------------------------')
-// }, 5000)
 
 server.listen(3005, () => {
   console.log('listening on *:3005')
