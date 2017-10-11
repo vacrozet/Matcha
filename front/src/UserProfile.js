@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
 import socket from './socket.js'
 import Chip from 'material-ui/Chip'
+import store from './store.js'
+import { observer } from 'mobx-react'
 import './StyleSheet.css'
 
-// socket.on('activPresence', {
-//   document.get
-// })
+@observer
 
 class UserProfile extends Component {
   constructor (props) {
@@ -26,7 +26,8 @@ class UserProfile extends Component {
       like: '',
       location: '',
       popularite: '',
-      block: ''
+      block: '',
+      loginUser: ''
     }
     this.likeProfile = this.likeProfile.bind(this)
     this.unlikeProfile = this.unlikeProfile.bind(this)
@@ -39,8 +40,8 @@ class UserProfile extends Component {
       login: this.state.login
     }).then((res) => {
       if (res.data.addlike === true) {
-        socket.emit('userViewProfile', {
-          login: this.props.match.params.login
+        socket.emit('likeProfile', {
+          login: this.state.login
         })
         this.setState({
           like: true,
@@ -59,8 +60,10 @@ class UserProfile extends Component {
   unlikeProfile (event) {
     axiosInst().delete(`./like/deletelike/${this.state.login}`).then((res) => {
       if (res.data.unlike === true) {
-        socket.emit('userViewProfile', {
-          login: this.props.match.params.login
+        socket.emit('DislikeProfile', {
+          login: this.state.login,
+          loginUser: this.state.loginUser,
+          time: Date.now()
         })
         this.setState({
           like: false,
@@ -80,8 +83,8 @@ class UserProfile extends Component {
       login: this.state.login
     }).then((res) => {
       if (res.data.block === true && res.data.success !== true) {
-        socket.emit('userViewProfile', {
-          login: this.props.match.params.login
+        socket.emit('likeProfile', {
+          login: this.state.login
         })
         this.setState({
           block: true,
@@ -104,9 +107,6 @@ class UserProfile extends Component {
   unBlockUser () {
     axiosInst().delete(`./block/deleteblock/${this.state.login}`).then((res) => {
       if (res.data.Unblock === true) {
-        socket.emit('userViewProfile', {
-          login: this.props.match.params.login
-        })
         this.setState({
           block: false,
           popularite: res.data.popularite
@@ -122,13 +122,6 @@ class UserProfile extends Component {
   }
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
-      // socket.on('afficheLoginDisconnect', (data) => {
-      //   if (data.login === this.state.login) {
-      //     this.setState({
-      //       connected: 'offline'
-      //     })
-      //   }
-      // })
       axiosInst().get(`./user/userprofile/${this.props.match.params.login}`).then((res) => {
         let capteur = false
         if (res.data.result[0].block.length > 0) {
@@ -140,7 +133,7 @@ class UserProfile extends Component {
         }
         axiosInst().get(`./like/getlike/${this.props.match.params.login}`).then((res1) => {
           if (res.data.result[0].connected === true) {
-            res.data.result[0].connected = 'connecte'
+            res.data.result[0].connected = 'Online'
           }
           this.setState({
             login: res.data.result[0].login,
@@ -155,10 +148,13 @@ class UserProfile extends Component {
             popularite: res.data.result[0].popularite,
             block: capteur,
             like: res1.data.like,
-            connected: res.data.result[0].connected
+            connected: res.data.result[0].connected,
+            loginUser: res.data.user
           })
           socket.emit('userViewProfile', {
-            login: this.props.match.params.login
+            login: this.props.match.params.login,
+            loginUser: res.data.user,
+            time: Date.now()
           })
         }).catch((err1) => {
           console.log(err1)
@@ -184,7 +180,12 @@ class UserProfile extends Component {
               <div className='textUserProfile'>Login: </div>
               <div>{this.state.login}</div>
               <div className='textUserProfile'>connected: </div>
-              <div>{this.state.connected}</div>
+              { (store.UserConnected.indexOf(this.state.login) !== -1) ? (
+                <div>Online</div>
+              ) : (
+                <div>{this.state.connected}</div>
+              )
+              }
               <div className='textUserProfile'>Popularité: </div>
               <div>{this.state.popularite}</div>
               <div className='textUserProfile'>Prenom: </div>

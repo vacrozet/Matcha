@@ -3,11 +3,15 @@ import React, { Component } from 'react'
 import store from './store.js'
 import axiosInst from './utils/axios.js'
 import socket from './socket.js'
+import { observer } from 'mobx-react'
 
-function scrollbutton() {
+
+function scrollbutton () {
   var element = document.getElementById('discution')
   element.scrollTop = element.scrollHeight
 }
+
+@observer
 
 class Message extends Component {
   constructor (props) {
@@ -20,15 +24,6 @@ class Message extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
-    socket.on('receiveChat', (data) => {
-      let obj = {
-        login: data.login,
-        message: data.message
-      }
-      store.addChat(obj)
-      this.setState({})
-      scrollbutton()
-    })
   }
 
   handleChange (event) {
@@ -48,9 +43,7 @@ class Message extends Component {
       this.setState({message: ''})
       socket.emit('sendChat', obj)
       store.addChat(obj)
-      setTimeout(() => {
-        scrollbutton()
-      }, 100)
+      scrollbutton()
     }
   }
 
@@ -58,7 +51,6 @@ class Message extends Component {
     if (global.localStorage.getItem('token') && this.props.match.params.login !== '') {
       axiosInst().get(`/user/getmessage/${this.props.match.params.login}`).then((res) => {
         if (res.data.success === true) {
-          console.log(res.data.result)
           store.setChat(res.data.result)
           this.setState({
             nb: res.data.present,
@@ -67,7 +59,6 @@ class Message extends Component {
             loginSend: res.data.loginSend
           })
         }
-        scrollbutton()
       })
     } else {
       this.props.history.push('/')

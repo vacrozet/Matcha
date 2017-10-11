@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
 import './StyleSheet.css'
 
-function scrollbutton() {
+function scrollbutton () {
   var element = document.getElementById('scroll')
   element.scrollTop = element.scrollHeight
 }
@@ -25,13 +25,13 @@ class Notifaction extends Component {
             nb: true
           })
           document.getElementById('Notification').setAttribute('style', 'color: white')
+          scrollbutton()
         } else {
           this.setState({
             notification: res.data.result[0].notification,
             nb: false
           })
         }
-        scrollbutton()
       }).catch((err) => {
         console.log(err)
       })

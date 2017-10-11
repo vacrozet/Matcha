@@ -4,8 +4,33 @@ const db = require('./db.js')
 
 let tabUser = []
 io.on('connection', (socket) => {
-  console.log('socket activé')
+  // console.log('socket activé')
 
+  function addNotification (data) {
+    let notification = []
+    notification.push(data.time)
+    notification.push(`${data.loginUser} consulte votre profile`)
+    db.get().then((db) => {
+      db.collection('Users').update({login: data.login},
+      {
+        $push: {notification: notification},
+        $set: {newNotification: true}
+      })
+    })
+  }
+
+  function dislikeProfile (data) {
+    let notification = []
+    notification.push(data.time)
+    notification.push(`${data.loginUser} à Dislike votre Profile`)
+    db.get().then((db) => {
+      db.collection('Users').update({login: data.login},
+      {
+        $push: {notification: notification},
+        $set: {newNotification: true}
+      })
+    })
+  }
   socket.on('UserLoginConnected', (data) => {
     let isPresent = true
     tabUser.forEach((element) => {
@@ -29,17 +54,37 @@ io.on('connection', (socket) => {
   socket.on('userViewProfile', (data) => {
     tabUser.forEach((element) => {
       if (element.login === data.login) {
-        element.socket.emit('activNotif', {})
+        element.socket.emit('activNotif', {
+          login: data.loginUser
+        })
+      }
+    }, this)
+    addNotification (data)
+  })
+  socket.on('likeProfile', (data) => {
+    tabUser.forEach((element) => {
+      if (element.login === data.login) {
+        element.socket.emit('activEvenement',{
+          login: data.login
+        })
       }
     }, this)
   })
-
+  socket.on('DislikeProfile', (data) => {
+    tabUser.forEach((element) => {
+      if (element.login === data.login) {
+        element.socket.emit('activEvenement',{
+          login: data.login
+        })
+      }
+    }, this)
+    dislikeProfile(data)
+  })
   socket.on('UserLoginDisconnected', (data) => {
-    console.log(`socket user Disconnected --> ${data.login}`)
     socket.broadcast.emit('UserDisconnected', {
       login: data.login
     })
-    tabUser.splice(data.login)
+    tabUser = tabUser.filter((element) => (element.login !== data.login) ? element : null)
   })
   socket.on('sendChat', (data) => {
     tabUser.forEach((element) => {
@@ -48,7 +93,9 @@ io.on('connection', (socket) => {
           message: data.message,
           login: data.login
         })
-        element.socket.emit('activNotif', {})
+        element.socket.emit('activNotif', {
+          login: data.login
+        })
       }
     }, this)
     db.get().then((db) => {
@@ -65,7 +112,6 @@ io.on('connection', (socket) => {
             }
           }
         })
-      console.log(noti)
       db.collection('Users').update({login: data.desti},
         {
           $push: {
@@ -78,6 +124,11 @@ io.on('connection', (socket) => {
     })
   })
 })
+
+// setInterval(() =>{
+//   console.log(tabUser)
+//   console.log('---------------------------------------------------------')
+// }, 5000)
 
 server.listen(3005, () => {
   console.log('listening on *:3005')

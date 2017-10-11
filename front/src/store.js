@@ -1,36 +1,47 @@
 import { observable, action, useStrict } from 'mobx'
-import { Component } from 'react'
 
 useStrict(true)
 
-class Store extends Component {
+class Store {
   @observable chat = []
   @observable UserConnected = []
+  @observable noti = []
 
   @action
   addChat (chat) {
-    if (chat.length === 0) {
-      this.chat = chat
-    } else {
+    if (this.chat) {
       this.chat.push(chat)
+    } else {
+      this.chat = [chat]
     }
-    // this.chat = this.chat.slice(0)
-  }
-  @action
-  addUser (User) {
-    this.UserConnected.push(User)
   }
 
   @action
-   getChat() {
-     return this.chat
-   }
+  addUser (user) {
+    this.UserConnected.push(user)
+  }
+  @action
+  dellUser (user) {
+    this.UserConnected = this.UserConnected.filter((element) => (element !== user) ? element : null)
+  }
+  @action
+  addNoti (noti) {
+    if (this.noti) {
+      this.noti.push(noti)
+    } else {
+      this.noti = [noti]
+    }
+  }
+  @action
+  setNoti (noti) {
+    this.noti = noti
+  }
 
   @action
   setChat (chat) {
     this.chat = chat
+    }
   }
-}
-
 let store = new Store()
 export default store
+export { Store }

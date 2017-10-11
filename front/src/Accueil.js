@@ -5,7 +5,6 @@ import TextField from 'material-ui/TextField'
 import MenuItem from 'material-ui/MenuItem'
 import axiosInst from './utils/axios.js'
 import LinearProgress from 'material-ui/LinearProgress'
-import socket from './socket.js'
 import React from 'react'
 import './StyleSheet.css'
 
@@ -40,7 +39,8 @@ class Acceuil extends React.Component {
       populariteMax: 100,
       distance: '',
       tag: '',
-      tab: []
+      tab: [],
+      UserLog: []
     }
     this.handleChangeAgeMin = this.handleChangeAgeMin.bind(this)
     this.handleChangeAgeMax = this.handleChangeAgeMax.bind(this)
@@ -49,29 +49,9 @@ class Acceuil extends React.Component {
     this.handleChangedistance = this.handleChangedistance.bind(this)
     this.handleChangeTag = this.handleChangeTag.bind(this)
     this.handleChangeNumber = this.handleChangeNumber.bind(this)
-    socket.on('UserDisconnected', (data) => {
-      console.log('je passe la')
-      var maj = this.state.tab
-      maj.forEach((element) => {
-        if (element.login === data.login) {
-          element.connected = 'Offline'
-        }
-      }, this)
-      this.setState({
-        tab: maj
-      })
-    })
-    socket.on('UserConnected', (data) => {
-      var maj = this.state.tab
-      maj.forEach((element) => {
-        if (element.login === data.login) {
-          element.connected = 'Online'
-        }
-      }, this)
-      this.setState({
-        tab: maj
-      })
-    })
+    this.handleDistance = this.handleDistance.bind(this)
+    this.handleAge = this.handleAge.bind(this)
+    this.handlePopularite = this.handlePopularite.bind(this)
   }
   handleButtonPress (login) {
     this.props.history.push(`/userprofile/${login}`)
@@ -146,6 +126,63 @@ class Acceuil extends React.Component {
       })
     }
   }
+  handleDistance (event) {
+    if (this.state.tab.length > 1) {
+      var maj = this.state.tab
+      maj.sort((a, b) => {
+        if (a.distance < b.distance) {
+          return -1
+        }
+        if (a.distance === b.distance) {
+          return 0
+        }
+        if (a.distance > b.distance) {
+          return 1
+        }
+      })
+      this.setState({
+        tab: maj
+      })
+    }
+  }
+  handlePopularite (event) {
+    if (this.state.tab.length > 1) {
+      var maj = this.state.tab
+      maj.sort((a, b) => {
+        if (a.distance < b.distance) {
+          return 1
+        }
+        if (a.distance === b.distance) {
+          return 0
+        }
+        if (a.distance > b.distance) {
+          return -1
+        }
+      })
+      this.setState({
+        tab: maj
+      })
+    }
+  }
+  handleAge (event) {
+    if (this.state.tab.length > 1) {
+      var maj = this.state.tab
+      maj.sort((a, b) => {
+        if (a.age < b.age) {
+          return -1
+        }
+        if (a.age === b.age) {
+          return 0
+        }
+        if (a.age > b.age) {
+          return 1
+        }
+      })
+      this.setState({
+        tab: maj
+      })
+    }
+  }
   componentWillMount () {
     if (!global.localStorage.getItem('token')) {
       this.props.history.push('/')
@@ -196,7 +233,10 @@ class Acceuil extends React.Component {
             </SelectField><br />
             <TextField hintText='#tag' value={this.state.tag} type='text' underlineShow onChange={this.handleChangeTag} />
             <TextField hintText='Distance Max' value={this.state.distance} type='number' min='1' max='1000' underlineShow onChange={this.handleChangeNumber} />
-            <RaisedButton label='Rechercher' primary onClick={() => { this.handleKeyPress() }} />
+            <RaisedButton label='Rechercher' primary onClick={() => { this.handleKeyPress() }} /><br />
+            <RaisedButton label='Distance' style={style} primary onClick={() => { this.handleDistance() }} />
+            <RaisedButton label='Age' style={style} primary onClick={() => { this.handleAge() }} />
+            <RaisedButton label='Popularite' style={style} primary onClick={() => { this.handlePopularite() }} />
           </div>
           <div className='resultProfile'>
             { this.state.tab ? this.state.tab.map((nam) => {
@@ -218,8 +258,6 @@ class Acceuil extends React.Component {
                     <div>{nam.distance} km</div>
                     <div className='textDescri'>Popularité</div>
                     <LinearProgress mode='determinate' value={nam.popularite} style={style} />
-                    <div className='textDescri'>Etat de connexion:</div>
-                    <div>{nam.connected}</div>
                     <FlatButton label='Voir' primary onClick={() => { this.handleButtonPress(nam.login) }} />
                   </div>
                 </div>

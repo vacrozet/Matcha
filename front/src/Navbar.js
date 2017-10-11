@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import axiosInst from './utils/axios.js'
 import {Link} from 'react-router-dom'
 import socket from './socket.js'
+import store from './store.js'
 import axios from 'axios'
 import './StyleSheet.css'
+import { observer } from 'mobx-react'
 import './Navbar.css'
 
-socket.on('activNotif', (data) => {
-  document.getElementById('Notification').setAttribute('style', 'color: red')
-})
+@observer
+
 class Volet extends Component {
   constructor (props) {
     super(props)
@@ -33,6 +34,22 @@ class Volet extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.logoutUser = this.logoutUser.bind(this)
+    socket.on('UserConnected', (data) => {
+      store.addUser(data.login)
+    })
+    socket.on('UserDisconnected', (data) => {
+      store.dellUser(data.login)
+    })
+    socket.on('activNotif', (data) => {
+      document.getElementById('Notification').setAttribute('style', 'color: red')
+      this.props.notification.addNotification({
+        message: `${data.login} consulte votre profile`,
+        level: 'success'
+      })
+    })
+    socket.on('activEvenement', (data) => {
+      document.getElementById('Notification').setAttribute('style', 'color: red')
+    })
   }
   myFunction (event) {
     document.querySelector('.container').classList.toggle('change')
