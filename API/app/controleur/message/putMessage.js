@@ -34,7 +34,6 @@ module.exports = (req, res) => {
             if (error) return erreur(res, 500, false, 'erreur requet db found')
             if (result.length === 1) {
               let Message = result[0].convers
-              console.log(Message)
               return renvoi(res, 200, true, 'Result found', Message, true)
             } else { return erreur(res, 404, false, 'Result not found') }
           })

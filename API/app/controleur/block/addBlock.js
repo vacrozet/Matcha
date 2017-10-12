@@ -38,13 +38,11 @@ module.exports = (req, res) => {
         if (result.length === 1 && result[0].login !== req.user.login) {
           let matchPresent = false
           result[0].match.forEach((element) => {
-            console.log(element)
             if (element === req.user.login) {
               matchPresent = true
             }
           }, this)
           if (matchPresent === true) {
-            console.log('je rentre la')
             let pop = parseInt(result[0].popularite - 12)
             let popu = parseInt(req.user.popularite - 12)
             db.collection('Users').update({login: req.body.login},
@@ -112,7 +110,6 @@ module.exports = (req, res) => {
                     popularite: result[0].popularite
                   })
                 }).catch((err1) => {
-                  console.log(err1)
                   return res.json({
                     success: false,
                     message: 'err writing database'
@@ -127,7 +124,6 @@ module.exports = (req, res) => {
             }
           }
         } else {
-          console.log('user not found')
           return res.json({
             success: false,
             message: 'User not found'
