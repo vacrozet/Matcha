@@ -4,7 +4,6 @@ const fs = require('fs')
 const dir = path.dirname(require.main.filename) + '/pictures/'
 
 module.exports = (req, res) => {
-  console.log(req.params.id_pict)
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
@@ -21,12 +20,6 @@ module.exports = (req, res) => {
               completed: true,
               popularite: req.user.popularite
             }
-    })
-    }).then((res1) => {
-      res.status(200)
-      return res.json({
-        success: true,
-        popularite: req.user.popularite
       })
     })
   }
@@ -54,7 +47,7 @@ module.exports = (req, res) => {
       return res.json({
         success: true,
         popularite: req.user.popularite
-      })  
+      }) 
     }
   })
 }
