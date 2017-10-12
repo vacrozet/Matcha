@@ -128,7 +128,8 @@ module.exports = (req, res) => {
         tab = {
           _id: id,
           login: req.body.login,
-          chat: []
+          chat: [],
+          conversation: []
         }
         db.collection('Message_Users').insert(tab, null, (error, results) => {
           if (error) return error(res, 500, 'Internal server error')
