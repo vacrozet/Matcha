@@ -16,7 +16,8 @@ class modifyProfile extends Component {
       birthday: '',
       bio: '',
       toSexe: '',
-      location: ''
+      location: '',
+      turner: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -25,6 +26,9 @@ class modifyProfile extends Component {
     this.setState({[event.target.name]: event.target.value})
   }
   handleKeyPress (event) {
+    this.setState({
+      turner: true
+    })
     axiosInst().patch('/user/modifyprofile',
       {
         login: this.state.login,
@@ -110,7 +114,12 @@ class modifyProfile extends Component {
               <option value='Femme'>Femme</option>
             </select><br />
           </div><br />
-          <RaisedButton label='confirmer' primary={true} onClick={this.handleKeyPress} />
+          {!this.state.turner ? (
+            <RaisedButton label='confirmer' primary onClick={this.handleKeyPress} />
+          ) : (
+            <RaisedButton label='confirmer' disabled primary onClick={this.handleKeyPress} />
+          )
+          }
         </div>
       </div>
     )
