@@ -51,6 +51,9 @@ class UserProfile extends Component {
           message: 'User Like',
           level: 'success'
         })
+        if (res.data.match === true) {
+          document.getElementById('Notification').setAttribute('style', 'color: red')
+        }
       }
     }).catch((err) => {
       console.log(err)

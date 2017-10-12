@@ -53,7 +53,6 @@ class Inscription extends Component {
             })
             this.props.history.push('/')
           } else {
-            console.log(res.data)
             this.props.notification.addNotification({
               message: res.data.message,
               level: 'error',

@@ -86,6 +86,7 @@ module.exports = (req, res) => {
           login: results[0].login,
           sexe: results[0].sexe,
           age: hbirthday,
+          newNotification: results[0].newNotification,
           img: [
             `http://localhost:3001/picture/${objToken.token}/0`,
             `http://localhost:3001/picture/${objToken.token}/1`,

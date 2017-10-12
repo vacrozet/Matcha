@@ -55,17 +55,14 @@ class Volet extends Component {
     document.querySelector('.container').classList.toggle('change')
     document.querySelector('.volet').classList.toggle('voley')
   }
-
   signIn (event) {
     document.querySelector('.connexion').classList.toggle('volet_sign')
     document.querySelector('.Signin_navbar').classList.toggle('Signin_navbar_click')
     document.querySelector('.input_connect').classList.toggle('input_connect_click')
   }
-
   handleChange (event) {
     this.setState({[event.target.name]: event.target.value})
   }
-
   handleKeyPress (event) {
     if (event.key === 'Enter' || event.target.value === 'connexion') {
       if (this.state.login === '' || this.state.passwd === '') {
@@ -97,7 +94,8 @@ class Volet extends Component {
               login: res.data.login,
               age: res.data.age,
               sexe: res.data.sexe,
-              img: res.data.img
+              img: res.data.img,
+              newNotification: res.data.newNotification
             }, () => {
               this.props.notification.addNotification({
                 message: 'Connected',

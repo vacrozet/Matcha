@@ -35,8 +35,6 @@ class modifyProfile extends Component {
         prenom: this.state.prenom,
         nom: this.state.nom,
         mail: this.state.mail,
-        passwd: this.state.passwd,
-        rePasswd: this.state.rePasswd,
         birthday: this.state.birthday,
         bio: this.state.bio,
         toSexe: this.state.toSexe,
@@ -84,14 +82,6 @@ class modifyProfile extends Component {
           <div className='cmp'>
             <p>Email</p>
             <input type='mail' value={this.state.mail} name='mail' onChange={this.handleChange} />
-          </div>
-          <div className='cmp'>
-            <p>Passwd</p>
-            <input type='passwd' value={this.state.passwd} name='passwd' onChange={this.handleChange} />
-          </div>
-          <div className='cmp'>
-            <p>RePasswd</p>
-            <input type='passwd' value={this.state.rePasswd} name='rePasswd' onChange={this.handleChange} />
           </div>
           <div className='cmp'>
             <p>Birthday</p>

@@ -8,7 +8,6 @@ class Messenger extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      isPresent: '',
       chat: []
     }
   }
@@ -21,12 +20,7 @@ class Messenger extends Component {
       axiosInst().get('user/getchat').then((res) => {
         if (res.data.success === true) {
           this.setState({
-            isPresent: true,
             chat: res.data.result
-          })
-        } else {
-          this.setState({
-            isPresent: false
           })
         }
       }).catch((err) => {
@@ -40,7 +34,7 @@ class Messenger extends Component {
   render () {
     return (
       <div className='bodyMessenger'>
-        { this.state.isPresent ? (this.state.chat.map((conv) => {
+        { this.state.chat ? (this.state.chat.map((conv) => {
           return (
             <Paper zDepth={3} key={Math.random()}>
               <div className='cadreApercu' key={Math.random()}>

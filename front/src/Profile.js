@@ -43,7 +43,6 @@ class Profile extends Component {
   handleChange (event) {
     this.setState({[event.target.name]: event.target.value})
   }
-
   sendPicture (pic, index) {
     axiosInst().post('/picture/' + index, {
       pic: pic
@@ -70,7 +69,6 @@ class Profile extends Component {
       }
     })
   }
-
   onDropReject () {
     this.props.notification.addNotification({
       level: 'error',
@@ -78,7 +76,6 @@ class Profile extends Component {
       message: 'Failed'
     })
   }
-
   onDrop1 (acceptedFiles) {
     let self = this
     acceptedFiles.forEach(file => {
@@ -101,7 +98,6 @@ class Profile extends Component {
       document.getElementById('pictureProfile').style.backgroundImage = `url('${url}')`
     }, 50)
   }
-
   onDrop2 (acceptedFiles) {
     let self = this
     acceptedFiles.forEach(file => {
@@ -207,7 +203,6 @@ class Profile extends Component {
       axiosInst().post('./user/addTag', {
         tag: this.state.tag
       }).then((res) => {
-        console.log(res.data)
         this.setState({
           tag: '',
           popularite: res.data.popularite
@@ -224,7 +219,6 @@ class Profile extends Component {
       })
     }
   }
-
   componentWillMount () {
     if (global.localStorage.getItem('token')) {
       axiosInst().get('/user/profile').then((res) => {
@@ -248,7 +242,6 @@ class Profile extends Component {
       })
     }
   }
-
   render () {
     return (
       <div className='page_profile'>

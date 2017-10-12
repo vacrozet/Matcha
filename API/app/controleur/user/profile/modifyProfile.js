@@ -2,6 +2,17 @@ const db = require('../../../db.js')
 const axios = require('axios')
 const bcrypt = require('bcryptjs')
 
+function getAge (datestring) {
+  var today = new Date()
+  var birthDate = new Date(datestring)
+  var age = today.getFullYear() - birthDate.getFullYear()
+  var m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+  return age
+}
+
 module.exports = (req, res) => {
   db.get().then((db) => {
     db.collection('Users').find({ login: req.user.login }).toArray((err, result) => {
@@ -21,13 +32,10 @@ module.exports = (req, res) => {
       req.body.mail.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
         result[0].mail = req.body.mail
       }
-      if (typeof req.body.passwd === 'string' && bcrypt.compareSync(req.body.passwd, result[0].passwd) && req.body.passwd === req.body.rePasswd &&
-      req.body.passwd !== '' && req.body.rePasswd !== '' && req.body.passwd.length >= 8 && req.body.rePasswd.length >= 8) {
-        result[0].passwd = bcrypt.hashSync(req.body.passwd, 10)
-      }
       if (typeof req.body.birthday === 'string' && req.body.birthday !== '' &&
-      req.body.birthday.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) && result[0].date !== req.body.birthday) {
+      req.body.birthday.match(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/) && result[0].date !== req.body.birthday) {
         result[0].date = req.body.birthday
+        result[0].age = getAge(result[0].date)
       }
       if (typeof req.body.bio === 'string' && req.body.bio !== '' && req.body.bio !== result[0].bio) {
         result[0].bio = req.body.bio
@@ -52,6 +60,7 @@ module.exports = (req, res) => {
               date: result[0].date,
               bio: result[0].bio,
               mail: result[0].mail,
+              age: result[0].age,
               to_match: result[0].to_match,
               location: result[0].location,
               lat: result[0].lat,
@@ -77,6 +86,7 @@ module.exports = (req, res) => {
             date: result[0].date,
             bio: result[0].bio,
             mail: result[0].mail,
+            age: result[0].age,
             to_match: result[0].to_match,
             location: result[0].location,
             lat: result[0].lat,

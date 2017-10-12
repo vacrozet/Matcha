@@ -25,12 +25,9 @@ app.use((req, res) => {
   })
 })
 
-// Démarrer le serveur
 app.listen(port, hostname, () => {
   console.log('Mon serveur fonctionne sur http://' + hostname + ':' + port)
 })
-
-
 
 process.on('SIGINT', () => {
   db.close()

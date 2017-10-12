@@ -77,13 +77,11 @@ class Acceuil extends React.Component {
   }
   handleChangeNumber (event) {
     this.setState({distance: event.target.value})
-    console.log(this.state.distance)
   }
   handleKeyPress (event) {
     var tag = true
     var age = true
     var popularite = true
-    console.log(this.state.distance)
     if (this.state.tag !== '') {
       var tagtab = this.state.tag.split(' ')
       if (tagtab.length !== 1 || tagtab[0][0] !== '#') {
@@ -96,14 +94,14 @@ class Acceuil extends React.Component {
         tag = true
       }
     }
-    if (this.state.AgeMin > this.state.AgeMax) {
+    if (this.state.AgeMin >= this.state.AgeMax) {
       this.props.notification.addNotification({
         message: 'Age Mal renseigné',
         level: 'error'
       })
       age = false
     }
-    if (this.state.populariteMin > this.state.populariteMax) {
+    if (this.state.populariteMin >= this.state.populariteMax) {
       this.props.notification.addNotification({
         message: 'popularité Mal renseigné',
         level: 'error'

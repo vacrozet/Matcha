@@ -165,6 +165,7 @@ module.exports = (req, res) => {
                       }).then((res4) => {
                         return res.json({
                           addlike: true,
+                          match: false,
                           message: 'like inseree et pas present dans l autre user',
                           popularite: result[0].popularite
                         })

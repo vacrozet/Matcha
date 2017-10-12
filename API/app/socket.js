@@ -3,7 +3,6 @@ var io = require('socket.io')(server)
 const db = require('./db.js')
 
 function addNotification (data) {
-  console.log('je passe dans la fonction')
   let notification = []
   notification.push(data.time)
   notification.push(`${data.loginUser} à consulté votre profile`)
@@ -45,8 +44,6 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('UserConnected', {
       login: data.login
     })
-    } else {
-      console.log('user already present')
     }
   })
   socket.on('userViewProfile', (data) => {
@@ -57,7 +54,6 @@ io.on('connection', (socket) => {
         })
       }
     }, this)
-    console.log(data)
     addNotification (data)
   })
   socket.on('likeProfile', (data) => {
