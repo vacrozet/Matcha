@@ -70,13 +70,11 @@ module.exports = (req, res) => {
   !req.body.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
     return errorform(res, false, 'Email Incorrect')
   }
-  if (req.body.date === undefined || !req.body.date.match(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/)) {
+  if (req.body.date === undefined || !req.body.date.match(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/)) {
     return errorform(res, false, 'date incorrect')
-  } else {
-    let test = getAge(req.body.date)
-    if (test < 18 || test > 99) {
-      return errorform(res, false, 'vous navez pas 18 ans')
-    }
+  }
+  if (req.body.date === undefined || !req.body.date.match(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/) || (getAge(req.body.date) < 18) || (getAge(req.body.date) > 99)) {
+    return errorform(res, false, 'Tu n\'as pas l\'age pour ces conneries')
   }
   if (req.body.bio === undefined) {
     return errorform(res, false, 'bio not defined')

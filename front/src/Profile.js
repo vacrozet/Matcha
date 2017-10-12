@@ -65,7 +65,7 @@ class Profile extends Component {
       })
     }).catch((err) => {
       if (err) {
-        console.log(err.response)
+        console.log(err)
       }
     })
   }
